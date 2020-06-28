@@ -18,8 +18,9 @@ export function MainScene() {
     if (app.currentUser) {
       const event = await eventsCollection.insertOne({
         ...values,
-        participants: [],
         facilitator: app.currentUser.id,
+        participants: [],
+        evaluations: {},
       });
       helpers.setSubmitting(false);
       history.push(`/events/${event.insertedId.toHexString()}`);

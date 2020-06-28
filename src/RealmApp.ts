@@ -1,8 +1,16 @@
-import * as RealmApp from "realm-web";
+import { App } from "realm-web";
 import { ObjectId } from "bson";
 
+interface Functions {
+  updateEventScore(
+    eventId: ObjectId,
+    scores: { criterion: string; alternative: string; score: number }[]
+  ): Promise<{ success: boolean }>;
+  acceptEventInvitation(eventId: string): Promise<void>;
+}
+
 export const APP_ID = "rationalize-iwbgr";
-export const app = RealmApp.app(APP_ID);
+export const app = new App<Functions>(APP_ID);
 
 export type Criterion = {
   name: string;
@@ -12,6 +20,12 @@ export type Alternative = {
   name: string;
 };
 
+export type Evaluation = {
+  alternative: string;
+  criterion: string;
+  score: number;
+};
+
 export type Event = {
   _id: ObjectId;
   name: string;
@@ -19,6 +33,7 @@ export type Event = {
   participants: string[];
   criteria: Criterion[];
   alternatives: Alternative[];
+  evaluations: { [userId: string]: Evaluation[] };
 };
 
 export const mongodb = app.services.mongodb("mongodb-atlas");

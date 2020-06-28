@@ -54,9 +54,9 @@ export function EventScreen({ id }: EventScreenProps) {
             </Route>
             <Route path="/events/:id/result">
               {() => (
-                <Container>
+                <NarrowContainer>
                   <EventResult event={event} />
-                </Container>
+                </NarrowContainer>
               )}
             </Route>
             {app.currentUser?.id === event.facilitator ? (

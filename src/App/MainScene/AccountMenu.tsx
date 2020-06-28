@@ -12,7 +12,7 @@ import { app } from "../../RealmApp";
 
 import styles from "./AccountMenu.module.scss";
 
-function getUserDisplayName(user: Realm.User | null) {
+function getUserDisplayName(user: Realm.User<any> | null) {
   if (user && user.state === "active") {
     return (
       user.profile.firstName ||
