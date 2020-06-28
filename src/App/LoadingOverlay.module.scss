@@ -1,0 +1,10 @@
+.LoadingOverlay {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &__Alert {
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+}

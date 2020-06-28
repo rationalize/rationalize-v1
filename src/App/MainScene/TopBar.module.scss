@@ -1,0 +1,13 @@
+@import "../../variables";
+
+.TopBar {
+    display: flex;
+    background: $primary;
+    color: $white;
+}
+
+.TopBar__Container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Oxanium';
+  src: local('Oxanium'), url(./fonts/Oxanium-ExtraLight.ttf) format('truetype');
+  font-weight: lighter;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Oxanium';
+  src: local('Oxanium'), url(./fonts/Oxanium-Bold.ttf) format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}

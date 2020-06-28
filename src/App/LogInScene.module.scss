@@ -1,0 +1,12 @@
+@import "../variables";
+
+.LogInScene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.LogInScene__Card {
+    box-shadow: $gray-300 0 $spacer $spacer;
+}

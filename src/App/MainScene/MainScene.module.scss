@@ -1,0 +1,13 @@
+@import "../../variables";
+
+.MainScene {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    &__TopBar {
+        flex-basis: 3 * $spacer;
+        box-shadow: $gray-400 0 (.2 * $spacer) (.5 * $spacer);
+        margin-bottom: 2 * $spacer;
+    }
+}

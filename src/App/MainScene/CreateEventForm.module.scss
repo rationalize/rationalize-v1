@@ -1,0 +1,7 @@
+@import "../../variables.scss";
+
+.CreateEventForm {
+    &__Alternative, &__Criterion {
+        margin-bottom: $spacer;
+    }
+}

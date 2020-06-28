@@ -1,0 +1,10 @@
+@import "../variables.scss";
+
+.LinkCard {
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0 (.2 * $spacer) (.5 * $spacer) $gray-300;
+        top: -0.1 * $spacer;
+    }
+}
