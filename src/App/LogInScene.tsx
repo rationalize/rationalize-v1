@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { RouteChildrenProps, useHistory } from "react-router-dom";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import {
   Button,
   Container,

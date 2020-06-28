@@ -22,7 +22,7 @@ export function EventResult({ event }: EventResultProps) {
   console.log(scoredAlternatives);
   // Whats the max accumulated score available points per criteria?
   const evaluationCount = Object.keys(event.evaluations).length;
-  const availablePoints = evaluationCount * 10;
+  // const availablePoints = evaluationCount * 10;
   return (
     <>
       <p>Result from {Object.keys(event.evaluations).length} evaluations.</p>
