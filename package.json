@@ -21,7 +21,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "reactstrap": "^8.5.1",
-    "realm-web": "^0.4.0",
+    "realm-web": "^0.5.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
