@@ -1,0 +1,30 @@
+{
+    "id": "5ef5e40066cf194cd2d3bddf",
+    "database": "rationalize-db",
+    "collection": "Events",
+    "roles": [
+        {
+            "name": "facilitator",
+            "apply_when": {
+                "facilitator": "%%user.id"
+            },
+            "read": true,
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "participants",
+            "apply_when": {
+                "participants": "%%user.id"
+            },
+            "read": true,
+            "write": false,
+            "insert": false,
+            "delete": false,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {}
+}
