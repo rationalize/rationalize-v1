@@ -7,6 +7,7 @@
     "security": {},
     "hosting": {
         "enabled": true,
+        "custom_domain": "app.rationalize.io",
         "app_default_domain": "rationalize-iwbgr.mongodbstitch.com",
         "default_error_path": "/index.html",
         "default_error_code": "200"
