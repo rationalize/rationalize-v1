@@ -1,6 +1,6 @@
 @import "../../../variables";
 
-.EventResult {
+.EventOverview {
   &__AlternativeCard {
     margin-bottom: $spacer / 2;
     flex-direction: row;
@@ -12,5 +12,9 @@
   &__Evaluations,
   &__Introduction {
     text-align: center;
+  }
+
+  &__Section {
+    margin-top: 2 * $spacer;
   }
 }

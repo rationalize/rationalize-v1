@@ -1,5 +1,15 @@
-$cyan: #17a2b8;
-$primary: $cyan;
+$primary: #394e77;
+$secondary: #498e99;
+$danger: #cc614e;
+
+$yiq-contrasted-threshold: 200;
+
+// $success:       $green !default;
+// $info:          $cyan !default;
+// $warning:       $yellow !default;
+// $danger:        $red !default;
+// $light:         $gray-100 !default;
+// $dark:          $gray-800 !default;
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";

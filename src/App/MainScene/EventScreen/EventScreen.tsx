@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { FormGroup, Label } from "reactstrap";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ObjectId } from "bson";
 import { Credentials } from "realm-web";
 
 import { Event, eventsCollection, app } from "../../../RealmApp";
 
-import { LinkButton } from "../../LinkButton";
 import { NarrowContainer } from "../NarrowContainer";
 import { LoadingOverlay } from "../../LoadingOverlay";
-import { CopyToClipboardInput } from "../../CopyToClipboardInput";
 
 import styles from "./EventScreen.module.scss";
 import { EvaluationForm } from "./EvaluationForm";
-import { EventResult } from "./EventResult";
+import { EventOverview } from "./EventOverview";
 
 type EventScreenProps = { id: string };
 
@@ -54,31 +51,10 @@ export function EventScreen({ id }: EventScreenProps) {
                 </NarrowContainer>
               )}
             </Route>
-            <Route path="/events/:id/result">
-              {() => (
-                <NarrowContainer>
-                  <EventResult event={event} />
-                </NarrowContainer>
-              )}
-            </Route>
             {app.currentUser?.id === event.facilitator ? (
               <Route exact path="/events/:id">
                 <NarrowContainer>
-                  <FormGroup>
-                    <Label for="evaluation-link">
-                      Send this link to participants:
-                    </Label>
-                    <CopyToClipboardInput
-                      id="evaluation-link"
-                      text={global.location.href + "/evaluate"}
-                    />
-                  </FormGroup>
-                  <LinkButton
-                    to={`/events/${event._id.toHexString()}/result`}
-                    color="primary"
-                  >
-                    Go to result
-                  </LinkButton>
+                  <EventOverview event={event} />
                 </NarrowContainer>
               </Route>
             ) : (

@@ -22,12 +22,15 @@ export function InputListCard<Item extends BaseItem>({
 }: InputListCardProps<Item>) {
   function handleListInputKeyPress(
     helpers: ArrayHelpers,
+    isLastItem: boolean,
     e: React.KeyboardEvent<HTMLElement>
   ) {
     if (e.key === "Enter") {
       e.preventDefault();
       e.stopPropagation();
-      helpers.push({ [propertyName]: "" });
+      if (isLastItem) {
+        helpers.push({ [propertyName]: "" });
+      }
     }
   }
 
@@ -43,16 +46,21 @@ export function InputListCard<Item extends BaseItem>({
           <CardBody>
             {items.map((item, index) => {
               const itemPath = `${itemsPath}.${index}.${propertyName}`;
+              const isLastItem = index === items.length - 1;
               return (
                 <InputWithControls
                   className={styles.InputListCard__Item}
-                  key={index < items.length - 1 ? index : "last"}
+                  key={isLastItem ? "last" : index}
                   type="text"
                   name={itemPath}
                   value={item[propertyName]}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  onKeyDown={handleListInputKeyPress.bind(null, arrayHelpers)}
+                  onKeyDown={handleListInputKeyPress.bind(
+                    null,
+                    arrayHelpers,
+                    isLastItem
+                  )}
                 >
                   <Button
                     color="transparent"
