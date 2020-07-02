@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Alert } from "reactstrap";
+import { ThumbsUp, AlertTriangle } from "react-feather";
+import { Button } from "reactstrap";
 
 import { Event, app } from "../../../RealmApp";
 import { LoadingOverlay } from "../../LoadingOverlay";
+import { CriterionCard } from "./CriterionCard";
 
 import styles from "./EvaluationForm.module.scss";
-import { CriterionCard } from "./CriterionCard";
 
 type EvaluationFormProps = { event: Event };
 type ScorePair = { criterion: string; alternative: string; score: number };
@@ -15,7 +16,7 @@ export function EvaluationForm({ event }: EvaluationFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [scores, setScores] = useState<ScorePair[]>([]);
-  const [scoresSubmitted, setScoresSubmitted] = useState(false);
+  const [success, setSuccess] = useState<boolean | undefined>(undefined);
 
   async function handleScores(scoreValues: number[]) {
     const criterion = event.criteria[criterionIndex];
@@ -32,8 +33,11 @@ export function EvaluationForm({ event }: EvaluationFormProps) {
       // This is the last ... submit the scores
       try {
         setIsLoading(true);
-        await app.functions.updateEventScore(event._id, allScores);
-        setScoresSubmitted(true);
+        const { success } = await app.functions.updateEventScore(
+          event._id,
+          allScores
+        );
+        setSuccess(success);
       } catch (err) {
         setError(err);
       } finally {
@@ -45,18 +49,36 @@ export function EvaluationForm({ event }: EvaluationFormProps) {
     }
   }
 
+  function handleReset() {
+    setScores([]);
+    setCriterionIndex(0);
+    setSuccess(undefined);
+  }
+
   return (
-    <LoadingOverlay isLoading={isLoading} error={error}>
-      {scoresSubmitted ? (
-        <Alert color="success">
-          Thank you! Your scores have been submitted!
-        </Alert>
+    <LoadingOverlay
+      isLoading={isLoading}
+      error={error}
+      className={styles.EvaluationForm}
+    >
+      {success === true ? (
+        <>
+          <ThumbsUp className={styles.EvaluationForm__Icon} size="4rem" />
+          <p>Thank you! Your scores have been submitted!</p>
+        </>
+      ) : success === false ? (
+        <>
+          <AlertTriangle className={styles.EvaluationForm__Icon} size="4rem" />
+          <p>Failed to send your scores - would you mind trying again?</p>
+          <Button color="primary" onClick={handleReset}>
+            Reset and try again
+          </Button>
+        </>
       ) : (
         <>
-          <p className={styles.EvaluationForm__Introduction}>
-            Please provide your knowledge by scoring the concepts.
-          </p>
+          <p>Please provide your knowledge by scoring the concepts.</p>
           <CriterionCard
+            className={styles.EvaluationForm__Card}
             index={criterionIndex}
             count={event.criteria.length}
             criterion={event.criteria[criterionIndex]}

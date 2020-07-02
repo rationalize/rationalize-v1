@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { FormGroup, Input, Label } from "reactstrap";
+import { FormGroup, Label } from "reactstrap";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ObjectId } from "bson";
 import { Credentials } from "realm-web";
 
 import { Event, eventsCollection, app } from "../../../RealmApp";
+
 import { LinkButton } from "../../LinkButton";
 import { NarrowContainer } from "../NarrowContainer";
+import { LoadingOverlay } from "../../LoadingOverlay";
+import { CopyToClipboardInput } from "../../CopyToClipboardInput";
 
 import styles from "./EventScreen.module.scss";
 import { EvaluationForm } from "./EvaluationForm";
 import { EventResult } from "./EventResult";
-import { LoadingOverlay } from "../../LoadingOverlay";
 
 type EventScreenProps = { id: string };
 
@@ -66,11 +68,9 @@ export function EventScreen({ id }: EventScreenProps) {
                     <Label for="evaluation-link">
                       Send this link to participants:
                     </Label>
-                    <Input
-                      type="text"
+                    <CopyToClipboardInput
                       id="evaluation-link"
-                      value={global.location.href + "/evaluate"}
-                      onChange={() => {}}
+                      text={global.location.href + "/evaluate"}
                     />
                   </FormGroup>
                   <LinkButton

@@ -1,0 +1,19 @@
+@import "../variables.scss";
+
+.InputWithControls {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    padding: 0;
+
+    &__Input {
+        border: 0;
+        height: 100%;
+        padding-right: 0;
+    }
+
+    &__Controls {
+        display: flex;
+        align-items: center;
+    }
+}

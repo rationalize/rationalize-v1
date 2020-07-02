@@ -1,0 +1,15 @@
+@import "../variables.scss";
+
+.ControlButton {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0 $spacer / 4;
+
+    opacity: .6;
+
+    &:hover, &:focus {
+        opacity: 1;
+        box-shadow: none;
+    }
+}

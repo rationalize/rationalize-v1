@@ -1,0 +1,16 @@
+@import "../../../variables";
+
+.EventResult {
+  &__AlternativeCard {
+    margin-bottom: $spacer / 2;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacer / 2;
+  }
+
+  &__Evaluations,
+  &__Introduction {
+    text-align: center;
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "short_name": "CoConcept",
+  "short_name": "Rationalize",
   "name": "Collaborative Concept Evaluation",
   "icons": [
     {
@@ -19,7 +19,7 @@
     }
   ],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
+  "display": "fullscreen",
+  "theme_color": "#17a2b8",
   "background_color": "#ffffff"
 }

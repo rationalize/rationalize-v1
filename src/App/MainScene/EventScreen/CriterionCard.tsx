@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardTitle,
-  CardSubtitle,
   Label,
   Input,
   FormGroup,
@@ -14,8 +13,10 @@ import { Formik } from "formik";
 import { Alternative, Criterion } from "../../../RealmApp";
 
 import styles from "./CriterionCard.module.scss";
+import { Send } from "react-feather";
 
 type CriterionCardProps = {
+  className?: string;
   index: number;
   count: number;
   criterion: Criterion;
@@ -28,6 +29,7 @@ type Values = {
 };
 
 export function CriterionCard({
+  className,
   index,
   count,
   criterion,
@@ -38,16 +40,15 @@ export function CriterionCard({
     return onScores(scores);
   }
 
+  const isLast = index === count - 1;
+
   return (
-    <Card body>
-      <CardSubtitle className={styles.CriterionCard__Subtitle}>
-        Criterion {index + 1} of {count}
-      </CardSubtitle>
+    <Card className={className} body>
       <CardTitle className={styles.CriterionCard__Title}>
         <h2>{criterion.name}</h2>
       </CardTitle>
       <Formik<Values>
-        initialValues={{ scores: alternatives.map((a) => 5) }}
+        initialValues={{ scores: alternatives.map((a) => 0.5) }}
         onSubmit={handleSubmit}
         key={index}
       >
@@ -63,14 +64,20 @@ export function CriterionCard({
                   value={values.scores[index]}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  step="1"
-                  min="0"
-                  max="10"
+                  step={0.1}
+                  min={0}
+                  max={1}
                 />
               </FormGroup>
             ))}
             <Button type="submit" color="primary" block>
-              Next criterion
+              {isLast ? (
+                <>
+                  <Send /> Send
+                </>
+              ) : (
+                `Next criterion (${index + 2} of ${count})`
+              )}
             </Button>
           </Form>
         )}

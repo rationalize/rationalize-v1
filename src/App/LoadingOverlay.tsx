@@ -1,5 +1,6 @@
 import React from "react";
 import { Alert, Spinner } from "reactstrap";
+import classNames from "classnames";
 
 import styles from "./LoadingOverlay.module.scss";
 import { CenteredContainer } from "./MainScene/CenteredContainer";
@@ -7,6 +8,7 @@ import { CenteredContainer } from "./MainScene/CenteredContainer";
 type LoadingOverlayProps = {
   isLoading: boolean;
   error: Error | null;
+  className?: string;
   children: React.ReactNode;
 };
 
@@ -14,9 +16,10 @@ export function LoadingOverlay({
   isLoading,
   error,
   children,
+  className,
 }: LoadingOverlayProps) {
   return (
-    <div className={styles.LoadingOverlay}>
+    <div className={classNames(styles.LoadingOverlay, className)}>
       {isLoading ? (
         <CenteredContainer>
           <Spinner color="primary" />
