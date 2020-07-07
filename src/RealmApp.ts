@@ -20,6 +20,8 @@ export type Alternative = {
   name: string;
 };
 
+export type Weights = { [criterion: string]: number };
+
 export type Evaluation = {
   alternative: string;
   criterion: string;
@@ -34,6 +36,7 @@ export type Event = {
   criteria: Criterion[];
   alternatives: Alternative[];
   evaluations: { [userId: string]: Evaluation[] };
+  weights?: Weights;
 };
 
 export const mongodb = app.services.mongodb("mongodb-atlas");

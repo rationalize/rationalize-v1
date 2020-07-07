@@ -1,11 +1,31 @@
 .LoadingOverlay {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  align-items: center;
+  position: relative;
+
+  &--grow {
+    flex-grow: 1;
+  }
+
+  &__Overlay {
+    position: absolute;
+    display: flex;
+    min-height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+  }
 
   &__Alert {
     max-width: 100%;
     word-wrap: break-word;
+  }
+
+  &__Children {
+    flex-grow: 1;
+    &--loading {
+      opacity: .5;
+      pointer-events: none;
+    }
   }
 }

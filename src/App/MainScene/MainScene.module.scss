@@ -3,11 +3,16 @@
 .MainScene {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
+    padding-top: 5 * $spacer;
+    padding-bottom: 2 * $spacer;
 
     &__TopBar {
+        z-index: 1;
+        position: fixed;
+        top: 0;
+        width: 100vw;
         flex-basis: 3 * $spacer;
-        box-shadow: $gray-400 0 (.2 * $spacer) (.5 * $spacer);
-        margin-bottom: 2 * $spacer;
+        box-shadow: rgba($black, .3) 0 (.2 * $spacer) (.5 * $spacer);
     }
 }

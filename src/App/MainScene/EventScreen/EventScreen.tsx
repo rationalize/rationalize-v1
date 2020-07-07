@@ -39,7 +39,7 @@ export function EventScreen({ id }: EventScreenProps) {
   }, [id]);
 
   return (
-    <LoadingOverlay isLoading={isLoading} error={error}>
+    <LoadingOverlay isLoading={isLoading} error={error} grow>
       {event ? (
         <>
           <h1 className={styles.EventScreen__Heading}>{event.name}</h1>

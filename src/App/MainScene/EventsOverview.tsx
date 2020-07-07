@@ -23,15 +23,8 @@ export function EventsOverview() {
   }, []);
 
   return (
-    <LoadingOverlay isLoading={isLoading} error={error}>
-      {events.length === 0 ? (
-        <CenteredContainer>
-          <p>Concepts are evaluated at events ...</p>
-          <LinkButton to="/events/create" color="primary">
-            Start by creating an event
-          </LinkButton>
-        </CenteredContainer>
-      ) : (
+    <LoadingOverlay isLoading={isLoading} error={error} grow>
+      {events.length > 0 ? (
         <NarrowContainer>
           {events.map((event) => (
             <EventCard key={event._id.toHexString()} event={event} />
@@ -40,7 +33,14 @@ export function EventsOverview() {
             Create another event
           </LinkButton>
         </NarrowContainer>
-      )}
+      ) : !isLoading ? (
+        <CenteredContainer>
+          <p>Concepts are evaluated at events ...</p>
+          <LinkButton to="/events/create" color="primary">
+            Start by creating an event
+          </LinkButton>
+        </CenteredContainer>
+      ) : null}
     </LoadingOverlay>
   );
 }

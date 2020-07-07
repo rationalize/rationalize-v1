@@ -3,13 +3,13 @@ import { Alert, Spinner } from "reactstrap";
 import classNames from "classnames";
 
 import styles from "./LoadingOverlay.module.scss";
-import { CenteredContainer } from "./MainScene/CenteredContainer";
 
 type LoadingOverlayProps = {
   isLoading: boolean;
   error: Error | null;
   className?: string;
   children: React.ReactNode;
+  grow?: boolean;
 };
 
 export function LoadingOverlay({
@@ -17,22 +17,36 @@ export function LoadingOverlay({
   error,
   children,
   className,
+  grow,
 }: LoadingOverlayProps) {
   return (
-    <div className={classNames(styles.LoadingOverlay, className)}>
+    <div
+      className={classNames(
+        styles.LoadingOverlay,
+        {
+          [styles["LoadingOverlay--grow"]]: grow,
+        },
+        className
+      )}
+    >
       {isLoading ? (
-        <CenteredContainer>
+        <div className={styles.LoadingOverlay__Overlay}>
           <Spinner color="primary" />
-        </CenteredContainer>
+        </div>
       ) : error ? (
-        <CenteredContainer>
+        <div className={styles.LoadingOverlay__Overlay}>
           <Alert color="warning" className={styles.LoadingOverlay__Alert}>
             {error.message}
           </Alert>
-        </CenteredContainer>
-      ) : (
-        children
-      )}
+        </div>
+      ) : null}
+      <div
+        className={classNames(styles.LoadingOverlay__Children, {
+          [styles["LoadingOverlay__Children--loading"]]: isLoading,
+        })}
+      >
+        {children}
+      </div>
     </div>
   );
 }
