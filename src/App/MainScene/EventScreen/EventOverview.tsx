@@ -77,7 +77,7 @@ export function EventOverview({ event }: EventOverviewProps) {
           return (
             <>
               <section className={styles.EventOverview__Section}>
-                <LoadingOverlay isLoading={isSubmitting} error={null}>
+                <LoadingOverlay isLoading={isSubmitting}>
                   <Form onSubmit={handleSubmit} onReset={handleReset}>
                     <h2>Criteria</h2>
                     <p>

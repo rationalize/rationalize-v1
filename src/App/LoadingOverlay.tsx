@@ -6,7 +6,7 @@ import styles from "./LoadingOverlay.module.scss";
 
 type LoadingOverlayProps = {
   isLoading: boolean;
-  error: Error | null;
+  error?: Error | null;
   className?: string;
   children: React.ReactNode;
   grow?: boolean;

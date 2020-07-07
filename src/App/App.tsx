@@ -17,7 +17,7 @@ function isAuthenticated() {
 
 export function App() {
   return (
-    <Router>
+    <Router key={app.currentUser?.id}>
       <Switch>
         <Route path="/log-in" component={LogInScene} />
         <Route path="/events/:id/evaluate">

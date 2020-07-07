@@ -1,13 +1,15 @@
-@import "../../variables";
+@import "../variables";
 
 .Brand {
     font-family: 'Oxanium', cursive;
     font-size: 1.8rem;
     font-weight: lighter;
-    color: $white;
 
-    &:hover {
+    &--dark {
+        color: $primary;
+    }
+
+    &--light {
         color: $white;
-        text-decoration: none;
     }
 }
