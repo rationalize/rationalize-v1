@@ -15,6 +15,8 @@ import { Formik, FormikHelpers } from "formik";
 import { LoadingOverlay } from "../LoadingOverlay";
 import { CenteredCard } from "../layouts/CenteredCard";
 import { useAuthentication } from "../AuthenticationContext";
+import { OrLine } from "../OrLine";
+import { Facebook } from "react-feather";
 
 type FormValues = { email: string; password: string };
 
@@ -27,6 +29,13 @@ export function LogInScene() {
     { setSubmitting }: FormikHelpers<FormValues>
   ) {
     const credentials = Credentials.emailPassword(email, password);
+    await logIn(credentials);
+    setSubmitting(false);
+  }
+
+  async function handleFacebookLogin() {
+    const redirectUrl = window.location.origin + "/facebook-callback";
+    const credentials = Credentials.facebook(redirectUrl);
     await logIn(credentials);
   }
 
@@ -75,20 +84,29 @@ export function LogInScene() {
                     onBlur={handleBlur}
                   />
                 </FormGroup>
-                <Button
-                  type="submit"
-                  color="primary"
-                  disabled={isSubmitting}
-                  block
-                >
-                  Log in
-                </Button>
+                <FormGroup>
+                  <Button
+                    type="submit"
+                    color="primary"
+                    disabled={isSubmitting}
+                    block
+                  >
+                    Log in
+                  </Button>
+                </FormGroup>
               </Form>
             </LoadingOverlay>
           )}
         </Formik>
+        <FormGroup>
+          <Button onClick={handleFacebookLogin}>
+            <Facebook size="16" />
+            Log in with Facebook
+          </Button>
+        </FormGroup>
+        <OrLine />
         <CardText>
-          Or you can <Link to="/register">register</Link> an account.
+          <Link to="/register">Register</Link> an account.
         </CardText>
       </CardBody>
     </CenteredCard>

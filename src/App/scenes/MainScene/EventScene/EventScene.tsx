@@ -11,9 +11,9 @@ import styles from "./EventScreen.module.scss";
 import { EvaluationForm } from "../../../EvaluationForm";
 import { EventOverview } from "./EventOverview";
 
-type EventScreenProps = { id: string };
+type EventSceneProps = { id: string };
 
-export function EventScreen({ id }: EventScreenProps) {
+export function EventScene({ id }: EventSceneProps) {
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

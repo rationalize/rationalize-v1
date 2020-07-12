@@ -19,12 +19,7 @@ function getUserDisplayName(user: User | null) {
     } else if (typeof firstName === "string") {
       return firstName;
     } else {
-      return (
-        user.profile.firstName ||
-        user.profile.name ||
-        user.profile.email ||
-        "Anonymous"
-      );
+      return "Anonymous";
     }
   } else {
     return "Logged out";

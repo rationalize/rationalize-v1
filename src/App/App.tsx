@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from "react-router-dom";
+import { handleAuthRedirect } from "realm-web";
 
 import { app } from "../RealmApp";
 import { LogInScene } from "./scenes/LogInScene";
@@ -18,6 +19,13 @@ import {
 import { OnboardingScene } from "./scenes/OnboardingScene";
 import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 
+function FacebookCallback() {
+  useEffect(() => {
+    handleAuthRedirect();
+  }, []);
+  return null;
+}
+
 export function App() {
   return (
     <Router>
@@ -30,6 +38,7 @@ export function App() {
           <Route path="/register" component={RegisterScene} />
           <Route path="/onboarding" component={OnboardingScene} />
           <Route path="/reset-password" component={ResetPasswordScene} />
+          <Route path="/facebook-callback" component={FacebookCallback} />
           <AuthenticationConsumer>
             {({ user }) =>
               user ? (

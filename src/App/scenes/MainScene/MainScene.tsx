@@ -5,10 +5,10 @@ import { app, eventsCollection } from "../../../RealmApp";
 
 import { CreateEventForm, CreateEventHandler } from "./CreateEventForm";
 import { EventsOverview } from "./EventsOverview";
-import { EventScreen } from "./EventScreen";
+import { EventScene } from "./EventScene";
 import { NarrowContainer } from "../../NarrowContainer";
 import { TopAndSideBar } from "../../layouts/TopAndSideBar";
-import { UserProfile } from "./UserProfile";
+import { UserProfileScene } from "./UserProfileScene";
 
 export function MainScene() {
   const history = useHistory();
@@ -54,10 +54,10 @@ export function MainScene() {
           </NarrowContainer>
         </Route>
         <Route path="/events/:id">
-          {({ match }) => <EventScreen id={match?.params.id} />}
+          {({ match }) => <EventScene id={match?.params.id} />}
         </Route>
         <Route exact path="/profile">
-          <UserProfile />
+          <UserProfileScene />
         </Route>
       </Switch>
     </TopAndSideBar>

@@ -1,0 +1,21 @@
+@import "../variables";
+
+$or-line-color: $gray-400 !default;
+
+.OrLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $or-line-color;
+  padding-bottom: $spacer / 2;
+
+  &__Line {
+    height: 1px;
+    background: $or-line-color;
+    flex-grow: 1;
+  }
+
+  &__Text {
+    padding: 0 $spacer;
+  }
+}

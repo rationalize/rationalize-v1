@@ -4,7 +4,7 @@ import { Button } from "reactstrap";
 
 import { Event, app } from "../RealmApp";
 import { LoadingOverlay } from "./LoadingOverlay";
-import { CriterionCard } from "./scenes/MainScene/EventScreen/CriterionCard";
+import { CriterionCard } from "./scenes/MainScene/EventScene/CriterionCard";
 
 import styles from "./EvaluationForm.module.scss";
 

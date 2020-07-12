@@ -1,0 +1,13 @@
+{
+    "name": "oauth2-user-creation",
+    "type": "AUTHENTICATION",
+    "config": {
+        "operation_type": "CREATE",
+        "providers": [
+            "oauth2-facebook",
+            "oauth2-google"
+        ]
+    },
+    "function_name": "storeUserProfile",
+    "disabled": false
+}

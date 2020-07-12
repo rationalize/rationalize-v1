@@ -103,6 +103,17 @@ export function UserProfileForm({ onSaved }: UserProfileFormProps) {
     extendedInitialValues.work = "other";
   }
 
+  // If unknown, pull the first and last names from the users profile
+  // TODO: Move this to a MongoDB Function fireing when authenticated
+  /*
+  if (user && !extendedInitialValues.firstName) {
+    extendedInitialValues.firstName = user.profile.firstName;
+  }
+  if (user && !extendedInitialValues.lastName && user) {
+    extendedInitialValues.lastName = user.profile.lastName;
+  }
+  */
+
   return (
     <Formik<FormValues>
       initialValues={extendedInitialValues}

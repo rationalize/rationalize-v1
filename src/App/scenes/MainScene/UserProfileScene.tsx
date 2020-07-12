@@ -6,7 +6,7 @@ import { useAuthentication } from "../../AuthenticationContext";
 
 export type UserProfileProps = {};
 
-export function UserProfile() {
+export function UserProfileScene() {
   const { user } = useAuthentication();
 
   function handleSendResetPasswordEmail() {
