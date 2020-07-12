@@ -1,5 +1,4 @@
 {
-    "id": "5ef5e71cadf2642eb5724e2e",
     "name": "local-userpass",
     "type": "local-userpass",
     "config": {
@@ -7,7 +6,7 @@
         "resetPasswordSubject": "",
         "resetPasswordUrl": "https://app.rationalize.io/reset-password",
         "runConfirmationFunction": false,
-        "runResetFunction": ""
+        "runResetFunction": false
     },
     "disabled": false
 }
