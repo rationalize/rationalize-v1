@@ -7,27 +7,47 @@ import {
 } from "react-router-dom";
 
 import { app } from "../RealmApp";
-import { LogInScene } from "./LogInScene";
-import { MainScene } from "./MainScene/MainScene";
-
-function isAuthenticated() {
-  // console.log("Checking if theres an authenticated user", app.currentUser);
-  return app.currentUser && app.currentUser.state === "active";
-}
+import { LogInScene } from "./scenes/LogInScene";
+import { MainScene } from "./scenes/MainScene";
+import { RegisterScene } from "./scenes/RegisterScene";
+import { EvaluationInvitation } from "./EvaluationInvitation";
+import {
+  AuthenticationProvider,
+  AuthenticationConsumer,
+} from "./AuthenticationContext";
+import { OnboardingScene } from "./scenes/OnboardingScene";
+import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 
 export function App() {
   return (
-    <Router key={app.currentUser?.id}>
-      <Switch>
-        <Route path="/log-in" component={LogInScene} />
-        <Route path="/events/:id/evaluate">
-          {/* Skip redirect to /log-in when evaluating */}
-          <MainScene />
-        </Route>
-        <Route>
-          {isAuthenticated() ? <MainScene /> : <Redirect to={"/log-in"} />}
-        </Route>
-      </Switch>
+    <Router>
+      <AuthenticationProvider app={app}>
+        <Switch>
+          <Route path="/events/:id/invite">
+            {({ match }) => <EvaluationInvitation eventId={match?.params.id} />}
+          </Route>
+          <Route path="/log-in" component={LogInScene} />
+          <Route path="/register" component={RegisterScene} />
+          <Route path="/onboarding" component={OnboardingScene} />
+          <Route path="/reset-password" component={ResetPasswordScene} />
+          <AuthenticationConsumer>
+            {({ user }) =>
+              user ? (
+                <>
+                  <Route exact path="/">
+                    <Redirect to="/events" />
+                  </Route>
+                  <Route>
+                    <MainScene />
+                  </Route>
+                </>
+              ) : (
+                <Redirect to={"/log-in"} />
+              )
+            }
+          </AuthenticationConsumer>
+        </Switch>
+      </AuthenticationProvider>
     </Router>
   );
 }

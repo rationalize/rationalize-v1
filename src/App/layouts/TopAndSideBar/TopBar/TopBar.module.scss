@@ -1,0 +1,16 @@
+@import "../../../../variables";
+
+.TopBar {
+    display: flex;
+    background: $primary;
+    color: $white;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $spacer;
+
+    &__Brand {
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

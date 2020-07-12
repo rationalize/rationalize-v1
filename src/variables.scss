@@ -1,16 +1,17 @@
 $primary: #394e77;
 $secondary: #498e99;
 $danger: #cc614e;
+$body-bg: lighten($primary, 60%);
 
 $yiq-contrasted-threshold: 200;
-
-// $success:       $green !default;
-// $info:          $cyan !default;
-// $warning:       $yellow !default;
-// $danger:        $red !default;
-// $light:         $gray-100 !default;
-// $dark:          $gray-800 !default;
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+
+$topbar-height: 3.5 * $spacer;
+$sidebar-width: 250px;
+
+$shadow-color: rgba($black, .25);
+$shadow-offset: .2 * $spacer;
+$shadow-radius: $spacer;

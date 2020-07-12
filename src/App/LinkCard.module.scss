@@ -5,6 +5,7 @@
 
     &:hover {
         box-shadow: 0 (.2 * $spacer) (.5 * $spacer) $gray-300;
-        top: -0.1 * $spacer;
+        background-color: darken($white, 2%);
+        // border-color: $primary;
     }
 }

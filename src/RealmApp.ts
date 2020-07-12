@@ -1,7 +1,7 @@
-import { App } from "realm-web";
+import { App, User as RealmUser } from "realm-web";
 import { ObjectId } from "bson";
 
-interface Functions {
+export interface Functions {
   updateEventScore(
     eventId: ObjectId,
     scores: { criterion: string; alternative: string; score: number }[]
@@ -10,7 +10,7 @@ interface Functions {
 }
 
 export const APP_ID = "rationalize-iwbgr";
-export const app = new App<Functions>(APP_ID);
+export const app = new App<Functions, UserProfile | {}>(APP_ID);
 
 export type Criterion = {
   name: string;
@@ -39,6 +39,25 @@ export type Event = {
   weights?: Weights;
 };
 
+type ProfessionalProfile = {
+  use: "professional";
+  company: string;
+  title: string;
+  work: string;
+};
+
+export type UserProfile = {
+  _id: ObjectId;
+  userId: string;
+  firstName: string;
+  lastName: string;
+} & (ProfessionalProfile | { use: "individual" });
+
+export type User = RealmUser<Functions, Partial<UserProfile>>;
+
 export const mongodb = app.services.mongodb("mongodb-atlas");
 export const rationalizeDB = mongodb.db("rationalize-db");
 export const eventsCollection = rationalizeDB.collection<Event>("Events");
+export const userProfilesCollection = rationalizeDB.collection<UserProfile>(
+  "UserProfiles"
+);

@@ -1,0 +1,13 @@
+@import "../variables";
+
+.EvaluationForm {
+  align-items: center;
+  
+  &__Card {
+    width: 100%;
+  }
+
+  &__Icon {
+    margin: 1rem;
+  }
+}

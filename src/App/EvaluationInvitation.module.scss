@@ -1,0 +1,9 @@
+@import "../variables";
+
+.EvaluationInvitation {
+  padding: $spacer 0;
+
+  &__EventName {
+    text-align: center;
+  }
+}

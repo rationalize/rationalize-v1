@@ -1,0 +1,1 @@
+export { CenteredCard } from "./CenteredCard";

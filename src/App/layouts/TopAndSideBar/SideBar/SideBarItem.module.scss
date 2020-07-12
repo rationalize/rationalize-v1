@@ -1,0 +1,44 @@
+@import "../../../../variables";
+
+$sidebar-item-handle-offset: .2rem;
+$sidebar-item-handle-width: .2rem;
+
+.SideBarItem {
+  position: relative;
+  display: flex;
+  height: 3rem;
+  align-items: center;
+  padding-left: $spacer;
+
+  &__Icon {
+    margin-right: $spacer / 2;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: $sidebar-item-handle-offset;
+    top: $sidebar-item-handle-offset;
+    bottom: $sidebar-item-handle-offset;
+    width: $sidebar-item-handle-width;
+    border-radius: $sidebar-item-handle-width / 2;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &--active {
+    background-color: $gray-200;
+  }
+
+  &:not(&--active):hover {
+    background-color: $gray-100;
+  }
+
+  &--active, &:hover {
+    &::before {
+      background-color: $primary;
+    }
+  }
+}

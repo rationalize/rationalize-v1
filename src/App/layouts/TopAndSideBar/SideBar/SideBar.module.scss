@@ -1,0 +1,14 @@
+@import "../../../../variables";
+
+.SideBar {
+  background: $white;
+  flex-basis: 250px;
+
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-color $shadow-offset 0 $shadow-radius;
+
+  &__Navigation {
+    padding-top: $spacer;
+  }
+}
