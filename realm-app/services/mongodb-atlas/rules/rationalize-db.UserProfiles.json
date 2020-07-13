@@ -1,4 +1,5 @@
 {
+    "id": "5f0b5efb5bf236e32bc4acc8",
     "database": "rationalize-db",
     "collection": "UserProfiles",
     "roles": [
@@ -15,23 +16,20 @@
         }
     ],
     "schema": {
-        "title": "UserProfile",
-        "required": [
-            "firstName",
-            "lastName",
-            "use"
-        ],
         "properties": {
             "_id": {
                 "bsonType": "objectId"
             },
-            "userId": {
+            "company": {
                 "bsonType": "string"
             },
             "firstName": {
                 "bsonType": "string"
             },
             "lastName": {
+                "bsonType": "string"
+            },
+            "title": {
                 "bsonType": "string"
             },
             "use": {
@@ -41,15 +39,18 @@
                     "professional"
                 ]
             },
-            "company": {
-                "bsonType": "string"
-            },
-            "title": {
+            "userId": {
                 "bsonType": "string"
             },
             "work": {
                 "bsonType": "string"
             }
-        }
+        },
+        "required": [
+            "firstName",
+            "lastName",
+            "use"
+        ],
+        "title": "UserProfile"
     }
 }
