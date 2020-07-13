@@ -16,6 +16,7 @@ import { CenteredCard } from "../layouts/CenteredCard";
 import { LoadingOverlay } from "../LoadingOverlay";
 import { useAuthentication } from "../AuthenticationContext";
 import { app } from "../../RealmApp";
+import { OrLine } from "../OrLine";
 
 type FormValues = {
   email: string;
@@ -124,8 +125,9 @@ export function RegisterScene() {
             </LoadingOverlay>
           )}
         </Formik>
+        <OrLine />
         <CardText>
-          Or <Link to="/log-in">log into</Link> an existing account.
+          <Link to="/log-in">Log into</Link> an existing account.
         </CardText>
       </CardBody>
     </CenteredCard>

@@ -1,0 +1,54 @@
+{
+    "id": "5f0c2a7755bab5defa0b8178",
+    "name": "oauth2-google",
+    "type": "oauth2-google",
+    "config": {
+        "clientId": "1014830239501-0dbr898o4nlcin6de8dvckk7tf1u2sjl.apps.googleusercontent.com"
+    },
+    "secret_config": {
+        "clientSecret": "google-client-secret"
+    },
+    "disabled": false,
+    "metadata_fields": [
+        {
+            "required": false,
+            "name": "name"
+        },
+        {
+            "required": false,
+            "name": "first_name"
+        },
+        {
+            "required": false,
+            "name": "picture"
+        },
+        {
+            "required": false,
+            "name": "gender"
+        },
+        {
+            "required": false,
+            "name": "birthday"
+        },
+        {
+            "required": false,
+            "name": "min_age"
+        },
+        {
+            "required": false,
+            "name": "max_age"
+        },
+        {
+            "required": false,
+            "name": "email"
+        },
+        {
+            "required": false,
+            "name": "last_name"
+        }
+    ],
+    "redirect_uris": [
+        "http://localhost:3000/google-callback",
+        "https://app.rationalize.io/google-callback"
+    ]
+}

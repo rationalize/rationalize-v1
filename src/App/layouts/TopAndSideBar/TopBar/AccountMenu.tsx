@@ -6,10 +6,11 @@ import {
   DropdownToggle,
 } from "reactstrap";
 
-import styles from "./AccountMenu.module.scss";
 import { useAuthentication } from "../../../AuthenticationContext";
 import { User } from "../../../../RealmApp";
-import { Link } from "react-router-dom";
+import { DropdownLink } from "../../../DropdownLink";
+
+import styles from "./AccountMenu.module.scss";
 
 function getUserDisplayName(user: User | null) {
   if (user && user.state === "active") {
@@ -42,9 +43,7 @@ export function AccountMenu() {
         {getUserDisplayName(user)}
       </DropdownToggle>
       <DropdownMenu right>
-        <Link to="/profile">
-          <DropdownItem>Profile</DropdownItem>
-        </Link>
+        <DropdownLink to="/profile">Profile</DropdownLink>
         <DropdownItem onClick={logOut}>Log out</DropdownItem>
       </DropdownMenu>
     </Dropdown>

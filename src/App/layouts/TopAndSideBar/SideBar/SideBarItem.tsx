@@ -3,7 +3,7 @@ import React from "react";
 import { NavLink, LinkProps } from "react-router-dom";
 import { LocationState } from "history";
 
-import { Icon, IconName } from "../../../Icon";
+import { Icon, IconName } from "../../../icons/Icon";
 
 import styles from "./SideBarItem.module.scss";
 

@@ -1,5 +1,7 @@
 @import "../../../variables";
 
+$centered-card-min-width: 350px !default;
+
 .CenteredCard {
     display: flex;
     flex-direction: column;
@@ -12,6 +14,7 @@
     }
 
     &__Card {
+        min-width: $centered-card-min-width;
         box-shadow: $gray-300 0 $spacer $spacer;
     }
 }

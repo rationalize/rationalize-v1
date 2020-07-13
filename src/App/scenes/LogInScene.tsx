@@ -16,7 +16,7 @@ import { LoadingOverlay } from "../LoadingOverlay";
 import { CenteredCard } from "../layouts/CenteredCard";
 import { useAuthentication } from "../AuthenticationContext";
 import { OrLine } from "../OrLine";
-import { Facebook } from "react-feather";
+import { IconButton } from "../icons";
 
 type FormValues = { email: string; password: string };
 
@@ -36,6 +36,12 @@ export function LogInScene() {
   async function handleFacebookLogin() {
     const redirectUrl = window.location.origin + "/facebook-callback";
     const credentials = Credentials.facebook(redirectUrl);
+    await logIn(credentials);
+  }
+
+  async function handleGoogleLogin() {
+    const redirectUrl = window.location.origin + "/google-callback";
+    const credentials = Credentials.google(redirectUrl);
     await logIn(credentials);
   }
 
@@ -99,10 +105,14 @@ export function LogInScene() {
           )}
         </Formik>
         <FormGroup>
-          <Button onClick={handleFacebookLogin}>
-            <Facebook size="16" />
+          <IconButton onClick={handleFacebookLogin} icon="Facebook" block>
             Log in with Facebook
-          </Button>
+          </IconButton>
+        </FormGroup>
+        <FormGroup>
+          <IconButton onClick={handleGoogleLogin} icon="Google" block>
+            Log in with Google
+          </IconButton>
         </FormGroup>
         <OrLine />
         <CardText>

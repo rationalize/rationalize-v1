@@ -19,7 +19,7 @@ import {
 import { OnboardingScene } from "./scenes/OnboardingScene";
 import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 
-function FacebookCallback() {
+function OAuthCallback() {
   useEffect(() => {
     handleAuthRedirect();
   }, []);
@@ -38,7 +38,8 @@ export function App() {
           <Route path="/register" component={RegisterScene} />
           <Route path="/onboarding" component={OnboardingScene} />
           <Route path="/reset-password" component={ResetPasswordScene} />
-          <Route path="/facebook-callback" component={FacebookCallback} />
+          <Route path="/facebook-callback" component={OAuthCallback} />
+          <Route path="/google-callback" component={OAuthCallback} />
           <AuthenticationConsumer>
             {({ user }) =>
               user ? (
