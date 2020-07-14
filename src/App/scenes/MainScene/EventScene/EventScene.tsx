@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { ObjectId } from "bson";
 import { Credentials } from "realm-web";
 
@@ -50,17 +50,11 @@ export function EventScene({ id }: EventSceneProps) {
                 </NarrowContainer>
               )}
             </Route>
-            {app.currentUser?.id === event.facilitator ? (
-              <Route exact path="/events/:id">
-                <NarrowContainer>
-                  <EventOverview event={event} />
-                </NarrowContainer>
-              </Route>
-            ) : (
-              <Route>
-                <Redirect to="/log-in" />
-              </Route>
-            )}
+            <Route exact path="/events/:id">
+              <NarrowContainer>
+                <EventOverview event={event} />
+              </NarrowContainer>
+            </Route>
           </Switch>
         </>
       ) : null}

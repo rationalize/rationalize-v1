@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useReducer } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useReducer,
+  useEffect,
+} from "react";
 import { Credentials, App } from "realm-web";
 
 import { User } from "../RealmApp";
@@ -42,11 +48,13 @@ export function AuthenticationProvider({
   async function logIn(credentials: Credentials<any>) {
     await app.logIn(credentials);
     setUser(app.currentUser);
+    gtag("event", "login", { method: credentials.providerType });
   }
 
   async function logOut() {
     const { currentUser } = app;
     if (currentUser) {
+      gtag("event", "logout");
       await currentUser.logOut();
       setUser(app.currentUser);
     } else {
@@ -58,6 +66,13 @@ export function AuthenticationProvider({
     app.switchUser(user);
     setUser(app.currentUser);
   }
+
+  useEffect(() => {
+    if (typeof gtag === "function") {
+      // Start sending the user ID to Google Analytics
+      gtag("set", { user_id: user ? user.id : undefined });
+    }
+  }, [user]);
 
   async function refreshCustomData() {
     const { currentUser } = app;

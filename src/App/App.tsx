@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { handleAuthRedirect } from "realm-web";
+import { createBrowserHistory } from "history";
 
 import { app } from "../RealmApp";
 import { LogInScene } from "./scenes/LogInScene";
@@ -19,6 +15,16 @@ import {
 import { OnboardingScene } from "./scenes/OnboardingScene";
 import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 
+const history = createBrowserHistory();
+
+history.listen((location) => {
+  gtag("config", GA_TRACKING_ID, {
+    page_title: document.title,
+    page_location: window.location.href,
+    page_path: location.pathname,
+  });
+});
+
 function OAuthCallback() {
   useEffect(() => {
     handleAuthRedirect();
@@ -28,7 +34,7 @@ function OAuthCallback() {
 
 export function App() {
   return (
-    <Router>
+    <Router history={history}>
       <AuthenticationProvider app={app}>
         <Switch>
           <Route path="/events/:id/invite">

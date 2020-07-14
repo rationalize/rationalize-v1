@@ -43,6 +43,7 @@ export function RegisterScene() {
 
   async function handleRegister(values: FormValues) {
     await app.emailPasswordAuth.registerUser(values.email, values.password);
+    gtag("event", "sign_up", { method: "local-userpass" });
     const credentials = Credentials.emailPassword(
       values.email,
       values.password

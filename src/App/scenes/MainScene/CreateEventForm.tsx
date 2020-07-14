@@ -89,6 +89,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
         sharing: { mode: "disabled" },
       });
       helpers.setSubmitting(false);
+      gtag("event", "create_event");
       handleCreated(insertedId);
     }
   };

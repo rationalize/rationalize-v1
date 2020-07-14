@@ -85,6 +85,7 @@ export function UserProfileForm({ onSaved }: UserProfileFormProps) {
       throw new Error("Cannot save profile without an authenticated user");
     }
     setSubmitting(false);
+    gtag("event", "save_user_profile");
     if (onSaved) {
       onSaved();
     }
@@ -102,17 +103,6 @@ export function UserProfileForm({ onSaved }: UserProfileFormProps) {
     extendedInitialValues.workOther = extendedInitialValues.work;
     extendedInitialValues.work = "other";
   }
-
-  // If unknown, pull the first and last names from the users profile
-  // TODO: Move this to a MongoDB Function fireing when authenticated
-  /*
-  if (user && !extendedInitialValues.firstName) {
-    extendedInitialValues.firstName = user.profile.firstName;
-  }
-  if (user && !extendedInitialValues.lastName && user) {
-    extendedInitialValues.lastName = user.profile.lastName;
-  }
-  */
 
   return (
     <Formik<FormValues>
