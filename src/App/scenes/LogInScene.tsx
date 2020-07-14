@@ -35,17 +35,25 @@ export function LogInScene() {
   }
 
   async function handleFacebookLogin() {
-    const redirectUrl = window.location.origin + "/facebook-callback";
-    const credentials = Credentials.facebook(redirectUrl);
-    await logIn(credentials);
-    history.replace("/");
+    try {
+      const redirectUrl = window.location.origin + "/facebook-callback";
+      const credentials = Credentials.facebook(redirectUrl);
+      await logIn(credentials);
+      history.replace("/");
+    } catch (err) {
+      console.error(`Failed to authenticate: ${err}`);
+    }
   }
 
   async function handleGoogleLogin() {
-    const redirectUrl = window.location.origin + "/google-callback";
-    const credentials = Credentials.google(redirectUrl);
-    await logIn(credentials);
-    history.replace("/");
+    try {
+      const redirectUrl = window.location.origin + "/google-callback";
+      const credentials = Credentials.google(redirectUrl);
+      await logIn(credentials);
+      history.replace("/");
+    } catch (err) {
+      console.error(`Failed to authenticate: ${err}`);
+    }
   }
 
   return (
