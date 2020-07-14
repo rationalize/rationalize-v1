@@ -28,6 +28,12 @@ export type Evaluation = {
   score: number;
 };
 
+export type SharingMode = "disabled" | "public";
+
+export type Sharing = {
+  mode: SharingMode;
+};
+
 export type Event = {
   _id: ObjectId;
   name: string;
@@ -37,6 +43,7 @@ export type Event = {
   alternatives: Alternative[];
   evaluations: { [userId: string]: Evaluation[] };
   weights?: Weights;
+  sharing: Sharing;
 };
 
 type ProfessionalProfile = {
@@ -53,7 +60,10 @@ export type UserProfile = {
   lastName: string;
 } & (ProfessionalProfile | { use: "individual" });
 
-export type User = RealmUser<Functions, Partial<UserProfile>>;
+export type User = RealmUser<
+  Functions & Realm.BaseFunctionsFactory,
+  Partial<UserProfile>
+>;
 
 export const mongodb = app.services.mongodb("mongodb-atlas");
 export const rationalizeDB = mongodb.db("rationalize-db");

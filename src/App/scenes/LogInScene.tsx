@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
   Button,
@@ -22,7 +22,7 @@ type FormValues = { email: string; password: string };
 
 export function LogInScene() {
   const history = useHistory();
-  const { user, logIn } = useAuthentication();
+  const { logIn } = useAuthentication();
 
   async function handleLogIn(
     { email, password }: FormValues,
@@ -31,25 +31,22 @@ export function LogInScene() {
     const credentials = Credentials.emailPassword(email, password);
     await logIn(credentials);
     setSubmitting(false);
+    history.replace("/");
   }
 
   async function handleFacebookLogin() {
     const redirectUrl = window.location.origin + "/facebook-callback";
     const credentials = Credentials.facebook(redirectUrl);
     await logIn(credentials);
+    history.replace("/");
   }
 
   async function handleGoogleLogin() {
     const redirectUrl = window.location.origin + "/google-callback";
     const credentials = Credentials.google(redirectUrl);
     await logIn(credentials);
+    history.replace("/");
   }
-
-  useEffect(() => {
-    if (user) {
-      history.replace("/");
-    }
-  }, [history, user]);
 
   return (
     <CenteredCard>

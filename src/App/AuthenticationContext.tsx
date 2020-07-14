@@ -1,11 +1,14 @@
 import React, { createContext, useState, useContext, useReducer } from "react";
-import { User, Credentials, App } from "realm-web";
+import { Credentials, App } from "realm-web";
+
+import { User } from "../RealmApp";
 
 type AuthenticationContext = {
-  user: User<any, any> | null;
+  user: User | null;
   logIn: (credentials: Credentials<any>) => Promise<void>;
   logOut: () => Promise<void>;
   refreshCustomData: () => Promise<void>;
+  switchUser: (user: User) => void;
 };
 
 async function throwMissingProvider(): Promise<any> {
@@ -17,32 +20,24 @@ const context = createContext<AuthenticationContext>({
   logIn: throwMissingProvider,
   logOut: throwMissingProvider,
   refreshCustomData: throwMissingProvider,
+  switchUser: throwMissingProvider,
 });
 
 const { Consumer, Provider } = context;
 
-type AuthenticationProviderProps<
-  FunctionsFactoryType extends object,
-  CustomDataType extends object
-> = {
-  app: App<FunctionsFactoryType, CustomDataType>;
+type AuthenticationProviderProps = {
+  app: App<any, any>;
   children: React.ReactNode;
 };
 
-export function AuthenticationProvider<
-  FunctionsFactoryType extends object = Realm.DefaultFunctionsFactory,
-  CustomDataType extends object = any
->({
+export function AuthenticationProvider({
   app,
   children,
-}: AuthenticationProviderProps<FunctionsFactoryType, CustomDataType>) {
+}: AuthenticationProviderProps) {
   // See https://stackoverflow.com/a/60820265/503899
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const [user, setUser] = useState<User<
-    FunctionsFactoryType,
-    CustomDataType
-  > | null>(app.currentUser);
+  const [user, setUser] = useState<User | null>(app.currentUser);
 
   async function logIn(credentials: Credentials<any>) {
     await app.logIn(credentials);
@@ -59,6 +54,11 @@ export function AuthenticationProvider<
     }
   }
 
+  function switchUser(user: User) {
+    app.switchUser(user);
+    setUser(app.currentUser);
+  }
+
   async function refreshCustomData() {
     const { currentUser } = app;
     if (currentUser) {
@@ -71,7 +71,7 @@ export function AuthenticationProvider<
 
   return (
     <Provider
-      value={{ user, logIn, logOut, refreshCustomData }}
+      value={{ user, logIn, logOut, switchUser, refreshCustomData }}
       children={children}
     />
   );

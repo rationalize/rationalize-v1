@@ -1,7 +1,9 @@
 $primary: #394e77;
 $secondary: #498e99;
 $danger: #cc614e;
-$body-bg: lighten($primary, 60%);
+
+$gray-100: #f8f9fa;
+$body-bg: $gray-100;
 
 $yiq-contrasted-threshold: 200;
 

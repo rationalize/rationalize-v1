@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Badge, Input, FormGroup, Label, Card, Form, Button } from "reactstrap";
+import {
+  Badge,
+  Input,
+  FormGroup,
+  Label,
+  Card,
+  Form,
+  Button,
+  CardText,
+} from "reactstrap";
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { Formik, FormikHelpers } from "formik";
 
@@ -10,6 +19,7 @@ import { eventsCollection, Weights } from "../../../../RealmApp";
 
 import styles from "./EventOverview.module.scss";
 import { LoadingOverlay } from "../../../LoadingOverlay";
+import { EventSharingForm } from "./EventSharingForm";
 
 type EventOverviewProps = { event: Event };
 
@@ -77,81 +87,96 @@ export function EventOverview({ event }: EventOverviewProps) {
           return (
             <>
               <section className={styles.EventOverview__Section}>
-                <LoadingOverlay isLoading={isSubmitting}>
-                  <Form onSubmit={handleSubmit} onReset={handleReset}>
-                    <h2>Criteria</h2>
-                    <p>
-                      Drag the sliders below to adjust the weight of each
-                      criterion.
-                    </p>
-                    {event.criteria.map((criterion, index) => (
-                      <FormGroup key={index}>
-                        <Label for={`criterion-${index}`}>
-                          {criterion.name}
-                        </Label>
-                        <Input
-                          type="range"
-                          id={`criterion-${index}`}
-                          name={`weights.${criterion.name}`}
-                          value={values.weights[criterion.name]}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          step={0.1}
-                          min={0}
-                          max={1}
-                        />
-                      </FormGroup>
-                    ))}
-                    <Button
-                      type="submit"
-                      disabled={!dirty || isSubmitting}
-                      block
-                    >
-                      Save weights
-                    </Button>
-                  </Form>
-                </LoadingOverlay>
+                <h3>Criteria</h3>
+                <Card body>
+                  <LoadingOverlay isLoading={isSubmitting}>
+                    <Form onSubmit={handleSubmit} onReset={handleReset}>
+                      <p>
+                        Drag the sliders below to adjust the weight of each
+                        criterion.
+                      </p>
+                      {event.criteria.map((criterion, index) => (
+                        <FormGroup key={index}>
+                          <Label for={`criterion-${index}`}>
+                            {criterion.name}
+                          </Label>
+                          <Input
+                            type="range"
+                            id={`criterion-${index}`}
+                            name={`weights.${criterion.name}`}
+                            value={values.weights[criterion.name]}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            step={0.1}
+                            min={0}
+                            max={1}
+                          />
+                        </FormGroup>
+                      ))}
+                      <Button
+                        type="submit"
+                        disabled={!dirty || isSubmitting}
+                        block
+                      >
+                        Save weights
+                      </Button>
+                    </Form>
+                  </LoadingOverlay>
+                </Card>
               </section>
               <section className={styles.EventOverview__Section}>
-                <h2>Alternatives</h2>
-                <Flipper flipKey={alternatives.map((a) => a.name).join("")}>
-                  {alternatives.map((alternative) => (
-                    <Flipped key={alternative.name} flipId={alternative.name}>
-                      <Card
-                        body
-                        className={styles.EventOverview__AlternativeCard}
-                      >
-                        {alternative.name}
-                        {!Number.isNaN(alternative.score.average) ? (
-                          <Badge pill>
-                            {Math.round(alternative.score.average * 10) / 10}
-                          </Badge>
-                        ) : null}
-                      </Card>
-                    </Flipped>
-                  ))}
-                </Flipper>
+                <h3>Alternatives</h3>
+                <Card body>
+                  <Flipper flipKey={alternatives.map((a) => a.name).join("")}>
+                    {alternatives.map((alternative) => (
+                      <Flipped key={alternative.name} flipId={alternative.name}>
+                        <Card
+                          body
+                          className={styles.EventOverview__AlternativeCard}
+                        >
+                          {alternative.name}
+                          {!Number.isNaN(alternative.score.average) ? (
+                            <Badge pill>
+                              {(alternative.score.average * 10).toFixed(1)}
+                            </Badge>
+                          ) : null}
+                        </Card>
+                      </Flipped>
+                    ))}
+                  </Flipper>
+                </Card>
               </section>
             </>
           );
         }}
       </Formik>
       <section className={styles.EventOverview__Section}>
-        <h2>Invite participants</h2>
-        <FormGroup>
-          <Label for="evaluation-link">Send this link to participants:</Label>
-          <CopyToClipboardInput
-            id="evaluation-link"
-            text={global.location.href + "/invite"}
-          />
-        </FormGroup>
-        <p>
-          {Object.keys(event.evaluations).length} participants has completed the
-          evaluation.
-        </p>
-        <LinkButton to={`/events/${event._id.toHexString()}/evaluate`} block>
-          Go to evaluation
-        </LinkButton>
+        <h3>Scoring</h3>
+        <Card body>
+          <FormGroup>
+            <Label for="evaluation-link">Send this link to participants:</Label>
+            <CopyToClipboardInput
+              id="evaluation-link"
+              text={global.location.href + "/invite"}
+            />
+          </FormGroup>
+          <p>
+            {Object.keys(event.evaluations).length} participants has completed
+            the evaluation.
+          </p>
+          <LinkButton to={`/events/${event._id.toHexString()}/evaluate`} block>
+            Go to evaluation
+          </LinkButton>
+        </Card>
+      </section>
+      <section className={styles.EventOverview__Section}>
+        <h3>Sharing</h3>
+        <Card body>
+          <CardText>
+            You can share the result of the evaluation event with others.
+          </CardText>
+          <EventSharingForm event={event} />
+        </Card>
       </section>
     </>
   );

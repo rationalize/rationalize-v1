@@ -1,0 +1,10 @@
+@import "../../../variables";
+
+.EventsOverviewScene {
+  &__EventRow {
+    cursor: pointer;
+    &:hover, &:active, &:focus {
+      background: $gray-100;
+    }
+  }
+}

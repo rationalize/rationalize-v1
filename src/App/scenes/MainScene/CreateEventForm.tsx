@@ -3,6 +3,7 @@ import { Formik, FormikHelpers, useFormikContext } from "formik";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 
 import { InputListCard } from "../../InputListCard";
+import { app, eventsCollection } from "../../../RealmApp";
 
 export type AlternativeValues = {
   name: string;
@@ -25,7 +26,7 @@ export type CreateEventHandler = (
 ) => void;
 
 type CreateEventFormProps = {
-  handleCreateEvent: CreateEventHandler;
+  handleCreated: (id: Realm.ObjectId) => void;
 };
 
 type ErrorObject<Values> = { [key in keyof Values]?: string };
@@ -61,7 +62,37 @@ function FieldFeedback<Values>({ name, helper }: FieldFeedbackProps<Values>) {
   );
 }
 
-export function CreateEventForm({ handleCreateEvent }: CreateEventFormProps) {
+export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
+  const handleSubmit: CreateEventHandler = async (values, helpers) => {
+    if (app.currentUser) {
+      const criteria = values.criteria.filter((c) => c.name);
+      const alternatives = values.alternatives.filter((a) => a.name);
+      if (criteria.length === 0) {
+        helpers.setFieldError(
+          "criteria",
+          "The must be at least one criterion."
+        );
+      }
+      if (alternatives.length === 0) {
+        helpers.setFieldError(
+          "alternatives",
+          "The must be at least one alternative."
+        );
+      }
+      const { insertedId } = await eventsCollection.insertOne({
+        facilitator: app.currentUser.id,
+        participants: values.participate ? [app.currentUser.id] : [],
+        evaluations: {},
+        name: values.name,
+        criteria,
+        alternatives,
+        sharing: { mode: "disabled" },
+      });
+      helpers.setSubmitting(false);
+      handleCreated(insertedId);
+    }
+  };
+
   return (
     <Formik<EventValues>
       initialValues={{
@@ -71,7 +102,7 @@ export function CreateEventForm({ handleCreateEvent }: CreateEventFormProps) {
         participate: false,
       }}
       validate={validate}
-      onSubmit={handleCreateEvent}
+      onSubmit={handleSubmit}
     >
       {({
         values,

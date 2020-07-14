@@ -7,10 +7,11 @@ import {
 } from "reactstrap";
 
 import { useAuthentication } from "../../../AuthenticationContext";
-import { User } from "../../../../RealmApp";
+import { User, app } from "../../../../RealmApp";
 import { DropdownLink } from "../../../DropdownLink";
 
 import styles from "./AccountMenu.module.scss";
+import { useHistory } from "react-router";
 
 function getUserDisplayName(user: User | null) {
   if (user && user.state === "active") {
@@ -30,7 +31,17 @@ function getUserDisplayName(user: User | null) {
 export function AccountMenu() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const { user, logOut } = useAuthentication();
+  const { user, logOut, switchUser } = useAuthentication();
+  const history = useHistory();
+
+  const otherActiveUsers = app.allUsers.filter(
+    (u) => u !== user && u.state === "active"
+  );
+
+  function handleUserSwitch(otherUser: User) {
+    switchUser(otherUser);
+    history.push("/");
+  }
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -45,6 +56,20 @@ export function AccountMenu() {
       <DropdownMenu right>
         <DropdownLink to="/profile">Profile</DropdownLink>
         <DropdownItem onClick={logOut}>Log out</DropdownItem>
+        {otherActiveUsers.length >= 1 && (
+          <>
+            <DropdownItem divider />
+            <DropdownItem header>Switch user</DropdownItem>
+            {otherActiveUsers.map((otherUser) => (
+              <DropdownItem
+                key={otherUser.id}
+                onClick={handleUserSwitch.bind(null, otherUser as User)}
+              >
+                {getUserDisplayName(otherUser as User)}
+              </DropdownItem>
+            ))}
+          </>
+        )}
       </DropdownMenu>
     </Dropdown>
   );

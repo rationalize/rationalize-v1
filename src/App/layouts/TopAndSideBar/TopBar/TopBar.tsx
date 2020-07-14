@@ -13,7 +13,7 @@ export function TopBar({ className }: TopBarProps) {
   return (
     <div className={classNames(styles.TopBar, className)}>
       <Link to="/" className={styles.TopBar__Brand}>
-        <Brand color="light" />
+        <Brand />
       </Link>
       <AccountMenu />
     </div>
