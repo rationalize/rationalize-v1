@@ -8,6 +8,10 @@
   flex-direction: column;
   box-shadow: $shadow-color $shadow-offset 0 $shadow-radius;
 
+  &__QuickAction {
+    padding: $spacer;
+  }
+
   &__Navigation {
     padding-top: $spacer;
   }

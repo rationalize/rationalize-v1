@@ -10,6 +10,7 @@ import { LoadingOverlay } from "../../../LoadingOverlay";
 import styles from "./EventScreen.module.scss";
 import { EvaluationForm } from "../../../EvaluationForm";
 import { EventOverview } from "./EventOverview";
+import { EvaluationInvitation } from "../../../EvaluationInvitation";
 
 type EventSceneProps = { id: string };
 
@@ -50,10 +51,13 @@ export function EventScene({ id }: EventSceneProps) {
                 </NarrowContainer>
               )}
             </Route>
+            <Route path="/events/:id/invite">
+              {({ match }) => (
+                <EvaluationInvitation eventId={match?.params.id} />
+              )}
+            </Route>
             <Route exact path="/events/:id">
-              <NarrowContainer>
-                <EventOverview event={event} />
-              </NarrowContainer>
+              <EventOverview event={event} />
             </Route>
           </Switch>
         </>

@@ -30,5 +30,9 @@
         padding-bottom: 2*$spacer;
         padding-left: $spacer;
         padding-right: $spacer;
+
+        &--full-width {
+            margin-left: 0;
+        }
     }
 }

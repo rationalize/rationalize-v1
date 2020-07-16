@@ -1,0 +1,28 @@
+// $primary: #394e77;
+// $secondary: #498e99;
+// $danger: #cc614e;
+$primary: #70bbfd;
+$secondary: #e7e2e2;
+$success: #4ce1b6;
+$danger: #ff4861;
+
+$gray-150: #f2f4f7 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+
+$body-bg: $gray-150;
+$body-color: $gray-700;
+$card-border-width: 0;
+
+$yiq-contrasted-threshold: 200;
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+$topbar-height: 3.5 * $spacer;
+$sidebar-width: 250px;
+
+$shadow-color: rgba($gray-600, .25);
+$shadow-offset: .2 * $spacer;
+$shadow-radius: $spacer;

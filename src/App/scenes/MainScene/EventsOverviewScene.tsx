@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Card } from "reactstrap";
+import { Container, Table, Card } from "reactstrap";
 
 import { CenteredContainer } from "./CenteredContainer";
 import { LinkButton } from "../../LinkButton";
@@ -46,38 +46,36 @@ export function EventsOverviewScene() {
     <LoadingOverlay isLoading={isLoading} error={error} grow>
       {events.length > 0 ? (
         <>
-          <Container>
-            <Row>
-              <Col md={{ size: 8, offset: 2 }}>
-                <h3>Events</h3>
-                <Card body>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map((event) => (
-                        <tr
-                          key={event._id.toHexString()}
-                          className={styles.EventsOverviewScene__EventRow}
-                          onClick={handleClick.bind(null, event)}
-                          onKeyUp={handleKeyUp.bind(null, event)}
-                          tabIndex={0}
-                        >
-                          <td>{event.name}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
+          <Container fluid>
+            <h3>Events</h3>
+            <Card body>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Participants</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {events.map((event) => (
+                    <tr
+                      key={event._id.toHexString()}
+                      className={styles.EventsOverviewScene__EventRow}
+                      onClick={handleClick.bind(null, event)}
+                      onKeyUp={handleKeyUp.bind(null, event)}
+                      tabIndex={0}
+                    >
+                      <td>{event.name}</td>
+                      <td>{event.participants.length}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
 
-                  <LinkButton to="/events/create" color="primary">
-                    Create event
-                  </LinkButton>
-                </Card>
-              </Col>
-            </Row>
+              <LinkButton to="/events/create" color="primary">
+                Create event
+              </LinkButton>
+            </Card>
           </Container>
         </>
       ) : !isLoading ? (

@@ -2,8 +2,9 @@ import React from "react";
 import { Formik, FormikHelpers, useFormikContext } from "formik";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 
-import { InputListCard } from "../../InputListCard";
+import { InputList } from "../../InputList";
 import { app, eventsCollection } from "../../../RealmApp";
+import { InputWithControls } from "../../InputWithControls";
 
 export type AlternativeValues = {
   name: string;
@@ -118,7 +119,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
         <Form onSubmit={handleSubmit} onReset={handleReset}>
           <FormGroup>
             <Label for="name">Name</Label>
-            <Input
+            <InputWithControls
               type="text"
               name="name"
               id="name"
@@ -126,18 +127,26 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
               onChange={handleChange}
               onBlur={handleBlur}
               invalid={errors.name && touched.name ? true : false}
-            />
+            >
+              {/*<Button>Add more information</Button>*/}
+            </InputWithControls>
             <FieldFeedback
               name="name"
               helper="Events have names, making it easer to tell them apart."
             />
           </FormGroup>
           <FormGroup>
-            <Label>Criteria</Label>
-            <InputListCard
+            <Label>Define Criteria</Label>
+            <InputList
               items={values.criteria}
               itemsPath="criteria"
               propertyName="name"
+              addText="Add New Criterion"
+              /*
+              extraControls={() => (
+                <Button color="success">Add more information</Button>
+              )}
+              */
             />
             <FieldFeedback
               name="criteria"
@@ -145,11 +154,17 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
             />
           </FormGroup>
           <FormGroup>
-            <Label>Alternative concepts to evaluate</Label>
-            <InputListCard
+            <Label>Define Concepts</Label>
+            <InputList
               items={values.alternatives}
               itemsPath="alternatives"
               propertyName="name"
+              addText="Add New Concept"
+              /*
+              extraControls={() => (
+                <Button color="success">Add more information</Button>
+              )}
+              */
             />
             <FieldFeedback
               name="alternatives"

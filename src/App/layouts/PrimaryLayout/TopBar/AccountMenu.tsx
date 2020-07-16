@@ -12,6 +12,8 @@ import { DropdownLink } from "../../../DropdownLink";
 
 import styles from "./AccountMenu.module.scss";
 import { useHistory } from "react-router";
+import { LinkButton } from "../../../LinkButton";
+import { Lock } from "react-feather";
 
 function getUserDisplayName(user: User | null) {
   if (user && user.state === "active") {
@@ -43,7 +45,7 @@ export function AccountMenu() {
     history.push("/");
   }
 
-  return (
+  return user ? (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
         tag="span"
@@ -72,5 +74,9 @@ export function AccountMenu() {
         )}
       </DropdownMenu>
     </Dropdown>
+  ) : (
+    <LinkButton to="log-in" color="primary">
+      <Lock size="1rem" /> Log in
+    </LinkButton>
   );
 }

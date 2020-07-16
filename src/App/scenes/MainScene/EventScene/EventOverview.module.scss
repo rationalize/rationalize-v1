@@ -1,12 +1,35 @@
 @import "../../../../variables";
 
+$alternative-color: $primary;
+
 .EventOverview {
-  &__AlternativeCard {
+  &__Alternative {
+    display: flex;
     margin-bottom: $spacer / 2;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    padding: $spacer / 2;
+    border-radius: $border-radius;
+    border-color: $alternative-color;
+    border-width: $border-width;
+    border-style: solid;
+    background-color: $card-bg;
+  }
+
+  &__AlternativeName,
+  &__AlternativeScore {
+    padding: $input-padding-y $input-padding-x;
+  }
+
+  &__AlternativeName {
+    flex-grow: 1;
+  }
+
+  &__AlternativeScore {
+    background: $alternative-color;
+    flex-basis: 4rem;
+    text-align: center;
+    color: $white;
+    font-variant-numeric: tabular-nums;
   }
 
   &__Evaluations,
@@ -15,6 +38,6 @@
   }
 
   &__Section {
-    margin-top: 2 * $spacer;
+    padding-top: 2 * $spacer;
   }
 }
