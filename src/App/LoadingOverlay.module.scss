@@ -1,4 +1,5 @@
 .LoadingOverlay {
+  display: flex;
   position: relative;
 
   &--grow {
@@ -22,7 +23,10 @@
   }
 
   &__Children {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+
     &--loading {
       opacity: .5;
       pointer-events: none;

@@ -6,6 +6,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LoadingOverlay } from "../App/LoadingOverlay";
 
+import styles from "./ContentfulPage.module.scss";
+import { NotFound } from "../App/NotFound";
+
 export type ContentfulPageProps = {
   slug?: string;
 };
@@ -41,8 +44,12 @@ export function ContentfulPage({ slug }: ContentfulPageProps) {
   console.log("page", page);
 
   return (
-    <LoadingOverlay isLoading={page === null}>
-      {page ? documentToReactComponents(page.fields.content) : null}
+    <LoadingOverlay
+      className={styles.ContentfulPage}
+      isLoading={page === null}
+      grow
+    >
+      {page ? documentToReactComponents(page.fields.content) : <NotFound />}
     </LoadingOverlay>
   );
 }

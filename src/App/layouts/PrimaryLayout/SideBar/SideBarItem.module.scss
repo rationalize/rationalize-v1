@@ -45,4 +45,9 @@ $sidebar-item-color: $body-color !default;
       background-color: $success;
     }
   }
+
+  &--disabled {
+    pointer-events: none;
+    opacity: .33;
+  }
 }

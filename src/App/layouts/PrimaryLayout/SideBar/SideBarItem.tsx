@@ -10,18 +10,22 @@ import styles from "./SideBarItem.module.scss";
 export interface SideBarItemProps<S>
   extends React.PropsWithoutRef<LinkProps<S>> {
   icon?: IconName;
+  disabled?: boolean;
 }
 
 export function SideBarItem<S = LocationState>({
   className,
   children,
   icon,
+  disabled,
   ...rest
 }: SideBarItemProps<S>) {
   return (
     <NavLink
       {...rest}
-      className={classNames(styles.SideBarItem, className)}
+      className={classNames(styles.SideBarItem, className, {
+        [styles["SideBarItem--disabled"]]: disabled,
+      })}
       activeClassName={styles["SideBarItem--active"]}
     >
       {icon ? (

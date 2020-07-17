@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { ThumbsUp, AlertTriangle } from "react-feather";
 import { Button } from "reactstrap";
 
-import { Event, app } from "../RealmApp";
-import { LoadingOverlay } from "./LoadingOverlay";
-import { CriterionCard } from "./scenes/MainScene/EventScene/CriterionCard";
+import { Event, app } from "../../../../RealmApp";
+import { LoadingOverlay } from "../../../LoadingOverlay";
+import { CriterionCard } from "./CriterionCard";
 
 import styles from "./EvaluationForm.module.scss";
 

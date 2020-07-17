@@ -17,19 +17,19 @@ export function SideBar({ className }: SideBarProps) {
         </LinkButton>
       </section>
       <nav className={styles.SideBar__Navigation}>
-        <SideBarItem to="/projects" icon="Briefcase">
+        <SideBarItem to="/projects" icon="Briefcase" disabled>
           Projects
         </SideBarItem>
         <SideBarItem to="/events" icon="Calendar">
           Events
         </SideBarItem>
-        <SideBarItem to="/participants" icon="Users">
+        <SideBarItem to="/participants" icon="Users" disabled>
           Participants
         </SideBarItem>
-        <SideBarItem to="/concepts" icon="Layers">
+        <SideBarItem to="/concepts" icon="Layers" disabled>
           Concepts
         </SideBarItem>
-        <SideBarItem to="/criteria" icon="CheckCircle">
+        <SideBarItem to="/criteria" icon="CheckCircle" disabled>
           Criteria
         </SideBarItem>
       </nav>

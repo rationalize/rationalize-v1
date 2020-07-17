@@ -7,11 +7,7 @@ import { app } from "../RealmApp";
 import { LogInScene } from "./scenes/LogInScene";
 import { MainScene } from "./scenes/MainScene";
 import { RegisterScene } from "./scenes/RegisterScene";
-import { EvaluationInvitation } from "./EvaluationInvitation";
-import {
-  AuthenticationProvider,
-  AuthenticationConsumer,
-} from "./AuthenticationContext";
+import { AuthenticationProvider } from "./AuthenticationContext";
 import { OnboardingScene } from "./scenes/OnboardingScene";
 import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 
@@ -36,19 +32,15 @@ export function App() {
   return (
     <Router history={history}>
       <AuthenticationProvider app={app}>
-        <AuthenticationConsumer>
-          {({ user }) => (
-            <Switch>
-              <Route path="/log-in" component={LogInScene} />
-              <Route path="/register" component={RegisterScene} />
-              <Route path="/onboarding" component={OnboardingScene} />
-              <Route path="/reset-password" component={ResetPasswordScene} />
-              <Route path="/facebook-callback" component={OAuthCallback} />
-              <Route path="/google-callback" component={OAuthCallback} />
-              <Route component={MainScene} />
-            </Switch>
-          )}
-        </AuthenticationConsumer>
+        <Switch>
+          <Route path="/log-in" component={LogInScene} />
+          <Route path="/register" component={RegisterScene} />
+          <Route path="/onboarding" component={OnboardingScene} />
+          <Route path="/reset-password" component={ResetPasswordScene} />
+          <Route path="/facebook-callback" component={OAuthCallback} />
+          <Route path="/google-callback" component={OAuthCallback} />
+          <Route component={MainScene} />
+        </Switch>
       </AuthenticationProvider>
     </Router>
   );

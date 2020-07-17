@@ -8,8 +8,8 @@ import { EventScene } from "./EventScene";
 import { UserProfileScene } from "./UserProfileScene";
 import { CreateEventScene } from "./CreateEventScene";
 import { ContentfulPage } from "../../../Contentful";
-import { Container } from "reactstrap";
 import { AuthenticationConsumer } from "../../AuthenticationContext";
+import { RestrictedArea } from "../../RestrictedArea";
 
 export function MainScene() {
   return (
@@ -17,27 +17,31 @@ export function MainScene() {
       {({ user }) => (
         <PrimaryLayout sidebar={user ? "visible" : "hidden"}>
           <Switch>
-            {user && (
-              <Route exact path="/">
+            <Route exact path="/">
+              <RestrictedArea>
                 <Redirect to="/events" />
-              </Route>
-            )}
-            <Route exact path="/events">
-              <EventsOverviewScene />
+              </RestrictedArea>
             </Route>
-            <Route path="/events/create">
-              <CreateEventScene />
+            <Route exact path="/profile">
+              <RestrictedArea>
+                <UserProfileScene />
+              </RestrictedArea>
+            </Route>
+            <Route exact path="/events">
+              <RestrictedArea>
+                <EventsOverviewScene />
+              </RestrictedArea>
+            </Route>
+            <Route exact path="/events/create">
+              <RestrictedArea>
+                <CreateEventScene />
+              </RestrictedArea>
             </Route>
             <Route path="/events/:id">
               {({ match }) => <EventScene id={match?.params.id} />}
             </Route>
-            <Route exact path="/profile">
-              <UserProfileScene />
-            </Route>
             <Route path="/:slug">
-              <Container fluid>
-                <ContentfulPage />
-              </Container>
+              <ContentfulPage />
             </Route>
           </Switch>
         </PrimaryLayout>

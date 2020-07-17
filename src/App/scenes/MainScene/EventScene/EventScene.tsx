@@ -8,9 +8,8 @@ import { NarrowContainer } from "../../../NarrowContainer";
 import { LoadingOverlay } from "../../../LoadingOverlay";
 
 import styles from "./EventScreen.module.scss";
-import { EvaluationForm } from "../../../EvaluationForm";
+import { EvaluationForm } from "./EvaluationForm";
 import { EventOverview } from "./EventOverview";
-import { EvaluationInvitation } from "../../../EvaluationInvitation";
 
 type EventSceneProps = { id: string };
 
@@ -38,6 +37,8 @@ export function EventScene({ id }: EventSceneProps) {
       });
   }, [id]);
 
+  console.log("Event is", event);
+
   return (
     <LoadingOverlay isLoading={isLoading} error={error} grow>
       {event ? (
@@ -49,11 +50,6 @@ export function EventScene({ id }: EventSceneProps) {
                 <NarrowContainer>
                   <EvaluationForm event={event} />
                 </NarrowContainer>
-              )}
-            </Route>
-            <Route path="/events/:id/invite">
-              {({ match }) => (
-                <EvaluationInvitation eventId={match?.params.id} />
               )}
             </Route>
             <Route exact path="/events/:id">

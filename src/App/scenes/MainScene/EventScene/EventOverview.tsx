@@ -90,7 +90,7 @@ export function EventOverview({ event }: EventOverviewProps) {
             const alternatives = scoreAlternatives(values.weights);
             return (
               <>
-                <Col className={styles.EventOverview__Section}>
+                <Col className={styles.EventOverview__Section} sm="12" md="6">
                   <h3>Criteria Weights</h3>
                   <Card>
                     <CardBody>
@@ -156,7 +156,7 @@ export function EventOverview({ event }: EventOverviewProps) {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col className={styles.EventOverview__Section}>
+                <Col className={styles.EventOverview__Section} sm="12" md="6">
                   <h3>Prioritized Concept List</h3>
                   <Card body>
                     <Flipper flipKey={alternatives.map((a) => a.name).join("")}>
@@ -192,7 +192,7 @@ export function EventOverview({ event }: EventOverviewProps) {
         </Formik>
       </Row>
       <Row>
-        <Col className={styles.EventOverview__Section}>
+        <Col className={styles.EventOverview__Section} sm="12" md="6">
           <h3>Scoring</h3>
           <Card body>
             <FormGroup>
@@ -201,7 +201,7 @@ export function EventOverview({ event }: EventOverviewProps) {
               </Label>
               <CopyToClipboardInput
                 id="evaluation-link"
-                text={global.location.href + "/invite"}
+                text={global.location.href + "/evaluate"}
               />
             </FormGroup>
             <p>
@@ -216,7 +216,7 @@ export function EventOverview({ event }: EventOverviewProps) {
             </LinkButton>
           </Card>
         </Col>
-        <Col className={styles.EventOverview__Section}>
+        <Col className={styles.EventOverview__Section} sm="12" md="6">
           <h3>Sharing</h3>
           <Card body>
             <CardText>
