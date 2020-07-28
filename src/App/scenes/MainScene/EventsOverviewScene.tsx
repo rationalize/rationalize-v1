@@ -3,7 +3,7 @@ import { Container, Table, Card } from "reactstrap";
 
 import { CenteredContainer } from "./CenteredContainer";
 import { LinkButton } from "../../LinkButton";
-import { Event, eventsCollection, app } from "../../../RealmApp";
+import { Event, eventsCollection, app } from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { useHistory } from "react-router";
 

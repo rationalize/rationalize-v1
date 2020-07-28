@@ -1,7 +1,7 @@
 import React from "react";
 import { UserProfileForm } from "../../UserProfileForm";
 import { Card, CardText, Button, Row, Container, Col } from "reactstrap";
-import { app } from "../../../RealmApp";
+import { app } from "../../../mongodb";
 import { useAuthentication } from "../../AuthenticationContext";
 
 export type UserProfileProps = {};

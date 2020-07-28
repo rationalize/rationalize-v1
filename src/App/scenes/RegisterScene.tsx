@@ -15,7 +15,7 @@ import { Credentials } from "realm-web";
 import { CenteredCard } from "../layouts/CenteredCard";
 import { LoadingOverlay } from "../LoadingOverlay";
 import { useAuthentication } from "../AuthenticationContext";
-import { app } from "../../RealmApp";
+import { app } from "../../mongodb";
 import { OrLine } from "../OrLine";
 
 type FormValues = {

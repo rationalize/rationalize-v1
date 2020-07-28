@@ -2,7 +2,7 @@ import React from "react";
 import { CardText, CardBody } from "reactstrap";
 
 import { LinkCard } from "../../LinkCard";
-import { Event } from "../../../RealmApp";
+import { Event } from "../../../mongodb";
 
 import styles from "./EventCard.module.scss";
 

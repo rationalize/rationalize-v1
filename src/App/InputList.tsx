@@ -74,8 +74,10 @@ export function InputList<Item extends BaseItem>({
           })}
           <Button
             size="sm"
-            onClick={() => arrayHelpers.push({ name: "" })}
+            color="primary"
+            outline
             block
+            onClick={() => arrayHelpers.push({ name: "" })}
           >
             {addText}
           </Button>

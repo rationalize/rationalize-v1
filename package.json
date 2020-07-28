@@ -48,7 +48,11 @@
     "realm:import": "realm-cli import --include-hosting --path realm-app --yes --strategy replace",
     "realm:update-hosting": "rm -rf realm-app/hosting/files && cp -r build realm-app/hosting/files",
     "deploy": "npm run build && npm run realm:update-hosting && npm run realm:import",
-    "export-and-deploy": "rm -rf realm-app && npm run realm:export && npm run deploy"
+    "export-and-deploy": "rm -rf realm-app && npm run realm:export && npm run deploy",
+    "migration:list": "migrate list --chdir src/mongodb/migrate --compiler='ts:./register.js' --store ./store.ts",
+    "migration:create": "migrate create --chdir src/mongodb/migrate --compiler='ts:./register.js' --template-file ./template.ts --store ./store.ts",
+    "migration:up": "migrate up --chdir src/mongodb/migrate --compiler='ts:./register.js' --store ./store.ts",
+    "migration:down": "migrate down --chdir src/mongodb/migrate --compiler='ts:./register.js' --store ./store.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -76,9 +80,13 @@
     ]
   },
   "devDependencies": {
+    "@types/mongodb": "^3.5.25",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "migrate": "^1.7.0",
+    "mongodb": "^3.5.9",
     "mongodb-realm-cli": "^1.0.0",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "ts-node": "^8.10.2"
   }
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ThumbsUp, AlertTriangle } from "react-feather";
 import { Button } from "reactstrap";
 
-import { Event, app } from "../../../../RealmApp";
+import { Event, app } from "../../../../mongodb";
 import { LoadingOverlay } from "../../../LoadingOverlay";
 import { CriterionCard } from "./CriterionCard";
 

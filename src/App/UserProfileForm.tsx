@@ -3,7 +3,7 @@ import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 import { Formik, FormikHelpers } from "formik";
 
 import { LoadingOverlay } from "./LoadingOverlay";
-import { userProfilesCollection, UserProfile } from "../RealmApp";
+import { userProfilesCollection, UserProfile } from "../mongodb";
 import { useAuthentication } from "./AuthenticationContext";
 
 type FormValues = {

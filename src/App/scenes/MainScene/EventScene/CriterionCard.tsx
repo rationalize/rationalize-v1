@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import { Formik } from "formik";
 
-import { Alternative, Criterion } from "../../../../RealmApp";
+import { Alternative, Criterion } from "../../../../mongodb";
 
 import styles from "./CriterionCard.module.scss";
 import { Send } from "react-feather";

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { Credentials, App } from "realm-web";
 
-import { User } from "../RealmApp";
+import { User } from "../mongodb";
 
 type AuthenticationContext = {
   user: User | null;

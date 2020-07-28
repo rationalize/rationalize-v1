@@ -6,7 +6,7 @@ import qs from "qs";
 
 import { CenteredCard } from "../layouts/CenteredCard";
 import { LoadingOverlay } from "../LoadingOverlay";
-import { app } from "../../RealmApp";
+import { app } from "../../mongodb";
 
 type FormValues = {
   password: string;

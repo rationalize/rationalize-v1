@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, FormikHelpers } from "formik";
 import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
-import { Event, Sharing, eventsCollection } from "../../../../RealmApp";
+import { Event, Sharing, eventsCollection } from "../../../../mongodb";
 import { LoadingOverlay } from "../../../LoadingOverlay";
 
 type Values = Sharing;
@@ -46,7 +46,13 @@ export function EventSharingForm({ event }: EventSharingFormProps) {
                 <option value="public">Public</option>
               </Input>
             </FormGroup>
-            <Button type="submit" disabled={isSubmitting} block>
+            <Button
+              color="primary"
+              type="submit"
+              disabled={isSubmitting}
+              outline
+              block
+            >
               Save sharing settings
             </Button>
           </Form>

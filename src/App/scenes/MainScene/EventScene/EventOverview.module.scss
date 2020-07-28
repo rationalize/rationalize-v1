@@ -1,6 +1,6 @@
 @import "../../../../variables";
 
-$alternative-color: $primary;
+$alternative-color: $secondary;
 
 .EventOverview {
   &__Alternative {
@@ -28,7 +28,7 @@ $alternative-color: $primary;
     background: $alternative-color;
     flex-basis: 4rem;
     text-align: center;
-    color: $white;
+    color: $body-color;
     font-variant-numeric: tabular-nums;
   }
 

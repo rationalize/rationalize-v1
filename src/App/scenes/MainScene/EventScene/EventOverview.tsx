@@ -15,14 +15,15 @@ import {
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { Formik, FormikHelpers } from "formik";
 
-import { Event } from "../../../../RealmApp";
+import { Event } from "../../../../mongodb";
 import { LinkButton } from "../../../LinkButton";
 import { CopyToClipboardInput } from "../../../CopyToClipboardInput";
-import { eventsCollection, Weights } from "../../../../RealmApp";
+import { eventsCollection, Weights } from "../../../../mongodb";
 
 import styles from "./EventOverview.module.scss";
 import { LoadingOverlay } from "../../../LoadingOverlay";
 import { EventSharingForm } from "./EventSharingForm";
+import { useAuthentication } from "../../../AuthenticationContext";
 
 type EventOverviewProps = { event: Event };
 
@@ -35,7 +36,11 @@ export function EventOverview({ event }: EventOverviewProps) {
     Object.fromEntries(event.criteria.map(({ name }) => [name, 0.5]));
   const [weights, setWeights] = useState(initialWeights);
 
+  const { user } = useAuthentication();
+
   const evaluations = Object.values(event.evaluations).flat();
+
+  const isFacilitator = user && user.id === event.facilitator;
 
   function scoreAlternatives(weights: Weights) {
     // Reduce the scores into an array of alternatives and their scores accumulated over all criteria.
@@ -132,8 +137,10 @@ export function EventOverview({ event }: EventOverviewProps) {
                             <Col>
                               <Button
                                 type="reset"
+                                color="primary"
                                 disabled={!dirty || isSubmitting}
                                 block
+                                outline
                               >
                                 Reset weights
                               </Button>
@@ -191,41 +198,45 @@ export function EventOverview({ event }: EventOverviewProps) {
           }}
         </Formik>
       </Row>
-      <Row>
-        <Col className={styles.EventOverview__Section} sm="12" md="6">
-          <h3>Scoring</h3>
-          <Card body>
-            <FormGroup>
-              <Label for="evaluation-link">
-                Send this link to participants:
-              </Label>
-              <CopyToClipboardInput
-                id="evaluation-link"
-                text={global.location.href + "/evaluate"}
-              />
-            </FormGroup>
-            <p>
-              {Object.keys(event.evaluations).length} participants has completed
-              the evaluation.
-            </p>
-            <LinkButton
-              to={`/events/${event._id.toHexString()}/evaluate`}
-              block
-            >
-              Go to evaluation
-            </LinkButton>
-          </Card>
-        </Col>
-        <Col className={styles.EventOverview__Section} sm="12" md="6">
-          <h3>Sharing</h3>
-          <Card body>
-            <CardText>
-              You can share the result of the evaluation event with others.
-            </CardText>
-            <EventSharingForm event={event} />
-          </Card>
-        </Col>
-      </Row>
+      {isFacilitator && (
+        <Row>
+          <Col className={styles.EventOverview__Section} sm="12" md="6">
+            <h3>Scoring</h3>
+            <Card body>
+              <FormGroup>
+                <Label for="evaluation-link">
+                  Send this link to participants:
+                </Label>
+                <CopyToClipboardInput
+                  id="evaluation-link"
+                  text={global.location.href + "/evaluate"}
+                />
+              </FormGroup>
+              <p>
+                {Object.keys(event.evaluations).length} participants has
+                completed the evaluation.
+              </p>
+              <LinkButton
+                to={`/events/${event._id.toHexString()}/evaluate`}
+                color="primary"
+                outline
+                block
+              >
+                Go to evaluation
+              </LinkButton>
+            </Card>
+          </Col>
+          <Col className={styles.EventOverview__Section} sm="12" md="6">
+            <h3>Sharing</h3>
+            <Card body>
+              <CardText>
+                You can share the result of the evaluation event with others.
+              </CardText>
+              <EventSharingForm event={event} />
+            </Card>
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 }

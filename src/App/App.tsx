@@ -3,7 +3,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import { handleAuthRedirect } from "realm-web";
 import { createBrowserHistory } from "history";
 
-import { app } from "../RealmApp";
+import { app } from "../mongodb";
 import { LogInScene } from "./scenes/LogInScene";
 import { MainScene } from "./scenes/MainScene";
 import { RegisterScene } from "./scenes/RegisterScene";

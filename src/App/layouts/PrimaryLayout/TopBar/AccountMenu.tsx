@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { useAuthentication } from "../../../AuthenticationContext";
-import { User, app } from "../../../../RealmApp";
+import { User, app } from "../../../../mongodb";
 import { DropdownLink } from "../../../DropdownLink";
 
 import styles from "./AccountMenu.module.scss";

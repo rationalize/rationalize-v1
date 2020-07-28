@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { ObjectId } from "bson";
 import { Credentials } from "realm-web";
 
-import { Event, eventsCollection, app } from "../../../../RealmApp";
+import { Event, eventsCollection, app } from "../../../../mongodb";
 import { NarrowContainer } from "../../../NarrowContainer";
 import { LoadingOverlay } from "../../../LoadingOverlay";
 

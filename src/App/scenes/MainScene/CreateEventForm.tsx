@@ -3,7 +3,7 @@ import { Formik, FormikHelpers, useFormikContext } from "formik";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 
 import { InputList } from "../../InputList";
-import { app, eventsCollection } from "../../../RealmApp";
+import { app, eventsCollection } from "../../../mongodb";
 import { InputWithControls } from "../../InputWithControls";
 
 export type AlternativeValues = {
