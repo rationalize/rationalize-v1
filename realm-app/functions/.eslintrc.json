@@ -1,6 +1,0 @@
-{
-  "globals": {
-    "context": "readonly",
-    "BSON": "readonly"
-  }
-}

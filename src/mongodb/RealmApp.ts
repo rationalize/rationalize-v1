@@ -8,7 +8,7 @@ export interface Functions {
     evaluationId: ObjectId,
     scores: { criterion: string; alternative: string; score: number }[]
   ): Promise<{ success: boolean }>;
-  acceptEvaluationInvitation(
+  joinEvaluation(
     evaluationId: string,
     token: string
   ): Promise<{ success: boolean }>;

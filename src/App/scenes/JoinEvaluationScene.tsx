@@ -7,15 +7,15 @@ import { LoadingOverlay } from "../LoadingOverlay";
 import { CardBody } from "reactstrap";
 import { CenteredCard } from "../layouts/CenteredCard";
 
-async function authenticateAndAcceptInvitaion(id: string, token: string) {
+async function authenticateAndJoin(id: string, token: string) {
   if (app.currentUser === null) {
     const credentials = Credentials.anonymous();
     await app.logIn(credentials);
   }
-  return app.functions.acceptEvaluationInvitation(id, token);
+  return app.functions.joinEvaluation(id, token);
 }
 
-export function AcceptScoringInvitationScene() {
+export function JoinEvaluationScene() {
   const { id, token } = useParams<{ id?: string; token?: string }>();
   const history = useHistory();
   const [isLoading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ export function AcceptScoringInvitationScene() {
   useEffect(() => {
     if (id && token) {
       setLoading(true);
-      authenticateAndAcceptInvitaion(id, token)
+      authenticateAndJoin(id, token)
         .then(({ success }) => {
           if (success) {
             history.replace(`/evaluations/${id}/score`);

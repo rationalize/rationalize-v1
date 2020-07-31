@@ -16,7 +16,7 @@ import { EvaluationListScene } from "./scenes/EvaluationListScene";
 import { EvaluationOverviewScene } from "./scenes/EvaluationOverviewScene";
 import { ScoringScene } from "./scenes/ScoringScene";
 import { ContentfulScene } from "./scenes/ContentfulScene";
-import { AcceptScoringInvitationScene } from "./scenes/AcceptScoringInvitationScene";
+import { JoinEvaluationScene } from "./scenes/JoinEvaluationScene";
 
 const history = createBrowserHistory();
 
@@ -56,12 +56,16 @@ export function App() {
             path="/evaluations/create"
             component={CreateEvaluationScene}
           />
-          <Route exact path="/evaluations/:id" component={EvaluationOverviewScene} />
+          <Route
+            exact
+            path="/evaluations/:id"
+            component={EvaluationOverviewScene}
+          />
           <Route exact path="/evaluations/:id/score" component={ScoringScene} />
           <Route
             exact
             path="/evaluations/:id/score/:token"
-            component={AcceptScoringInvitationScene}
+            component={JoinEvaluationScene}
           />
           <Route path="/:slug" component={ContentfulScene} />
         </Switch>
