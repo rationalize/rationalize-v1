@@ -14,7 +14,6 @@
     },
     "custom_user_data_config": {
         "enabled": true,
-        "mongo_service_name": "mongodb-atlas",
         "database_name": "rationalize-db",
         "collection_name": "UserProfiles",
         "user_id_field": "userId"

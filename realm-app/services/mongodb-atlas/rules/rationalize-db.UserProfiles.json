@@ -1,6 +1,7 @@
 {
     "collection": "UserProfiles",
     "database": "rationalize-db",
+    "id": "5f237a4fc0280dad1c5103aa",
     "roles": [
         {
             "name": "owner",
