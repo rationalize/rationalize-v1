@@ -45,7 +45,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx src",
     "realm:export": "realm-cli export --app-id rationalize-iwbgr --include-hosting --for-source-control --output realm-app",
-    "realm:import": "realm-cli import --include-hosting --path realm-app --yes --strategy merge",
+    "realm:import": "realm-cli import --include-hosting --path realm-app --yes --strategy replace",
     "realm:update-hosting": "rm -rf realm-app/hosting/files && cp -r build realm-app/hosting/files",
     "deploy": "npm run build && npm run realm:update-hosting && npm run realm:import",
     "export-and-deploy": "rm -rf realm-app && npm run realm:export && npm run deploy",
