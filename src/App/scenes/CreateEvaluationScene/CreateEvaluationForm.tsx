@@ -5,10 +5,10 @@ import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import { InputList } from "../../InputList";
 import {
   app,
-  eventsCollection,
+  evaluationsCollection,
   Scoring,
   generateSharingToken,
-  Event,
+  Evaluation,
 } from "../../../mongodb";
 import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
@@ -27,26 +27,26 @@ export type ScoringValue = {
   survey: boolean;
 };
 
-export type EventValues = {
+export type EvaluationValues = {
   name: string;
   criteria: CriterionValues[];
   alternatives: AlternativeValues[];
   scoring: ScoringValue;
 };
 
-export type CreateEventHandler = (
-  value: EventValues,
-  helpers: FormikHelpers<EventValues>
+export type CreateEvaluationHandler = (
+  value: EvaluationValues,
+  helpers: FormikHelpers<EvaluationValues>
 ) => void;
 
-type CreateEventFormProps = {
-  handleCreated: (event: Event) => void;
+type CreateEvaluationFormProps = {
+  handleCreated: (evaluation: Evaluation) => void;
 };
 
 type ErrorObject<Values> = { [key in keyof Values]?: string };
 
-function validate(values: EventValues) {
-  const errors: ErrorObject<EventValues> = {};
+function validate(values: EvaluationValues) {
+  const errors: ErrorObject<EvaluationValues> = {};
   const criteria = values.criteria.filter((c) => c.name);
   const alternatives = values.alternatives.filter((a) => a.name);
   if (values.name === "") {
@@ -76,8 +76,10 @@ function FieldFeedback<Values>({ name, helper }: FieldFeedbackProps<Values>) {
   );
 }
 
-export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
-  const handleSubmit: CreateEventHandler = async (values, helpers) => {
+export function CreateEvaluationForm({
+  handleCreated,
+}: CreateEvaluationFormProps) {
+  const handleSubmit: CreateEvaluationHandler = async (values, helpers) => {
     if (app.currentUser) {
       const criteria = values.criteria.filter((c) => c.name);
       const alternatives = values.alternatives.filter((a) => a.name);
@@ -97,7 +99,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
         ...values.scoring,
         token: generateSharingToken(),
       };
-      const event: Omit<Event, "_id"> = {
+      const evaluation: Omit<Evaluation, "_id"> = {
         facilitator: app.currentUser.id,
         participants: [],
         scores: {},
@@ -107,15 +109,15 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
         sharing: { mode: "disabled" },
         scoring,
       };
-      const { insertedId } = await eventsCollection.insertOne(event);
+      const { insertedId } = await evaluationsCollection.insertOne(evaluation);
       helpers.setSubmitting(false);
-      gtag("event", "create_event");
-      handleCreated({ ...event, _id: insertedId });
+      gtag("event", "create_evaluation");
+      handleCreated({ ...evaluation, _id: insertedId });
     }
   };
 
   return (
-    <Formik<EventValues>
+    <Formik<EvaluationValues>
       initialValues={{
         name: "",
         alternatives: [{ name: "" }],
@@ -138,7 +140,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
         <Form onSubmit={handleSubmit} onReset={handleReset}>
           <FormGroup>
             <Label for="name">
-              <h5>Name Evaluation Event</h5>
+              <h5>Name Evaluation Evaluation</h5>
             </Label>
             <Input
               type="text"
@@ -151,7 +153,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
             />
             <FieldFeedback
               name="name"
-              helper="Events have names, making it easer to tell them apart."
+              helper="Evaluations have names, making it easer to tell them apart."
             />
           </FormGroup>
           <FormGroup>
@@ -195,7 +197,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
             />
             <FieldFeedback
               name="alternatives"
-              helper="What are the different potential outcomes from the event?"
+              helper="What are the different potential outcomes from the evaluation?"
             />
           </FormGroup>
           <FormGroup>
@@ -234,15 +236,15 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
               <small>
                 Note: We respect the privacy of our users thus Survey results
                 cannot be made public:{" "}
-                <a href="/public-vs-private-events">
-                  See Public vs Private Events
+                <a href="/public-vs-private-evaluations">
+                  See Public vs Private Evaluations
                 </a>
               </small>
             </FormGroup>
           </FormGroup>
           <FormGroup>
             <Button type="submit" color="primary" disabled={isSubmitting} block>
-              Create event
+              Create evaluation
             </Button>
           </FormGroup>
         </Form>

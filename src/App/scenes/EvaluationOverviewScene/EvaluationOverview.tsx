@@ -15,38 +15,38 @@ import {
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { Formik, FormikHelpers } from "formik";
 
-import { Event } from "../../../mongodb";
+import { Evaluation } from "../../../mongodb";
 import { LinkButton } from "../../LinkButton";
 import { CopyToClipboardInput } from "../../CopyToClipboardInput";
-import { eventsCollection, Weights } from "../../../mongodb";
+import { evaluationsCollection, Weights } from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { useAuthentication } from "../../AuthenticationContext";
 
-import { EventSharingForm } from "./EventSharingForm";
+import { EvaluationSharingForm } from "./EvaluationSharingForm";
 import { WeightsHelp } from "./WeightsHelp";
 
-import styles from "./EventOverview.module.scss";
+import styles from "./EvaluationOverview.module.scss";
 
-type EventOverviewProps = { event: Event };
+type EvaluationOverviewProps = { evaluation: Evaluation };
 
 type WeightValues = { weights: Weights };
 
-export function EventOverview({ event }: EventOverviewProps) {
-  // Read weights from the event or generate as fallback
+export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
+  // Read weights from the evaluation or generate as fallback
   const initialWeights =
-    event.weights ||
-    Object.fromEntries(event.criteria.map(({ name }) => [name, 0.5]));
+    evaluation.weights ||
+    Object.fromEntries(evaluation.criteria.map(({ name }) => [name, 0.5]));
   const [weights, setWeights] = useState(initialWeights);
 
   const { user } = useAuthentication();
 
-  const scores = Object.values(event.scores).flat();
+  const scores = Object.values(evaluation.scores).flat();
 
-  const isFacilitator = user && user.id === event.facilitator;
+  const isFacilitator = user && user.id === evaluation.facilitator;
 
   function scoreAlternatives(weights: Weights) {
     // Reduce the scores into an array of alternatives and their scores accumulated over all criteria.
-    const scoredAlternatives = event.alternatives.map((alternative) => {
+    const scoredAlternatives = evaluation.alternatives.map((alternative) => {
       const relevantScores = scores.filter(
         (e) => e.alternative === alternative.name
       );
@@ -73,8 +73,8 @@ export function EventOverview({ event }: EventOverviewProps) {
     values: WeightValues,
     { setSubmitting }: FormikHelpers<WeightValues>
   ) {
-    await eventsCollection.updateOne(
-      { _id: event._id },
+    await evaluationsCollection.updateOne(
+      { _id: evaluation._id },
       { $set: { weights: values.weights } }
     );
     setSubmitting(false);
@@ -83,7 +83,7 @@ export function EventOverview({ event }: EventOverviewProps) {
 
   return (
     <Container fluid>
-      <h1 className={styles.EventScreen__Heading}>{event.name}</h1>
+      <h1 className={styles.EvaluationScreen__Heading}>{evaluation.name}</h1>
       <Row>
         <Formik initialValues={{ weights }} onSubmit={handleWeightsSubmit}>
           {({
@@ -96,10 +96,13 @@ export function EventOverview({ event }: EventOverviewProps) {
             isSubmitting,
           }) => {
             const alternatives = scoreAlternatives(values.weights);
-            console.log(alternatives);
             return (
               <>
-                <Col className={styles.EventOverview__Section} sm="12" md="6">
+                <Col
+                  className={styles.EvaluationOverview__Section}
+                  sm="12"
+                  md="6"
+                >
                   <h3>
                     Criteria Weights <WeightsHelp />
                   </h3>
@@ -111,7 +114,7 @@ export function EventOverview({ event }: EventOverviewProps) {
                             Drag the sliders below to adjust the weight of each
                             criterion.
                           </p>
-                          {event.criteria.map((criterion, index) => (
+                          {evaluation.criteria.map((criterion, index) => (
                             <FormGroup key={index}>
                               <Label for={`criterion-${index}`}>
                                 {criterion.name}
@@ -157,7 +160,11 @@ export function EventOverview({ event }: EventOverviewProps) {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col className={styles.EventOverview__Section} sm="12" md="6">
+                <Col
+                  className={styles.EvaluationOverview__Section}
+                  sm="12"
+                  md="6"
+                >
                   <h3>Prioritized Concept List</h3>
                   <Card body>
                     <Flipper flipKey={alternatives.map((a) => a.name).join("")}>
@@ -166,16 +173,20 @@ export function EventOverview({ event }: EventOverviewProps) {
                           key={alternative.name}
                           flipId={alternative.name}
                         >
-                          <div className={styles.EventOverview__Alternative}>
+                          <div
+                            className={styles.EvaluationOverview__Alternative}
+                          >
                             <div
-                              className={styles.EventOverview__AlternativeName}
+                              className={
+                                styles.EvaluationOverview__AlternativeName
+                              }
                             >
                               {alternative.name}
                             </div>
                             {!Number.isNaN(alternative.score.average) ? (
                               <div
                                 className={
-                                  styles.EventOverview__AlternativeScore
+                                  styles.EvaluationOverview__AlternativeScore
                                 }
                               >
                                 {(alternative.score.average * 10).toFixed(1)}
@@ -194,10 +205,10 @@ export function EventOverview({ event }: EventOverviewProps) {
       </Row>
       {isFacilitator && (
         <Row>
-          <Col className={styles.EventOverview__Section} sm="12" md="6">
+          <Col className={styles.EvaluationOverview__Section} sm="12" md="6">
             <h3>Scoring</h3>
             <Card body>
-              {event.scoring.survey ? (
+              {evaluation.scoring.survey ? (
                 <FormGroup>
                   <Label for="evaluation-link">
                     Send this link to participants:
@@ -205,22 +216,23 @@ export function EventOverview({ event }: EventOverviewProps) {
                   <CopyToClipboardInput
                     id="evaluation-link"
                     text={
-                      global.location.href + `/score/${event.scoring.token}`
+                      global.location.href +
+                      `/score/${evaluation.scoring.token}`
                     }
                   />
                   <p>
-                    {Object.keys(event.scores).length} participants has
+                    {Object.keys(evaluation.scores).length} participants has
                     completed the evaluation.
                   </p>
                 </FormGroup>
               ) : (
                 <FormGroup>
-                  <em>Scoring via survey is disabled for this event.</em>
+                  <em>Scoring via survey is disabled for this evaluation.</em>
                 </FormGroup>
               )}
-              {event.scoring.facilitator ? (
+              {evaluation.scoring.facilitator ? (
                 <LinkButton
-                  to={`/events/${event._id.toHexString()}/score`}
+                  to={`/evaluations/${evaluation._id.toHexString()}/score`}
                   color="primary"
                   outline
                   block
@@ -229,18 +241,20 @@ export function EventOverview({ event }: EventOverviewProps) {
                 </LinkButton>
               ) : (
                 <FormGroup>
-                  <em>Providing scores yourself is disabled for this event.</em>
+                  <em>
+                    Providing scores yourself is disabled for this evaluation.
+                  </em>
                 </FormGroup>
               )}
             </Card>
           </Col>
-          <Col className={styles.EventOverview__Section} sm="12" md="6">
+          <Col className={styles.EvaluationOverview__Section} sm="12" md="6">
             <h3>Sharing</h3>
             <Card body>
               <CardText>
-                You can share the result of the evaluation event with others.
+                You can share the result of the evaluation with others.
               </CardText>
-              <EventSharingForm event={event} />
+              <EvaluationSharingForm evaluation={evaluation} />
             </Card>
           </Col>
         </Row>

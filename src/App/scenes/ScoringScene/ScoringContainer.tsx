@@ -12,16 +12,16 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
-import { Event, app } from "../../../mongodb";
+import { Evaluation, app } from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { CriterionSection } from "./CriterionSection";
 
 import styles from "./ScoringContainer.module.scss";
 import { useAuthentication } from "../../AuthenticationContext";
 
-type ScoringContainerProps = { event: Event };
+type ScoringContainerProps = { evaluation: Evaluation };
 
-export function ScoringContainer({ event }: ScoringContainerProps) {
+export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   const history = useHistory();
   const { user } = useAuthentication();
   const [criterionIndex, setCriterionIndex] = useState(0);
@@ -37,25 +37,25 @@ export function ScoringContainer({ event }: ScoringContainerProps) {
     };
     setScores(newScores);
     // Save the scores
-    if (criterionIndex >= event.criteria.length - 1) {
+    if (criterionIndex >= evaluation.criteria.length - 1) {
       // This is the last ... submit the scores
       try {
         setIsLoading(true);
         const flattenScores = Object.entries(newScores).flatMap(
           ([ci, scoresPerAlternative]) =>
             scoresPerAlternative.map((score, ai) => ({
-              criterion: event.criteria[ci as any].name,
-              alternative: event.alternatives[ai as any].name,
+              criterion: evaluation.criteria[ci as any].name,
+              alternative: evaluation.alternatives[ai as any].name,
               score,
             }))
         );
-        const { success } = await app.functions.updateEventScore(
-          event._id,
+        const { success } = await app.functions.updateEvaluationScore(
+          evaluation._id,
           flattenScores
         );
         setSaved(success);
-        if (success && user?.id === event.facilitator) {
-          history.push(`/events/${event._id.toHexString()}`);
+        if (success && user?.id === evaluation.facilitator) {
+          history.push(`/evaluations/${evaluation._id.toHexString()}`);
         }
       } catch (err) {
         setError(err);
@@ -113,9 +113,9 @@ export function ScoringContainer({ event }: ScoringContainerProps) {
                 ) : (
                   <CriterionSection
                     index={criterionIndex}
-                    count={event.criteria.length}
-                    criterion={event.criteria[criterionIndex]}
-                    alternatives={event.alternatives}
+                    count={evaluation.criteria.length}
+                    criterion={evaluation.criteria[criterionIndex]}
+                    alternatives={evaluation.alternatives}
                     onScores={handleScores}
                     onBack={handleBack}
                   />
@@ -128,7 +128,7 @@ export function ScoringContainer({ event }: ScoringContainerProps) {
               <em>This evaluation has no description.</em>
             </Card>
             <ListGroup className={styles.ScoringScene__Card}>
-              {event.criteria.map((c, i) => (
+              {evaluation.criteria.map((c, i) => (
                 <ListGroupItem
                   className={classNames(styles.ScoringScene__ListGroupItem, {
                     [styles["ScoringScene__ListGroupItem--answered"]]:

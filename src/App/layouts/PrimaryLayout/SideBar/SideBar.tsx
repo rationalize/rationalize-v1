@@ -12,16 +12,16 @@ export function SideBar({ className }: SideBarProps) {
   return (
     <div className={classNames(styles.SideBar, className)}>
       <section className={styles.SideBar__QuickAction}>
-        <LinkButton to="/events/create" color="primary" block>
-          <Plus size="1rem" /> New Event
+        <LinkButton to="/evaluations/create" color="primary" block>
+          <Plus size="1rem" /> New Evaluation
         </LinkButton>
       </section>
       <nav className={styles.SideBar__Navigation}>
         <SideBarItem to="/projects" icon="Briefcase" disabled>
           Projects
         </SideBarItem>
-        <SideBarItem to="/events" icon="Calendar">
-          Events
+        <SideBarItem to="/evaluations" icon="Calendar">
+          Evaluations
         </SideBarItem>
         <SideBarItem to="/participants" icon="Users" disabled>
           Participants

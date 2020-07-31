@@ -12,7 +12,7 @@ async function authenticateAndAcceptInvitaion(id: string, token: string) {
     const credentials = Credentials.anonymous();
     await app.logIn(credentials);
   }
-  return app.functions.acceptEventInvitation(id, token);
+  return app.functions.acceptEvaluationInvitation(id, token);
 }
 
 export function AcceptScoringInvitationScene() {
@@ -27,7 +27,7 @@ export function AcceptScoringInvitationScene() {
       authenticateAndAcceptInvitaion(id, token)
         .then(({ success }) => {
           if (success) {
-            history.replace(`/events/${id}/score`);
+            history.replace(`/evaluations/${id}/score`);
           } else {
             throw new Error(
               "Failed to accept invitation: Perhaps the invitation token has changed?"

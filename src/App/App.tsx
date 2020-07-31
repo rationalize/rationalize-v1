@@ -10,10 +10,10 @@ import { LogInScene } from "./scenes/LogInScene";
 import { RegisterScene } from "./scenes/RegisterScene";
 import { OnboardingScene } from "./scenes/OnboardingScene";
 import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
-import { CreateEventScene } from "./scenes/CreateEventScene";
+import { CreateEvaluationScene } from "./scenes/CreateEvaluationScene";
 import { UserProfileScene } from "./scenes/UserProfileScene";
-import { EventsListScene } from "./scenes/EventsListScene";
-import { EventOverviewScene } from "./scenes/EventOverviewScene";
+import { EvaluationListScene } from "./scenes/EvaluationListScene";
+import { EvaluationOverviewScene } from "./scenes/EvaluationOverviewScene";
 import { ScoringScene } from "./scenes/ScoringScene";
 import { ContentfulScene } from "./scenes/ContentfulScene";
 import { AcceptScoringInvitationScene } from "./scenes/AcceptScoringInvitationScene";
@@ -41,7 +41,7 @@ export function App() {
       <AuthenticationProvider app={app}>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/events" />
+            <Redirect to="/evaluations" />
           </Route>
           <Route path="/log-in" component={LogInScene} />
           <Route path="/register" component={RegisterScene} />
@@ -50,13 +50,17 @@ export function App() {
           <Route path="/facebook-callback" component={OAuthCallback} />
           <Route path="/google-callback" component={OAuthCallback} />
           <Route exact path="/profile" component={UserProfileScene} />
-          <Route exact path="/events" component={EventsListScene} />
-          <Route exact path="/events/create" component={CreateEventScene} />
-          <Route exact path="/events/:id" component={EventOverviewScene} />
-          <Route exact path="/events/:id/score" component={ScoringScene} />
+          <Route exact path="/evaluations" component={EvaluationListScene} />
           <Route
             exact
-            path="/events/:id/score/:token"
+            path="/evaluations/create"
+            component={CreateEvaluationScene}
+          />
+          <Route exact path="/evaluations/:id" component={EvaluationOverviewScene} />
+          <Route exact path="/evaluations/:id/score" component={ScoringScene} />
+          <Route
+            exact
+            path="/evaluations/:id/score/:token"
             component={AcceptScoringInvitationScene}
           />
           <Route path="/:slug" component={ContentfulScene} />

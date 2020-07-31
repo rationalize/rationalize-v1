@@ -1,7 +1,7 @@
 @import "../../../variables";
 
-.EventsOverviewScene {
-  &__EventRow {
+.EvaluationsOverviewScene {
+  &__EvaluationRow {
     cursor: pointer;
     &:hover, &:active, &:focus {
       background: $gray-100;

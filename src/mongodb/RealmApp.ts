@@ -4,12 +4,12 @@ import { App, User as RealmUser } from "realm-web";
 import { UserProfile } from "./UserProfiles";
 
 export interface Functions {
-  updateEventScore(
-    eventId: ObjectId,
+  updateEvaluationScore(
+    evaluationId: ObjectId,
     scores: { criterion: string; alternative: string; score: number }[]
   ): Promise<{ success: boolean }>;
-  acceptEventInvitation(
-    eventId: string,
+  acceptEvaluationInvitation(
+    evaluationId: string,
     token: string
   ): Promise<{ success: boolean }>;
 }

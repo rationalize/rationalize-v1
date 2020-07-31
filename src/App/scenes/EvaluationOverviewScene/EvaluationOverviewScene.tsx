@@ -1,15 +1,15 @@
 import React from "react";
 
-import { EventOverview } from "./EventOverview";
+import { EvaluationOverview } from "./EvaluationOverview";
 import { PrimaryLayout } from "../../layouts/PrimaryLayout";
-import { EventLoader } from "../../EventLoader";
+import { EvaluationLoader } from "../../EvaluationLoader";
 import { RestrictedArea } from "../../RestrictedArea";
 
-export function EventOverviewScene() {
+export function EvaluationOverviewScene() {
   return (
     <PrimaryLayout>
       <RestrictedArea>
-        <EventLoader component={EventOverview} />
+        <EvaluationLoader component={EvaluationOverview} />
       </RestrictedArea>
     </PrimaryLayout>
   );

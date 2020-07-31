@@ -35,7 +35,7 @@ export type Scoring =
       token: string;
     };
 
-export type Event = {
+export type Evaluation = {
   _id: ObjectId;
   name: string;
   facilitator: string;
@@ -57,4 +57,4 @@ export function generateSharingToken(length = 8) {
   return chars.join("");
 }
 
-export const eventsCollection = db.collection<Event>("Events");
+export const evaluationsCollection = db.collection<Evaluation>("Evaluations");

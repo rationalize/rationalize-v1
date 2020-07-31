@@ -2,24 +2,24 @@ import React from "react";
 import { Formik, FormikHelpers } from "formik";
 import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
-import { Event, Sharing, eventsCollection } from "../../../mongodb";
+import { Evaluation, Sharing, evaluationsCollection } from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
 
 type Values = Sharing;
 
-export type EventSharingFormProps = { event: Event };
+export type EvaluationSharingFormProps = { evaluation: Evaluation };
 
-export function EventSharingForm({ event }: EventSharingFormProps) {
+export function EvaluationSharingForm({ evaluation }: EvaluationSharingFormProps) {
   async function handleSubmit(values: Sharing, helpers: FormikHelpers<Values>) {
-    await eventsCollection.updateOne(
-      { _id: { $eq: event._id } },
+    await evaluationsCollection.updateOne(
+      { _id: { $eq: evaluation._id } },
       { $set: { sharing: values } }
     );
   }
 
   return (
     <Formik<Values>
-      initialValues={{ mode: event.sharing ? event.sharing.mode : "disabled" }}
+      initialValues={{ mode: evaluation.sharing ? evaluation.sharing.mode : "disabled" }}
       onSubmit={handleSubmit}
     >
       {({

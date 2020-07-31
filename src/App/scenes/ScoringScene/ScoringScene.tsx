@@ -1,12 +1,12 @@
 import React from "react";
 import { PrimaryLayout } from "../../layouts/PrimaryLayout";
 import { ScoringContainer } from "./ScoringContainer";
-import { EventLoader } from "../../EventLoader";
+import { EvaluationLoader } from "../../EvaluationLoader";
 
 export function ScoringScene() {
   return (
     <PrimaryLayout>
-      <EventLoader component={ScoringContainer} />
+      <EvaluationLoader component={ScoringContainer} />
     </PrimaryLayout>
   );
 }

@@ -1,4 +1,4 @@
 export * from "./RealmApp";
-export * from "./Events";
+export * from "./Evaluations";
 export * from "./UserProfiles";
-export * from "./EventFinder";
+export * from "./EvaluationFinder";
