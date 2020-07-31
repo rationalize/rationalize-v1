@@ -24,3 +24,5 @@ yarn-error.log*
 
 # Realm App hosting files
 realm-app/hosting/files
+# Temp Realm App used when importing, to avoid saving ids in the exported template
+temp-realm-app

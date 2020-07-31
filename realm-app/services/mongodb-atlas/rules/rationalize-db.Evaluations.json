@@ -1,7 +1,6 @@
 {
     "collection": "Evaluations",
     "database": "rationalize-db",
-    "id": "5f2382beee934c8aac0b79fb",
     "roles": [
         {
             "name": "facilitator",
