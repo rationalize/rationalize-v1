@@ -17,6 +17,7 @@ import { EvaluationOverviewScene } from "./scenes/EvaluationOverviewScene";
 import { ScoringScene } from "./scenes/ScoringScene";
 import { ContentfulScene } from "./scenes/ContentfulScene";
 import { JoinEvaluationScene } from "./scenes/JoinEvaluationScene";
+import { ConfigurationSelector } from "../mongodb/ConfigurationSelector";
 
 const history = createBrowserHistory();
 
@@ -39,6 +40,7 @@ export function App() {
   return (
     <Router history={history}>
       <AuthenticationProvider app={app}>
+        <ConfigurationSelector />
         <Switch>
           <Route exact path="/">
             <Redirect to="/evaluations" />
