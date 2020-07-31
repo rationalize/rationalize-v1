@@ -75,7 +75,7 @@ export function AccountMenu() {
       </DropdownMenu>
     </Dropdown>
   ) : (
-    <LinkButton to="log-in" color="primary">
+    <LinkButton to="/log-in" color="primary">
       <Lock size="1rem" /> Log in
     </LinkButton>
   );

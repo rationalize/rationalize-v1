@@ -22,7 +22,6 @@ export function InputWithControls({
         styles.InputWithControls,
         className
       )}
-      {...rest}
     >
       <Input
         className={classNames(styles.InputWithControls__Input, inputClassName)}

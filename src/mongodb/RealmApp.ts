@@ -8,7 +8,10 @@ export interface Functions {
     eventId: ObjectId,
     scores: { criterion: string; alternative: string; score: number }[]
   ): Promise<{ success: boolean }>;
-  acceptEventInvitation(eventId: string): Promise<void>;
+  acceptEventInvitation(
+    eventId: string,
+    token: string
+  ): Promise<{ success: boolean }>;
 }
 
 export type User = RealmUser<

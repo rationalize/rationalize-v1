@@ -8,7 +8,7 @@ type LoadingOverlayProps = {
   isLoading: boolean;
   error?: Error | null;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   grow?: boolean;
 };
 

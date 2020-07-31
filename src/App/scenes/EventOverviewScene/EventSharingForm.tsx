@@ -2,8 +2,8 @@ import React from "react";
 import { Formik, FormikHelpers } from "formik";
 import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
-import { Event, Sharing, eventsCollection } from "../../../../mongodb";
-import { LoadingOverlay } from "../../../LoadingOverlay";
+import { Event, Sharing, eventsCollection } from "../../../mongodb";
+import { LoadingOverlay } from "../../LoadingOverlay";
 
 type Values = Sharing;
 

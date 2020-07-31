@@ -10,10 +10,9 @@ import {
 } from "reactstrap";
 import { Formik } from "formik";
 
-import { Alternative, Criterion } from "../../../../mongodb";
+import { Alternative, Criterion } from "../../../mongodb";
 
-import styles from "./CriterionCard.module.scss";
-import { Send } from "react-feather";
+import styles from "./CriterionSection.module.scss";
 
 type CriterionCardProps = {
   className?: string;
@@ -22,22 +21,28 @@ type CriterionCardProps = {
   criterion: Criterion;
   alternatives: Alternative[];
   onScores: (scores: number[]) => void;
+  onBack: () => void;
 };
 
 type Values = {
   scores: number[];
 };
 
-export function CriterionCard({
+export function CriterionSection({
   className,
   index,
   count,
   criterion,
   alternatives,
   onScores,
+  onBack,
 }: CriterionCardProps) {
   function handleSubmit({ scores }: Values) {
     return onScores(scores);
+  }
+
+  function handleBackClick() {
+    onBack();
   }
 
   const isLast = index === count - 1;
@@ -45,7 +50,7 @@ export function CriterionCard({
   return (
     <Card className={className} body>
       <CardTitle className={styles.CriterionCard__Title}>
-        <h2>{criterion.name}</h2>
+        <h3>{criterion.name}</h3>
       </CardTitle>
       <Formik<Values>
         initialValues={{ scores: alternatives.map((a) => 0.5) }}
@@ -70,15 +75,19 @@ export function CriterionCard({
                 />
               </FormGroup>
             ))}
-            <Button type="submit" color="primary" block>
-              {isLast ? (
-                <>
-                  <Send /> Send
-                </>
-              ) : (
-                `Next criterion (${index + 2} of ${count})`
-              )}
-            </Button>
+            <section className={styles.CriterionCard__Controls}>
+              <Button
+                color="primary"
+                onClick={handleBackClick}
+                disabled={index === 0}
+                outline
+              >
+                Back
+              </Button>
+              <Button type="submit" color="primary">
+                {isLast ? "Save scores" : "Next criterion"}
+              </Button>
+            </section>
           </Form>
         )}
       </Formik>

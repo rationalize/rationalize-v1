@@ -15,15 +15,17 @@ import {
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { Formik, FormikHelpers } from "formik";
 
-import { Event } from "../../../../mongodb";
-import { LinkButton } from "../../../LinkButton";
-import { CopyToClipboardInput } from "../../../CopyToClipboardInput";
-import { eventsCollection, Weights } from "../../../../mongodb";
+import { Event } from "../../../mongodb";
+import { LinkButton } from "../../LinkButton";
+import { CopyToClipboardInput } from "../../CopyToClipboardInput";
+import { eventsCollection, Weights } from "../../../mongodb";
+import { LoadingOverlay } from "../../LoadingOverlay";
+import { useAuthentication } from "../../AuthenticationContext";
+
+import { EventSharingForm } from "./EventSharingForm";
+import { WeightsHelp } from "./WeightsHelp";
 
 import styles from "./EventOverview.module.scss";
-import { LoadingOverlay } from "../../../LoadingOverlay";
-import { EventSharingForm } from "./EventSharingForm";
-import { useAuthentication } from "../../../AuthenticationContext";
 
 type EventOverviewProps = { event: Event };
 
@@ -38,25 +40,25 @@ export function EventOverview({ event }: EventOverviewProps) {
 
   const { user } = useAuthentication();
 
-  const evaluations = Object.values(event.evaluations).flat();
+  const scores = Object.values(event.scores).flat();
 
   const isFacilitator = user && user.id === event.facilitator;
 
   function scoreAlternatives(weights: Weights) {
     // Reduce the scores into an array of alternatives and their scores accumulated over all criteria.
     const scoredAlternatives = event.alternatives.map((alternative) => {
-      const relevantEvaluations = evaluations.filter(
+      const relevantScores = scores.filter(
         (e) => e.alternative === alternative.name
       );
-      const totalScore = relevantEvaluations.reduce(
-        (sum, { score, criterion }) => score * weights[criterion] + sum,
+      const totalValue = relevantScores.reduce(
+        (sum, { value, criterion }) => value * weights[criterion] + sum,
         0
       );
       return {
         name: alternative.name,
         score: {
-          total: totalScore,
-          average: totalScore / relevantEvaluations.length,
+          total: totalValue,
+          average: totalValue / relevantScores.length,
         },
       };
     });
@@ -81,6 +83,7 @@ export function EventOverview({ event }: EventOverviewProps) {
 
   return (
     <Container fluid>
+      <h1 className={styles.EventScreen__Heading}>{event.name}</h1>
       <Row>
         <Formik initialValues={{ weights }} onSubmit={handleWeightsSubmit}>
           {({
@@ -93,10 +96,13 @@ export function EventOverview({ event }: EventOverviewProps) {
             isSubmitting,
           }) => {
             const alternatives = scoreAlternatives(values.weights);
+            console.log(alternatives);
             return (
               <>
                 <Col className={styles.EventOverview__Section} sm="12" md="6">
-                  <h3>Criteria Weights</h3>
+                  <h3>
+                    Criteria Weights <WeightsHelp />
+                  </h3>
                   <Card>
                     <CardBody>
                       <LoadingOverlay isLoading={isSubmitting}>
@@ -149,18 +155,6 @@ export function EventOverview({ event }: EventOverviewProps) {
                         </Form>
                       </LoadingOverlay>
                     </CardBody>
-                    <hr />
-                    <CardBody>
-                      <h6>What is this?</h6>
-                      <CardText>
-                        By setting Criteria Weights, you are defining the
-                        relative importance of each individual Criteria. If you
-                        think that each Criteria is equally important, just
-                        leave the dials where they are at. However, if some of
-                        the criteria is more important than others, adjust the
-                        dials accordingly.
-                      </CardText>
-                    </CardBody>
                   </Card>
                 </Col>
                 <Col className={styles.EventOverview__Section} sm="12" md="6">
@@ -203,27 +197,41 @@ export function EventOverview({ event }: EventOverviewProps) {
           <Col className={styles.EventOverview__Section} sm="12" md="6">
             <h3>Scoring</h3>
             <Card body>
-              <FormGroup>
-                <Label for="evaluation-link">
-                  Send this link to participants:
-                </Label>
-                <CopyToClipboardInput
-                  id="evaluation-link"
-                  text={global.location.href + "/evaluate"}
-                />
-              </FormGroup>
-              <p>
-                {Object.keys(event.evaluations).length} participants has
-                completed the evaluation.
-              </p>
-              <LinkButton
-                to={`/events/${event._id.toHexString()}/evaluate`}
-                color="primary"
-                outline
-                block
-              >
-                Go to evaluation
-              </LinkButton>
+              {event.scoring.survey ? (
+                <FormGroup>
+                  <Label for="evaluation-link">
+                    Send this link to participants:
+                  </Label>
+                  <CopyToClipboardInput
+                    id="evaluation-link"
+                    text={
+                      global.location.href + `/score/${event.scoring.token}`
+                    }
+                  />
+                  <p>
+                    {Object.keys(event.scores).length} participants has
+                    completed the evaluation.
+                  </p>
+                </FormGroup>
+              ) : (
+                <FormGroup>
+                  <em>Scoring via survey is disabled for this event.</em>
+                </FormGroup>
+              )}
+              {event.scoring.facilitator ? (
+                <LinkButton
+                  to={`/events/${event._id.toHexString()}/score`}
+                  color="primary"
+                  outline
+                  block
+                >
+                  Adjust your scores
+                </LinkButton>
+              ) : (
+                <FormGroup>
+                  <em>Providing scores yourself is disabled for this event.</em>
+                </FormGroup>
+              )}
             </Card>
           </Col>
           <Col className={styles.EventOverview__Section} sm="12" md="6">

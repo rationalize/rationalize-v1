@@ -1,7 +1,7 @@
 {
-    "id": "5f0b5efb5bf236e32bc4acc8",
-    "database": "rationalize-db",
     "collection": "UserProfiles",
+    "database": "rationalize-db",
+    "id": "5f0b5efb5bf236e32bc4acc8",
     "roles": [
         {
             "name": "owner",

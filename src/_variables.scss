@@ -13,8 +13,11 @@ $gray-800: #343a40 !default;
 $body-bg: $gray-150;
 $body-color: $gray-700;
 $card-border-width: 0;
+$list-group-border-width: 0;
 
 $yiq-contrasted-threshold: 200;
+
+// $form-group-margin-bottom: 2.5rem;
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";

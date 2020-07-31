@@ -1,0 +1,34 @@
+@import "../../../variables";
+
+.ScoringScene {
+  &__Message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: $spacer;
+  }
+
+  &__Icon {
+    margin: 1rem;
+  }
+
+  &__Card {
+    margin-bottom: $spacer;
+  }
+
+  &__ListGroupItem {
+    display: flex;
+
+    &--answered {
+      color: $gray-500;
+    }
+
+    &--active {
+      font-weight: bold;
+    }
+  }
+
+  &__ListGroupItemName {
+    flex-grow: 1;
+  }
+}

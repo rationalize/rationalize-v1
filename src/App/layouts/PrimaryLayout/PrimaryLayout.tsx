@@ -5,6 +5,7 @@ import styles from "./PrimaryLayout.module.scss";
 
 import { TopBar } from "./TopBar";
 import { SideBar } from "./SideBar";
+import { app } from "../../../mongodb";
 
 export type PrimaryLayoutProps = {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ export type PrimaryLayoutProps = {
 
 export function PrimaryLayout({
   children,
-  sidebar = "visible",
+  sidebar = app.currentUser ? "visible" : "hidden",
 }: PrimaryLayoutProps) {
   return (
     <div className={styles.TopAndSideBar}>

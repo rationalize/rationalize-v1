@@ -1,0 +1,10 @@
+@import "../variables";
+
+.HelpPopover {
+  &__Icon {
+    position: relative;
+    color: $primary;
+    cursor: pointer;
+    top: -.15rem;
+  }
+}

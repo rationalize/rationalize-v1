@@ -1,6 +1,6 @@
 {
+    "can_evaluate": {},
     "id": "5f0b94df5bf236e32be55899",
     "name": "storeUserProfile",
-    "private": true,
-    "can_evaluate": {}
+    "private": true
 }

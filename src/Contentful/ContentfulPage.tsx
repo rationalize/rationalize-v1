@@ -22,6 +22,7 @@ type Page = {
 };
 
 export function ContentfulPage({ slug }: ContentfulPageProps) {
+  const [isLoading, setLoading] = useState(true);
   const [page, setPage] = useState<Page | null>(null);
   const params = useParams<{ slug?: string }>();
   // Read the slug from the query param
@@ -38,18 +39,20 @@ export function ContentfulPage({ slug }: ContentfulPageProps) {
       })
       .then(({ items: [page] }) => {
         setPage(page as any);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [slug]);
-
-  console.log("page", page);
 
   return (
     <LoadingOverlay
       className={styles.ContentfulPage}
-      isLoading={page === null}
+      isLoading={isLoading}
       grow
     >
-      {page ? documentToReactComponents(page.fields.content) : <NotFound />}
+      {page && documentToReactComponents(page.fields.content)}
+      {!page && !isLoading && <NotFound />}
     </LoadingOverlay>
   );
 }

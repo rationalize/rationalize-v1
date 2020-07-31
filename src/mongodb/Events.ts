@@ -12,10 +12,10 @@ export type Alternative = {
 
 export type Weights = { [criterion: string]: number };
 
-export type Evaluation = {
+export type Score = {
   alternative: string;
   criterion: string;
-  score: number;
+  value: number;
 };
 
 export type SharingMode = "disabled" | "public";
@@ -24,6 +24,17 @@ export type Sharing = {
   mode: SharingMode;
 };
 
+export type Scoring =
+  | {
+      facilitator: boolean;
+      survey: false;
+    }
+  | {
+      facilitator: boolean;
+      survey: true;
+      token: string;
+    };
+
 export type Event = {
   _id: ObjectId;
   name: string;
@@ -31,9 +42,19 @@ export type Event = {
   participants: string[];
   criteria: Criterion[];
   alternatives: Alternative[];
-  evaluations: { [userId: string]: Evaluation[] };
+  scores: { [userId: string]: Score[] };
   weights?: Weights;
   sharing: Sharing;
+  scoring: Scoring;
 };
+
+export function generateSharingToken(length = 8) {
+  const buffer = new Uint8Array(length);
+  window.crypto.getRandomValues(buffer);
+  const chars = Array.from(buffer, (d) =>
+    d < 10 ? "0" + String(d) : d.toString(16)
+  );
+  return chars.join("");
+}
 
 export const eventsCollection = db.collection<Event>("Events");

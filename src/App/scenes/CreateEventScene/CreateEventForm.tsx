@@ -3,8 +3,16 @@ import { Formik, FormikHelpers, useFormikContext } from "formik";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 
 import { InputList } from "../../InputList";
-import { app, eventsCollection } from "../../../mongodb";
-import { InputWithControls } from "../../InputWithControls";
+import {
+  app,
+  eventsCollection,
+  Scoring,
+  generateSharingToken,
+  Event,
+} from "../../../mongodb";
+import { CriteriaHelp } from "./CriteriaHelp";
+import { ConceptHelp } from "./ConceptHelp";
+import { SharingModeHelp } from "./ScoringModeHelp";
 
 export type AlternativeValues = {
   name: string;
@@ -14,11 +22,16 @@ export type CriterionValues = {
   name: string;
 };
 
+export type ScoringValue = {
+  facilitator: boolean;
+  survey: boolean;
+};
+
 export type EventValues = {
   name: string;
   criteria: CriterionValues[];
   alternatives: AlternativeValues[];
-  participate: boolean;
+  scoring: ScoringValue;
 };
 
 export type CreateEventHandler = (
@@ -27,7 +40,7 @@ export type CreateEventHandler = (
 ) => void;
 
 type CreateEventFormProps = {
-  handleCreated: (id: Realm.ObjectId) => void;
+  handleCreated: (event: Event) => void;
 };
 
 type ErrorObject<Values> = { [key in keyof Values]?: string };
@@ -80,18 +93,24 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
           "The must be at least one alternative."
         );
       }
-      const { insertedId } = await eventsCollection.insertOne({
+      const scoring: Scoring = {
+        ...values.scoring,
+        token: generateSharingToken(),
+      };
+      const event: Omit<Event, "_id"> = {
         facilitator: app.currentUser.id,
-        participants: values.participate ? [app.currentUser.id] : [],
-        evaluations: {},
+        participants: [],
+        scores: {},
         name: values.name,
         criteria,
         alternatives,
         sharing: { mode: "disabled" },
-      });
+        scoring,
+      };
+      const { insertedId } = await eventsCollection.insertOne(event);
       helpers.setSubmitting(false);
       gtag("event", "create_event");
-      handleCreated(insertedId);
+      handleCreated({ ...event, _id: insertedId });
     }
   };
 
@@ -101,7 +120,7 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
         name: "",
         alternatives: [{ name: "" }],
         criteria: [{ name: "" }],
-        participate: false,
+        scoring: { facilitator: true, survey: false },
       }}
       validate={validate}
       onSubmit={handleSubmit}
@@ -118,8 +137,10 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
       }) => (
         <Form onSubmit={handleSubmit} onReset={handleReset}>
           <FormGroup>
-            <Label for="name">Name</Label>
-            <InputWithControls
+            <Label for="name">
+              <h5>Name Evaluation Event</h5>
+            </Label>
+            <Input
               type="text"
               name="name"
               id="name"
@@ -127,16 +148,18 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
               onChange={handleChange}
               onBlur={handleBlur}
               invalid={errors.name && touched.name ? true : false}
-            >
-              {/*<Button>Add more information</Button>*/}
-            </InputWithControls>
+            />
             <FieldFeedback
               name="name"
               helper="Events have names, making it easer to tell them apart."
             />
           </FormGroup>
           <FormGroup>
-            <Label>Define Criteria</Label>
+            <Label>
+              <h5>
+                Define Criteria <CriteriaHelp />
+              </h5>
+            </Label>
             <InputList
               items={values.criteria}
               itemsPath="criteria"
@@ -154,7 +177,11 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
             />
           </FormGroup>
           <FormGroup>
-            <Label>Define Concepts</Label>
+            <Label>
+              <h5>
+                Define Concepts <ConceptHelp />
+              </h5>
+            </Label>
             <InputList
               items={values.alternatives}
               itemsPath="alternatives"
@@ -171,24 +198,53 @@ export function CreateEventForm({ handleCreated }: CreateEventFormProps) {
               helper="What are the different potential outcomes from the event?"
             />
           </FormGroup>
-          <FormGroup check>
-            <Input
-              type="checkbox"
-              name="participate"
-              id="participate"
-              checked={values.participate}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={errors.participate && touched.participate ? true : false}
-            />
-            <Label for="participate" check>
-              Include yourself as participant
+          <FormGroup>
+            <Label>
+              <h5>
+                Define Scoring Mode <SharingModeHelp />
+              </h5>
             </Label>
+            <FormGroup check>
+              <Input
+                type="checkbox"
+                name="scoring.facilitator"
+                id="scoring.facilitator"
+                checked={values.scoring.facilitator}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Label for="scoring.facilitator" check>
+                <strong>Individual</strong> – I will score the Concepts against
+                the Criteria myself.
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Input
+                type="checkbox"
+                name="scoring.survey"
+                id="scoring.survey"
+                checked={values.scoring.survey}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Label for="scoring.survey" check>
+                <strong>Survey</strong> – I will ask others to score the
+                Concepts against the Criteria.
+              </Label>
+              <small>
+                Note: We respect the privacy of our users thus Survey results
+                cannot be made public:{" "}
+                <a href="/public-vs-private-events">
+                  See Public vs Private Events
+                </a>
+              </small>
+            </FormGroup>
           </FormGroup>
-          <hr />
-          <Button type="submit" color="primary" disabled={isSubmitting} block>
-            Create event
-          </Button>
+          <FormGroup>
+            <Button type="submit" color="primary" disabled={isSubmitting} block>
+              Create event
+            </Button>
+          </FormGroup>
         </Form>
       )}
     </Formik>

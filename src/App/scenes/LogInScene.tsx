@@ -110,12 +110,24 @@ export function LogInScene() {
           )}
         </Formik>
         <FormGroup>
-          <IconButton onClick={handleFacebookLogin} icon="Facebook" block>
+          <IconButton
+            color="primary"
+            onClick={handleFacebookLogin}
+            icon="Facebook"
+            block
+            outline
+          >
             Log in with Facebook
           </IconButton>
         </FormGroup>
         <FormGroup>
-          <IconButton onClick={handleGoogleLogin} icon="Google" block>
+          <IconButton
+            color="primary"
+            onClick={handleGoogleLogin}
+            icon="Google"
+            block
+            outline
+          >
             Log in with Google
           </IconButton>
         </FormGroup>

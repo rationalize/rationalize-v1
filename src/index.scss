@@ -19,3 +19,10 @@ button > svg {
   position: relative;
   top: -2px;
 }
+
+// Remove the margin in the bottom of the last form group, to enable a more compact layout.
+/*
+.form-group:last-child {
+  margin-bottom: 0;
+}
+*/

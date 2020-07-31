@@ -1,0 +1,12 @@
+@import "../../../variables";
+
+.CriterionCard {
+  &__Controls {
+    display: flex;
+    justify-content: flex-end;
+
+    & > button:not(:last-child) {
+      margin-right: $spacer / 2;
+    }
+  }
+}
