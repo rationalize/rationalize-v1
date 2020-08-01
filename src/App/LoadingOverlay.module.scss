@@ -1,20 +1,16 @@
 .LoadingOverlay {
-  display: flex;
-  position: relative;
-
-  &--grow {
-    flex-grow: 1;
-  }
-
   &__Overlay {
     position: absolute;
     display: flex;
-    min-height: 100%;
-    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+    z-index: 1000;
   }
 
   &__Alert {
@@ -28,7 +24,7 @@
     flex-grow: 1;
 
     &--loading {
-      opacity: .5;
+      opacity: .3;
       pointer-events: none;
     }
   }

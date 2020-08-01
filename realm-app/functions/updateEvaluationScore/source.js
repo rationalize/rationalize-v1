@@ -3,8 +3,8 @@ exports = async function (eventId, scores) {
   const eventsCollection = context.services
     .get("mongodb-atlas")
     .db("rationalize-db")
-    .collection("Events");
-  const { matchedCount, modifiedCount } = await eventsCollection.updateOne(
+    .collection("Evaluations");
+  const { matchedCount } = await eventsCollection.updateOne(
     // Search of an event with this ID and the user as a participant
     {
       _id: { $eq: eventId },
@@ -16,5 +16,5 @@ exports = async function (eventId, scores) {
     // Update the evaluations array for this specific user
     { $set: { [`scores.${context.user.id}`]: scores } }
   );
-  return { success: matchedCount === 1 && modifiedCount === 1 };
+  return { success: matchedCount === 1 };
 };

@@ -12,7 +12,7 @@ export function NotFound() {
       >
         🤷
       </span>
-      <h2>Page Not Found</h2>
+      <h1>Page Not Found</h1>
     </section>
   );
 }

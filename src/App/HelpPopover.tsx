@@ -38,7 +38,7 @@ export function HelpPopover({
   return (
     <>
       <span ref={iconRef} onClick={handleIconClick}>
-        <HelpCircle className={styles.HelpPopover__Icon} />
+        <HelpCircle size="1em" className={styles.HelpPopover__Icon} />
       </span>
       {currentIcon && (
         <Popover

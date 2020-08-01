@@ -47,7 +47,7 @@ export function EvaluationListScene() {
   return (
     <PrimaryLayout>
       <RestrictedArea>
-        <LoadingOverlay isLoading={isLoading} error={error} grow>
+        <LoadingOverlay isLoading={isLoading} error={error}>
           {evaluations.length > 0 ? (
             <>
               <Container fluid>

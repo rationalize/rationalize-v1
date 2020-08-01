@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { handleAuthRedirect } from "realm-web";
 import { createBrowserHistory } from "history";
 
@@ -18,6 +18,7 @@ import { ScoringScene } from "./scenes/ScoringScene";
 import { ContentfulScene } from "./scenes/ContentfulScene";
 import { JoinEvaluationScene } from "./scenes/JoinEvaluationScene";
 import { ConfigurationSelector } from "../mongodb/ConfigurationSelector";
+import { GreetingScene } from "./scenes/GreetingScene";
 
 const history = createBrowserHistory();
 
@@ -40,11 +41,8 @@ export function App() {
   return (
     <Router history={history}>
       <AuthenticationProvider app={app}>
-        <ConfigurationSelector />
         <Switch>
-          <Route exact path="/">
-            <Redirect to="/evaluations" />
-          </Route>
+          <Route exact path="/" component={GreetingScene} />
           <Route path="/log-in" component={LogInScene} />
           <Route path="/register" component={RegisterScene} />
           <Route path="/onboarding" component={OnboardingScene} />
@@ -71,6 +69,7 @@ export function App() {
           />
           <Route path="/:slug" component={ContentfulScene} />
         </Switch>
+        <ConfigurationSelector />
       </AuthenticationProvider>
     </Router>
   );

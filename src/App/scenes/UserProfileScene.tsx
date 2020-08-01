@@ -25,13 +25,13 @@ export function UserProfileScene() {
         <Container>
           <Row>
             <Col sm="12" md="6">
-              <h2>Profile</h2>
+              <h4>Profile</h4>
               <Card body>
                 <UserProfileForm />
               </Card>
             </Col>
             <Col sm="12" md="6">
-              <h2>Change password</h2>
+              <h4>Change password</h4>
               <Card body>
                 <CardText>
                   To verify your email address, you change your password by

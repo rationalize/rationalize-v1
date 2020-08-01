@@ -7,28 +7,16 @@ import styles from "./LoadingOverlay.module.scss";
 type LoadingOverlayProps = {
   isLoading: boolean;
   error?: Error | null;
-  className?: string;
   children?: React.ReactNode;
-  grow?: boolean;
 };
 
 export function LoadingOverlay({
   isLoading,
   error,
   children,
-  className,
-  grow,
 }: LoadingOverlayProps) {
   return (
-    <div
-      className={classNames(
-        styles.LoadingOverlay,
-        {
-          [styles["LoadingOverlay--grow"]]: grow,
-        },
-        className
-      )}
-    >
+    <>
       {isLoading ? (
         <div className={styles.LoadingOverlay__Overlay}>
           <Spinner color="primary" />
@@ -47,6 +35,6 @@ export function LoadingOverlay({
       >
         {children}
       </div>
-    </div>
+    </>
   );
 }

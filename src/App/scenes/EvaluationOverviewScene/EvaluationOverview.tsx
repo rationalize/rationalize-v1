@@ -83,7 +83,7 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
 
   return (
     <Container fluid>
-      <h1 className={styles.EvaluationScreen__Heading}>{evaluation.name}</h1>
+      <h3 className={styles.EvaluationScreen__Heading}>{evaluation.name}</h3>
       <Row>
         <Formik initialValues={{ weights }} onSubmit={handleWeightsSubmit}>
           {({

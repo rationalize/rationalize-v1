@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ContentfulPage } from "../../Contentful";
+import { ContentfulPage } from "../Contentful";
 import { PrimaryLayout } from "../layouts/PrimaryLayout";
 
 export function ContentfulScene() {

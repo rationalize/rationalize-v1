@@ -13,6 +13,7 @@ import {
 import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
 import { SharingModeHelp } from "./ScoringModeHelp";
+import { LoadingOverlay } from "../../LoadingOverlay";
 
 export type AlternativeValues = {
   name: string;
@@ -137,117 +138,124 @@ export function CreateEvaluationForm({
         handleBlur,
         handleChange,
       }) => (
-        <Form onSubmit={handleSubmit} onReset={handleReset}>
-          <FormGroup>
-            <Label for="name">
-              <h5>Name Evaluation Evaluation</h5>
-            </Label>
-            <Input
-              type="text"
-              name="name"
-              id="name"
-              value={values.name}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              invalid={errors.name && touched.name ? true : false}
-            />
-            <FieldFeedback
-              name="name"
-              helper="Evaluations have names, making it easer to tell them apart."
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>
-              <h5>
-                Define Criteria <CriteriaHelp />
-              </h5>
-            </Label>
-            <InputList
-              items={values.criteria}
-              itemsPath="criteria"
-              propertyName="name"
-              addText="Add New Criterion"
-              /*
+        <LoadingOverlay isLoading={isSubmitting}>
+          <Form onSubmit={handleSubmit} onReset={handleReset}>
+            <FormGroup>
+              <Label for="name">
+                <h6>Name Evaluation Evaluation</h6>
+              </Label>
+              <Input
+                type="text"
+                name="name"
+                id="name"
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                invalid={errors.name && touched.name ? true : false}
+              />
+              <FieldFeedback
+                name="name"
+                helper="Evaluations have names, making it easer to tell them apart."
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>
+                <h6>
+                  Define Criteria <CriteriaHelp />
+                </h6>
+              </Label>
+              <InputList
+                items={values.criteria}
+                itemsPath="criteria"
+                propertyName="name"
+                addText="Add New Criterion"
+                /*
               extraControls={() => (
                 <Button color="success">Add more information</Button>
               )}
               */
-            />
-            <FieldFeedback
-              name="criteria"
-              helper="A list of criteria that would make someone choose one alternative over the other."
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>
-              <h5>
-                Define Concepts <ConceptHelp />
-              </h5>
-            </Label>
-            <InputList
-              items={values.alternatives}
-              itemsPath="alternatives"
-              propertyName="name"
-              addText="Add New Concept"
-              /*
+              />
+              <FieldFeedback
+                name="criteria"
+                helper="A list of criteria that would make someone choose one alternative over the other."
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>
+                <h6>
+                  Define Concepts <ConceptHelp />
+                </h6>
+              </Label>
+              <InputList
+                items={values.alternatives}
+                itemsPath="alternatives"
+                propertyName="name"
+                addText="Add New Concept"
+                /*
               extraControls={() => (
                 <Button color="success">Add more information</Button>
               )}
               */
-            />
-            <FieldFeedback
-              name="alternatives"
-              helper="What are the different potential outcomes from the evaluation?"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>
-              <h5>
-                Define Scoring Mode <SharingModeHelp />
-              </h5>
-            </Label>
-            <FormGroup check>
-              <Input
-                type="checkbox"
-                name="scoring.facilitator"
-                id="scoring.facilitator"
-                checked={values.scoring.facilitator}
-                onChange={handleChange}
-                onBlur={handleBlur}
               />
-              <Label for="scoring.facilitator" check>
-                <strong>Individual</strong> – I will score the Concepts against
-                the Criteria myself.
-              </Label>
-            </FormGroup>
-            <FormGroup check>
-              <Input
-                type="checkbox"
-                name="scoring.survey"
-                id="scoring.survey"
-                checked={values.scoring.survey}
-                onChange={handleChange}
-                onBlur={handleBlur}
+              <FieldFeedback
+                name="alternatives"
+                helper="What are the different potential outcomes from the evaluation?"
               />
-              <Label for="scoring.survey" check>
-                <strong>Survey</strong> – I will ask others to score the
-                Concepts against the Criteria.
-              </Label>
-              <small>
-                Note: We respect the privacy of our users thus Survey results
-                cannot be made public:{" "}
-                <a href="/public-vs-private-evaluations">
-                  See Public vs Private Evaluations
-                </a>
-              </small>
             </FormGroup>
-          </FormGroup>
-          <FormGroup>
-            <Button type="submit" color="primary" disabled={isSubmitting} block>
-              Create evaluation
-            </Button>
-          </FormGroup>
-        </Form>
+            <FormGroup>
+              <Label>
+                <h6>
+                  Define Scoring Mode <SharingModeHelp />
+                </h6>
+              </Label>
+              <FormGroup check>
+                <Input
+                  type="checkbox"
+                  name="scoring.facilitator"
+                  id="scoring.facilitator"
+                  checked={values.scoring.facilitator}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <Label for="scoring.facilitator" check>
+                  <strong>Individual</strong> – I will score the Concepts
+                  against the Criteria myself.
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Input
+                  type="checkbox"
+                  name="scoring.survey"
+                  id="scoring.survey"
+                  checked={values.scoring.survey}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <Label for="scoring.survey" check>
+                  <strong>Survey</strong> – I will ask others to score the
+                  Concepts against the Criteria.
+                </Label>
+                <small>
+                  Note: We respect the privacy of our users thus Survey results
+                  cannot be made public:{" "}
+                  <a href="/public-vs-private-evaluations">
+                    See Public vs Private Evaluations
+                  </a>
+                </small>
+              </FormGroup>
+            </FormGroup>
+            <FormGroup>
+              <Button
+                type="submit"
+                color="primary"
+                disabled={isSubmitting}
+                block
+              >
+                Create evaluation
+              </Button>
+            </FormGroup>
+          </Form>
+        </LoadingOverlay>
       )}
     </Formik>
   );

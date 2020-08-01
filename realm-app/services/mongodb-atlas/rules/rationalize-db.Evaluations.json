@@ -14,7 +14,7 @@
             "additional_fields": {}
         },
         {
-            "name": "participants",
+            "name": "participant",
             "apply_when": {
                 "participants": "%%user.id"
             },

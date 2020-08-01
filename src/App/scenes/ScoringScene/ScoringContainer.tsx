@@ -80,28 +80,24 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   }
 
   return (
-    <Container>
+    <Container className={styles.ScoringContainer}>
       {saved ? (
-        <Card className={styles.ScoringScene__Card} body>
-          <div className={styles.ScoringScene__Message}>
-            <ThumbsUp className={styles.ScoringScene__Icon} size="4rem" />
+        <Card className={styles.ScoringContainer__Card} body>
+          <div className={styles.ScoringContainer__Message}>
+            <ThumbsUp className={styles.ScoringContainer__Icon} size="4rem" />
             Thank you! Your scores have been submitted!
           </div>
         </Card>
       ) : (
         <Row>
           <Col md="8">
-            <LoadingOverlay
-              isLoading={isLoading}
-              error={error}
-              className={styles.ScoringScene}
-            >
-              <Card className={styles.ScoringScene__Card} body>
+            <LoadingOverlay isLoading={isLoading} error={error}>
+              <Card className={styles.ScoringContainer__Card} body>
                 {saved === false ? (
                   <>
-                    <div className={styles.ScoringScene__Message}>
+                    <div className={styles.ScoringContainer__Message}>
                       <AlertTriangle
-                        className={styles.ScoringScene__Icon}
+                        className={styles.ScoringContainer__Icon}
                         size="4rem"
                       />
                       Failed to send your scores - would you mind trying again?
@@ -124,20 +120,24 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
             </LoadingOverlay>
           </Col>
           <Col md="4">
-            <Card className={styles.ScoringScene__Card} body>
+            <Card className={styles.ScoringContainer__Card} body>
+              <h5>{evaluation.name}</h5>
               <em>This evaluation has no description.</em>
             </Card>
-            <ListGroup className={styles.ScoringScene__Card}>
+            <ListGroup className={styles.ScoringContainer__Card}>
               {evaluation.criteria.map((c, i) => (
                 <ListGroupItem
-                  className={classNames(styles.ScoringScene__ListGroupItem, {
-                    [styles["ScoringScene__ListGroupItem--answered"]]:
-                      i < criterionIndex,
-                    [styles["ScoringScene__ListGroupItem--active"]]:
-                      i === criterionIndex,
-                  })}
+                  className={classNames(
+                    styles.ScoringContainer__ListGroupItem,
+                    {
+                      [styles["ScoringContainer__ListGroupItem--answered"]]:
+                        i < criterionIndex,
+                      [styles["ScoringContainer__ListGroupItem--active"]]:
+                        i === criterionIndex,
+                    }
+                  )}
                 >
-                  <span className={styles.ScoringScene__ListGroupItemName}>
+                  <span className={styles.ScoringContainer__ListGroupItemName}>
                     {c.name}
                   </span>
                   {i < criterionIndex && <CheckSquare />}

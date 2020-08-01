@@ -1,13 +1,12 @@
+import React, { useState, useEffect } from "react";
 import { Document } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { useParams } from "react-router-dom";
+
 import { client } from "./client";
 
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { LoadingOverlay } from "../App/LoadingOverlay";
-
-import styles from "./ContentfulPage.module.scss";
-import { NotFound } from "../App/NotFound";
+import { LoadingOverlay } from "../LoadingOverlay";
+import { NotFound } from "../NotFound";
 
 export type ContentfulPageProps = {
   slug?: string;
@@ -46,11 +45,7 @@ export function ContentfulPage({ slug }: ContentfulPageProps) {
   }, [slug]);
 
   return (
-    <LoadingOverlay
-      className={styles.ContentfulPage}
-      isLoading={isLoading}
-      grow
-    >
+    <LoadingOverlay isLoading={isLoading}>
       {page && documentToReactComponents(page.fields.content)}
       {!page && !isLoading && <NotFound />}
     </LoadingOverlay>

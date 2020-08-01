@@ -3,9 +3,9 @@ exports = async function (eventId, token) {
   const eventsCollection = context.services
     .get("mongodb-atlas")
     .db("rationalize-db")
-    .collection("Events");
+    .collection("Evaluations");
   // Add this user to the list of participants
-  const { matchedCount, modifiedCount } = await eventsCollection.updateOne(
+  const { matchedCount } = await eventsCollection.updateOne(
     {
       _id: { $eq: BSON.ObjectId(eventId) },
       "scoring.survey": true,
@@ -13,5 +13,5 @@ exports = async function (eventId, token) {
     },
     { $addToSet: { participants: context.user.id } }
   );
-  return { success: matchedCount === 1 && modifiedCount === 1 };
+  return { success: matchedCount === 1 };
 };

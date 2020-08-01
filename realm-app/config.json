@@ -6,16 +6,8 @@
     "security": {},
     "hosting": {
         "enabled": true,
-        "custom_domain": "app.rationalize.io",
-        "app_default_domain": "rationalize-iwbgr.mongodbstitch.com",
         "default_error_path": "/index.html",
         "default_error_code": "200"
-    },
-    "custom_user_data_config": {
-        "enabled": true,
-        "database_name": "rationalize-db",
-        "collection_name": "UserProfiles",
-        "user_id_field": "userId"
     },
     "sync": {
         "development_mode_enabled": false
