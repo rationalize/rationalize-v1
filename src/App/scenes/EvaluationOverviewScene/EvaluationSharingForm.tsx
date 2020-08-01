@@ -9,7 +9,9 @@ type Values = Sharing;
 
 export type EvaluationSharingFormProps = { evaluation: Evaluation };
 
-export function EvaluationSharingForm({ evaluation }: EvaluationSharingFormProps) {
+export function EvaluationSharingForm({
+  evaluation,
+}: EvaluationSharingFormProps) {
   async function handleSubmit(values: Sharing, helpers: FormikHelpers<Values>) {
     await evaluationsCollection.updateOne(
       { _id: { $eq: evaluation._id } },
@@ -19,7 +21,9 @@ export function EvaluationSharingForm({ evaluation }: EvaluationSharingFormProps
 
   return (
     <Formik<Values>
-      initialValues={{ mode: evaluation.sharing ? evaluation.sharing.mode : "disabled" }}
+      initialValues={{
+        mode: evaluation.sharing ? evaluation.sharing.mode : "disabled",
+      }}
       onSubmit={handleSubmit}
     >
       {({

@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import { Formik } from "formik";
 
-import { Alternative, Criterion } from "../../../mongodb";
+import { Concept, Criterion } from "../../../mongodb";
 
 import styles from "./CriterionSection.module.scss";
 
@@ -19,7 +19,7 @@ type CriterionCardProps = {
   index: number;
   count: number;
   criterion: Criterion;
-  alternatives: Alternative[];
+  concepts: Concept[];
   scores: number[][];
   onScores: (scores: number[]) => void;
   onBack: () => void;
@@ -34,7 +34,7 @@ export function CriterionSection({
   index,
   count,
   criterion,
-  alternatives,
+  concepts,
   scores,
   onScores,
   onBack,
@@ -48,7 +48,7 @@ export function CriterionSection({
   }
 
   const isLast = index === count - 1;
-  const initialScores = scores[index] || alternatives.map((a) => 0.5);
+  const initialScores = scores[index] || concepts.map((a) => 0.5);
 
   return (
     <Card className={className} body>
@@ -62,9 +62,9 @@ export function CriterionSection({
       >
         {({ handleSubmit, values, handleChange, handleBlur }) => (
           <Form onSubmit={handleSubmit}>
-            {alternatives.map((alternative, index) => (
+            {concepts.map((concept, index) => (
               <FormGroup key={index}>
-                <Label for={`scores.${index}`}>{alternative.name}</Label>
+                <Label for={`scores.${index}`}>{concept.name}</Label>
                 <Input
                   type="range"
                   name={`scores.${index}`}

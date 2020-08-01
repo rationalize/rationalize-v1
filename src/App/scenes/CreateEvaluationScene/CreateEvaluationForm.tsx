@@ -15,7 +15,7 @@ import { ConceptHelp } from "./ConceptHelp";
 import { SharingModeHelp } from "./ScoringModeHelp";
 import { LoadingOverlay } from "../../LoadingOverlay";
 
-export type AlternativeValues = {
+export type ConceptValues = {
   name: string;
 };
 
@@ -31,7 +31,7 @@ export type ScoringValue = {
 export type EvaluationValues = {
   name: string;
   criteria: CriterionValues[];
-  alternatives: AlternativeValues[];
+  concepts: ConceptValues[];
   scoring: ScoringValue;
 };
 
@@ -49,15 +49,15 @@ type ErrorObject<Values> = { [key in keyof Values]?: string };
 function validate(values: EvaluationValues) {
   const errors: ErrorObject<EvaluationValues> = {};
   const criteria = values.criteria.filter((c) => c.name);
-  const alternatives = values.alternatives.filter((a) => a.name);
+  const concepts = values.concepts.filter((a) => a.name);
   if (values.name === "") {
     errors.name = "You must provide a name";
   }
   if (criteria.length === 0) {
     errors.criteria = "The must be at least one criterion.";
   }
-  if (alternatives.length === 0) {
-    errors.alternatives = "The must be at least one alternative.";
+  if (concepts.length === 0) {
+    errors.concepts = "The must be at least one concept.";
   }
   return errors;
 }
@@ -83,18 +83,15 @@ export function CreateEvaluationForm({
   const handleSubmit: CreateEvaluationHandler = async (values, helpers) => {
     if (app.currentUser) {
       const criteria = values.criteria.filter((c) => c.name);
-      const alternatives = values.alternatives.filter((a) => a.name);
+      const concepts = values.concepts.filter((a) => a.name);
       if (criteria.length === 0) {
         helpers.setFieldError(
           "criteria",
           "The must be at least one criterion."
         );
       }
-      if (alternatives.length === 0) {
-        helpers.setFieldError(
-          "alternatives",
-          "The must be at least one alternative."
-        );
+      if (concepts.length === 0) {
+        helpers.setFieldError("concepts", "The must be at least one concept.");
       }
       const scoring: Scoring = {
         ...values.scoring,
@@ -106,7 +103,7 @@ export function CreateEvaluationForm({
         scores: {},
         name: values.name,
         criteria,
-        alternatives,
+        concepts,
         sharing: { mode: "disabled" },
         scoring,
       };
@@ -121,7 +118,7 @@ export function CreateEvaluationForm({
     <Formik<EvaluationValues>
       initialValues={{
         name: "",
-        alternatives: [{ name: "" }],
+        concepts: [{ name: "" }],
         criteria: [{ name: "" }],
         scoring: { facilitator: true, survey: false },
       }}
@@ -177,7 +174,7 @@ export function CreateEvaluationForm({
               />
               <FieldFeedback
                 name="criteria"
-                helper="A list of criteria that would make someone choose one alternative over the other."
+                helper="A list of criteria that would make someone choose one concept over the other."
               />
             </FormGroup>
             <FormGroup>
@@ -187,8 +184,8 @@ export function CreateEvaluationForm({
                 </h6>
               </Label>
               <InputList
-                items={values.alternatives}
-                itemsPath="alternatives"
+                items={values.concepts}
+                itemsPath="concepts"
                 propertyName="name"
                 addText="Add New Concept"
                 /*
@@ -198,7 +195,7 @@ export function CreateEvaluationForm({
               */
               />
               <FieldFeedback
-                name="alternatives"
+                name="concepts"
                 helper="What are the different potential outcomes from the evaluation?"
               />
             </FormGroup>

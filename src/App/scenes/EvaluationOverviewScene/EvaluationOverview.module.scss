@@ -1,31 +1,31 @@
 @import "../../../variables";
 
-$alternative-color: $secondary;
+$concept-color: $secondary;
 
 .EvaluationOverview {
-  &__Alternative {
+  &__Concept {
     display: flex;
     margin-bottom: $spacer / 2;
     flex-direction: row;
     align-items: center;
     border-radius: $border-radius;
-    border-color: $alternative-color;
+    border-color: $concept-color;
     border-width: $border-width;
     border-style: solid;
     background-color: $card-bg;
   }
 
-  &__AlternativeName,
-  &__AlternativeScore {
+  &__ConceptName,
+  &__ConceptScore {
     padding: $input-padding-y $input-padding-x;
   }
 
-  &__AlternativeName {
+  &__ConceptName {
     flex-grow: 1;
   }
 
-  &__AlternativeScore {
-    background: $alternative-color;
+  &__ConceptScore {
+    background: $concept-color;
     flex-basis: 4rem;
     text-align: center;
     color: $body-color;

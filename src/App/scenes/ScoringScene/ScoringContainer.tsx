@@ -27,7 +27,7 @@ import { useAuthentication } from "../../AuthenticationContext";
 type ScoringContainerProps = { evaluation: Evaluation };
 
 export function ScoringContainer({ evaluation }: ScoringContainerProps) {
-  const { criteria, alternatives } = evaluation;
+  const { criteria, concepts } = evaluation;
   const history = useHistory();
   const { user } = useAuthentication();
   const [criterionIndex, setCriterionIndex] = useState(0);
@@ -35,7 +35,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   const [error, setError] = useState<Error | null>(null);
   const initialFlatScores = user ? evaluation.scores[user.id] : undefined;
   const initialScores = initialFlatScores
-    ? unflattenScores(initialFlatScores, criteria, alternatives)
+    ? unflattenScores(initialFlatScores, criteria, concepts)
     : [];
   const [scores, setScores] = useState<number[][]>(initialScores);
   const [saved, setSaved] = useState<boolean | undefined>(undefined);
@@ -49,7 +49,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
       // This is the last ... submit the scores
       try {
         setIsLoading(true);
-        const flatScores = flattenScores(newScores, criteria, alternatives);
+        const flatScores = flattenScores(newScores, criteria, concepts);
         const { success } = await app.functions.updateEvaluationScore(
           evaluation._id,
           flatScores
@@ -113,7 +113,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                     scores={scores}
                     count={criteria.length}
                     criterion={criteria[criterionIndex]}
-                    alternatives={alternatives}
+                    concepts={concepts}
                     onScores={handleScores}
                     onBack={handleBack}
                   />

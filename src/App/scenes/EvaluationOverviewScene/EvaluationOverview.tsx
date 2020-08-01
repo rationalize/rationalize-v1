@@ -44,18 +44,16 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
 
   const isFacilitator = user && user.id === evaluation.facilitator;
 
-  function scoreAlternatives(weights: Weights) {
-    // Reduce the scores into an array of alternatives and their scores accumulated over all criteria.
-    const scoredAlternatives = evaluation.alternatives.map((alternative) => {
-      const relevantScores = scores.filter(
-        (e) => e.alternative === alternative.name
-      );
+  function scoreConcepts(weights: Weights) {
+    // Reduce the scores into an array of concepts and their scores accumulated over all criteria.
+    const scoredConcepts = evaluation.concepts.map((concept) => {
+      const relevantScores = scores.filter((e) => e.concept === concept.name);
       const totalValue = relevantScores.reduce(
         (sum, { value, criterion }) => value * weights[criterion] + sum,
         0
       );
       return {
-        name: alternative.name,
+        name: concept.name,
         score: {
           total: totalValue,
           average: totalValue / relevantScores.length,
@@ -63,10 +61,10 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
       };
     });
 
-    // Sort the alternatives based on accumulated score.
-    scoredAlternatives.sort((a, b) => b.score.average - a.score.average);
+    // Sort the concepts based on accumulated score.
+    scoredConcepts.sort((a, b) => b.score.average - a.score.average);
 
-    return scoredAlternatives;
+    return scoredConcepts;
   }
 
   async function handleWeightsSubmit(
@@ -95,7 +93,7 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
             dirty,
             isSubmitting,
           }) => {
-            const alternatives = scoreAlternatives(values.weights);
+            const concepts = scoreConcepts(values.weights);
             return (
               <>
                 <Col
@@ -167,29 +165,22 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
                 >
                   <h6>Prioritized Concept List</h6>
                   <Card body>
-                    <Flipper flipKey={alternatives.map((a) => a.name).join("")}>
-                      {alternatives.map((alternative) => (
-                        <Flipped
-                          key={alternative.name}
-                          flipId={alternative.name}
-                        >
-                          <div
-                            className={styles.EvaluationOverview__Alternative}
-                          >
+                    <Flipper flipKey={concepts.map((a) => a.name).join("")}>
+                      {concepts.map((concept) => (
+                        <Flipped key={concept.name} flipId={concept.name}>
+                          <div className={styles.EvaluationOverview__Concept}>
                             <div
-                              className={
-                                styles.EvaluationOverview__AlternativeName
-                              }
+                              className={styles.EvaluationOverview__ConceptName}
                             >
-                              {alternative.name}
+                              {concept.name}
                             </div>
-                            {!Number.isNaN(alternative.score.average) ? (
+                            {!Number.isNaN(concept.score.average) ? (
                               <div
                                 className={
-                                  styles.EvaluationOverview__AlternativeScore
+                                  styles.EvaluationOverview__ConceptScore
                                 }
                               >
-                                {(alternative.score.average * 10).toFixed(1)}
+                                {(concept.score.average * 10).toFixed(1)}
                               </div>
                             ) : null}
                           </div>

@@ -6,14 +6,14 @@ export type Criterion = {
   name: string;
 };
 
-export type Alternative = {
+export type Concept = {
   name: string;
 };
 
 export type Weights = { [criterion: string]: number };
 
 export type Score = {
-  alternative: string;
+  concept: string;
   criterion: string;
   value: number;
 };
@@ -41,7 +41,7 @@ export type Evaluation = {
   facilitator: string;
   participants: string[];
   criteria: Criterion[];
-  alternatives: Alternative[];
+  concepts: Concept[];
   scores: { [userId: string]: Score[] };
   weights?: Weights;
   sharing: Sharing;
@@ -59,16 +59,16 @@ export function generateSharingToken(length = 8) {
 
 export const evaluationsCollection = db.collection<Evaluation>("Evaluations");
 
-/** Turn an array of array of scores (values per alternative per criteria) into a flat array of score objects (criteria, alternative, value) */
+/** Turn an array of array of scores (values per concept per criteria) into a flat array of score objects (criteria, concept, value) */
 export function flattenScores(
   scores: number[][],
   criteria: Criterion[],
-  alternatives: Alternative[]
+  concepts: Concept[]
 ) {
   return scores.flatMap((scores, criterionIndex) =>
-    scores.map((value, alternativeIndex) => ({
+    scores.map((value, conceptIndex) => ({
       criterion: criteria[criterionIndex].name,
-      alternative: alternatives[alternativeIndex].name,
+      concept: concepts[conceptIndex].name,
       value,
     }))
   );
@@ -76,20 +76,18 @@ export function flattenScores(
 export function unflattenScores(
   scores: Score[],
   criteria: Criterion[],
-  alternatives: Alternative[]
+  concepts: Concept[]
 ) {
   const result: number[][] = [];
-  for (const { criterion, alternative, value } of scores) {
+  for (const { criterion, concept, value } of scores) {
     const criterionIndex = criteria.findIndex((c) => c.name === criterion);
-    const alternativeIndex = alternatives.findIndex(
-      (a) => a.name === alternative
-    );
+    const conceptIndex = concepts.findIndex((a) => a.name === concept);
     // If a score is added for a criterion for the first time, initialize its array
     if (!(criterionIndex in result)) {
       result[criterionIndex] = [];
     }
     // Add the value into the array of arrays
-    result[criterionIndex][alternativeIndex] = value;
+    result[criterionIndex][conceptIndex] = value;
   }
   return result;
 }
