@@ -23,6 +23,18 @@
             "insert": false,
             "delete": false,
             "additional_fields": {}
+        },
+        {
+            "name": "public",
+            "apply_when": {
+                "sharing": {
+                  "mode": "public"
+                }
+              },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "additional_fields": {}
         }
     ],
     "schema": {}

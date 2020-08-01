@@ -6,7 +6,7 @@ import { UserProfile } from "./UserProfiles";
 export interface Functions {
   updateEvaluationScore(
     evaluationId: ObjectId,
-    scores: { criterion: string; alternative: string; score: number }[]
+    scores: { criterion: string; alternative: string; value: number }[]
   ): Promise<{ success: boolean }>;
   joinEvaluation(
     evaluationId: string,

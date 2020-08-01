@@ -83,7 +83,7 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
 
   return (
     <Container fluid>
-      <h3 className={styles.EvaluationScreen__Heading}>{evaluation.name}</h3>
+      <h4 className={styles.EvaluationScreen__Heading}>{evaluation.name}</h4>
       <Row>
         <Formik initialValues={{ weights }} onSubmit={handleWeightsSubmit}>
           {({
@@ -103,9 +103,9 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
                   sm="12"
                   md="6"
                 >
-                  <h3>
+                  <h6>
                     Criteria Weights <WeightsHelp />
-                  </h3>
+                  </h6>
                   <Card>
                     <CardBody>
                       <LoadingOverlay isLoading={isSubmitting}>
@@ -165,7 +165,7 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
                   sm="12"
                   md="6"
                 >
-                  <h3>Prioritized Concept List</h3>
+                  <h6>Prioritized Concept List</h6>
                   <Card body>
                     <Flipper flipKey={alternatives.map((a) => a.name).join("")}>
                       {alternatives.map((alternative) => (
@@ -206,7 +206,7 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
       {isFacilitator && (
         <Row>
           <Col className={styles.EvaluationOverview__Section} sm="12" md="6">
-            <h3>Scoring</h3>
+            <h6>Scoring</h6>
             <Card body>
               {evaluation.scoring.survey ? (
                 <FormGroup>
@@ -249,7 +249,7 @@ export function EvaluationOverview({ evaluation }: EvaluationOverviewProps) {
             </Card>
           </Col>
           <Col className={styles.EvaluationOverview__Section} sm="12" md="6">
-            <h3>Sharing</h3>
+            <h6>Sharing</h6>
             <Card body>
               <CardText>
                 You can share the result of the evaluation with others.

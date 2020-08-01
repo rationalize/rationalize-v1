@@ -20,7 +20,7 @@ export function SideBar({ className }: SideBarProps) {
         <SideBarItem to="/projects" icon="Briefcase" disabled>
           Projects
         </SideBarItem>
-        <SideBarItem to="/evaluations" icon="Calendar">
+        <SideBarItem to="/evaluations" icon="Sliders">
           Evaluations
         </SideBarItem>
         <SideBarItem to="/participants" icon="Users" disabled>

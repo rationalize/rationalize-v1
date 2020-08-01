@@ -12,7 +12,12 @@ import {
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
-import { Evaluation, app } from "../../../mongodb";
+import {
+  Evaluation,
+  app,
+  flattenScores,
+  unflattenScores,
+} from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { CriterionSection } from "./CriterionSection";
 
@@ -22,44 +27,40 @@ import { useAuthentication } from "../../AuthenticationContext";
 type ScoringContainerProps = { evaluation: Evaluation };
 
 export function ScoringContainer({ evaluation }: ScoringContainerProps) {
+  const { criteria, alternatives } = evaluation;
   const history = useHistory();
   const { user } = useAuthentication();
   const [criterionIndex, setCriterionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [scores, setScores] = useState<Record<number, number[]>>([]);
+  const initialFlatScores = user ? evaluation.scores[user.id] : undefined;
+  const initialScores = initialFlatScores
+    ? unflattenScores(initialFlatScores, criteria, alternatives)
+    : [];
+  const [scores, setScores] = useState<number[][]>(initialScores);
   const [saved, setSaved] = useState<boolean | undefined>(undefined);
 
   async function handleScores(scoreValues: number[]) {
-    const newScores = {
-      ...scores,
-      [criterionIndex]: scoreValues,
-    };
+    const newScores = [...scores];
+    newScores[criterionIndex] = scoreValues;
     setScores(newScores);
     // Save the scores
-    if (criterionIndex >= evaluation.criteria.length - 1) {
+    if (criterionIndex >= criteria.length - 1) {
       // This is the last ... submit the scores
       try {
         setIsLoading(true);
-        const flattenScores = Object.entries(newScores).flatMap(
-          ([ci, scoresPerAlternative]) =>
-            scoresPerAlternative.map((score, ai) => ({
-              criterion: evaluation.criteria[ci as any].name,
-              alternative: evaluation.alternatives[ai as any].name,
-              score,
-            }))
-        );
+        const flatScores = flattenScores(newScores, criteria, alternatives);
         const { success } = await app.functions.updateEvaluationScore(
           evaluation._id,
-          flattenScores
+          flatScores
         );
         setSaved(success);
+        setIsLoading(false);
         if (success && user?.id === evaluation.facilitator) {
           history.push(`/evaluations/${evaluation._id.toHexString()}`);
         }
       } catch (err) {
         setError(err);
-      } finally {
         setIsLoading(false);
       }
     } else {
@@ -74,7 +75,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   }
 
   function handleReset() {
-    setScores([]);
+    setScores(initialScores);
     setCriterionIndex(0);
     setSaved(undefined);
   }
@@ -109,9 +110,10 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                 ) : (
                   <CriterionSection
                     index={criterionIndex}
-                    count={evaluation.criteria.length}
-                    criterion={evaluation.criteria[criterionIndex]}
-                    alternatives={evaluation.alternatives}
+                    scores={scores}
+                    count={criteria.length}
+                    criterion={criteria[criterionIndex]}
+                    alternatives={alternatives}
                     onScores={handleScores}
                     onBack={handleBack}
                   />
@@ -125,8 +127,9 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
               <em>This evaluation has no description.</em>
             </Card>
             <ListGroup className={styles.ScoringContainer__Card}>
-              {evaluation.criteria.map((c, i) => (
+              {criteria.map((c, i) => (
                 <ListGroupItem
+                  key={i}
                   className={classNames(
                     styles.ScoringContainer__ListGroupItem,
                     {

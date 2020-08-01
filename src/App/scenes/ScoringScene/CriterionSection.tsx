@@ -20,6 +20,7 @@ type CriterionCardProps = {
   count: number;
   criterion: Criterion;
   alternatives: Alternative[];
+  scores: number[][];
   onScores: (scores: number[]) => void;
   onBack: () => void;
 };
@@ -34,6 +35,7 @@ export function CriterionSection({
   count,
   criterion,
   alternatives,
+  scores,
   onScores,
   onBack,
 }: CriterionCardProps) {
@@ -46,6 +48,7 @@ export function CriterionSection({
   }
 
   const isLast = index === count - 1;
+  const initialScores = scores[index] || alternatives.map((a) => 0.5);
 
   return (
     <Card className={className} body>
@@ -53,7 +56,7 @@ export function CriterionSection({
         <h3>{criterion.name}</h3>
       </CardTitle>
       <Formik<Values>
-        initialValues={{ scores: alternatives.map((a) => 0.5) }}
+        initialValues={{ scores: initialScores }}
         onSubmit={handleSubmit}
         key={index}
       >

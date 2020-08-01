@@ -3,8 +3,8 @@
 $input-range-color: $primary;
 $input-range-size: 20px;
 
-$track-color: $secondary;
-$thumb-color: $input-range-color;
+$track-color: $white;
+$thumb-color: $white;
 
 $thumb-radius: $input-range-size / 2;
 $thumb-height: $input-range-size;
@@ -12,16 +12,16 @@ $thumb-width: $input-range-size;
 $thumb-shadow-size: 0;
 $thumb-shadow-blur: 0;
 $thumb-shadow-color: transparent;
-$thumb-border-width: 0;
-$thumb-border-color: transparent;
+$thumb-border-width: 1px;
+$thumb-border-color: $input-range-color;
 
 // $track-width: 100% !default;
 // $track-height: 8px !default;
 $track-shadow-size: 0;
 $track-shadow-blur: 0;
 $track-shadow-color: transparent;
-$track-border-width: 0;
-$track-border-color: transparent;
+$track-border-width: 1px;
+$track-border-color: $input-range-color;
 
 // $track-radius: 5px !default;
 // $contrast: 5% !default;
@@ -35,6 +35,28 @@ $track-border-color: transparent;
   &::-moz-range-thumb,
   &::-ms-thumb {
     cursor: grab !important;
-    background: red;
   }
+
+  @include border-radius($input-border-radius, 0);
+  @include form-control-focus($ignore-warning: true);
+
+  &:focus {
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb,
+    &::-ms-thumb {
+      @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+    }
+  }
+
+  /*
+  &:focus {
+    background: $primary;
+
+    &::-webkit-slider-runnable-track,
+    &::-ms-fill-lower,
+    &::-ms-fill-upper {
+      background: $primary !important;
+    }
+  }
+  */
 }

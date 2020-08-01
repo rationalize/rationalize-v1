@@ -51,7 +51,7 @@ export function EvaluationListScene() {
           {evaluations.length > 0 ? (
             <>
               <Container fluid>
-                <h3>Evaluations</h3>
+                <h4>Evaluations</h4>
                 <Card body>
                   <Table>
                     <thead>
