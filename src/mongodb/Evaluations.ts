@@ -43,9 +43,10 @@ export type Evaluation = {
   criteria: Criterion[];
   concepts: Concept[];
   scores: { [userId: string]: Score[] };
-  weights?: Weights;
   sharing: Sharing;
   scoring: Scoring;
+  weights?: Weights;
+  copyOf?: ObjectId;
 };
 
 export function generateSharingToken(length = 8) {
