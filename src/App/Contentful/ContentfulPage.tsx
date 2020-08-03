@@ -7,6 +7,7 @@ import { client } from "./client";
 
 import { LoadingOverlay } from "../LoadingOverlay";
 import { NotFound } from "../NotFound";
+import { Container, Card } from "reactstrap";
 
 export type ContentfulPageProps = {
   slug?: string;
@@ -46,8 +47,12 @@ export function ContentfulPage({ slug }: ContentfulPageProps) {
 
   return (
     <LoadingOverlay isLoading={isLoading}>
-      {page && documentToReactComponents(page.fields.content)}
-      {!page && !isLoading && <NotFound />}
+      <Container>
+        <Card body>
+          {page && documentToReactComponents(page.fields.content)}
+          {!page && !isLoading && <NotFound />}
+        </Card>
+      </Container>
     </LoadingOverlay>
   );
 }
