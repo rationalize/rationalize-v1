@@ -40,15 +40,23 @@ export const CONFIGURATIONS: AppConfiguration[] = [
   },
 ];
 
+function getDefaultConfigurationName() {
+  if (window.location.hostname === "app.rationalize.io") {
+    return "production";
+  } else {
+    return "staging";
+  }
+}
+
 function getAppConfiguration() {
   const configurationName =
-    localStorage.getItem(APP_CONFIGURATION_STORAGE_KEY) || "production";
+    localStorage.getItem(APP_CONFIGURATION_STORAGE_KEY) ||
+    getDefaultConfigurationName();
   const config = CONFIGURATIONS.find((c) => c.name === configurationName);
-
   if (config) {
     return config;
   } else {
-    return CONFIGURATIONS[0];
+    throw new Error(`Failed finding "${configurationName}" configuration`);
   }
 }
 
