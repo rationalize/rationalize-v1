@@ -28,9 +28,9 @@
             "name": "public",
             "apply_when": {
                 "sharing": {
-                  "mode": "public"
+                    "mode": "public"
                 }
-              },
+            },
             "read": true,
             "insert": false,
             "delete": false,
