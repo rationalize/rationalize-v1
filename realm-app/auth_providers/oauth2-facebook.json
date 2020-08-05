@@ -48,6 +48,7 @@
     ],
     "redirect_uris": [
         "https://app.rationalize.io/facebook-callback",
+        "https://staging.rationalize.io/facebook-callback",
         "http://localhost:3000/facebook-callback"
     ]
 }

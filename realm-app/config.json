@@ -1,4 +1,5 @@
 {
+    "app_id": "rationalize-iwbgr",
     "config_version": 20200603,
     "name": "rationalize",
     "location": "US-VA",
@@ -12,6 +13,8 @@
     },
     "hosting": {
         "enabled": true,
+        "custom_domain": "staging.rationalize.io",
+        "app_default_domain": "rationalize-iwbgr.mongodbstitch.com",
         "default_error_path": "/index.html",
         "default_error_code": "200"
     },

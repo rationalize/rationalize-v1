@@ -47,7 +47,8 @@
         }
     ],
     "redirect_uris": [
-        "http://localhost:3000/google-callback",
-        "https://app.rationalize.io/google-callback"
+        "https://app.rationalize.io/google-callback",
+        "https://staging.rationalize.io/google-callback",
+        "http://localhost:3000/google-callback"
     ]
 }
