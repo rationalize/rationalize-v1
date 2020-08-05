@@ -3,7 +3,13 @@
     "name": "rationalize",
     "location": "US-VA",
     "deployment_model": "GLOBAL",
-    "security": {},
+    "security": {
+        "allowed_request_origins": [
+            "http://localhost:3000",
+            "https://staging.rationalize.io",
+            "https://app.rationalize.io"
+        ]
+    },
     "hosting": {
         "enabled": true,
         "default_error_path": "/index.html",

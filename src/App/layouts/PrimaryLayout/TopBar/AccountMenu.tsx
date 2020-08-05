@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  ButtonToolbar,
   Dropdown,
   DropdownMenu,
   DropdownItem,
@@ -7,13 +8,14 @@ import {
 } from "reactstrap";
 
 import { useAuthentication } from "../../../AuthenticationContext";
-import { User, app } from "../../../../mongodb";
+import { User, app, isOnlyAnonymous } from "../../../../mongodb";
 import { DropdownLink } from "../../../DropdownLink";
 
 import styles from "./AccountMenu.module.scss";
+
 import { useHistory } from "react-router";
 import { LinkButton } from "../../../LinkButton";
-import { Lock } from "react-feather";
+import { Lock, UserPlus } from "react-feather";
 
 function getUserDisplayName(user: User | null) {
   if (user && user.state === "active") {
@@ -35,6 +37,7 @@ export function AccountMenu() {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const { user, logOut, switchUser } = useAuthentication();
   const history = useHistory();
+  const onlyAnonymous = isOnlyAnonymous(user);
 
   const otherActiveUsers = app.allUsers.filter(
     (u) => u !== user && u.state === "active"
@@ -45,7 +48,7 @@ export function AccountMenu() {
     history.push("/");
   }
 
-  return user ? (
+  return user && !onlyAnonymous ? (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
         tag="span"
@@ -75,8 +78,13 @@ export function AccountMenu() {
       </DropdownMenu>
     </Dropdown>
   ) : (
-    <LinkButton to="/log-in" color="primary">
-      <Lock size="1rem" /> Log in
-    </LinkButton>
+    <ButtonToolbar className={styles.AccountMenu__Toolbar}>
+      <LinkButton to="/register" color="primary">
+        <UserPlus size="1rem" /> Register account
+      </LinkButton>
+      <LinkButton to="/log-in" color="primary">
+        <Lock size="1rem" /> Log in
+      </LinkButton>
+    </ButtonToolbar>
   );
 }

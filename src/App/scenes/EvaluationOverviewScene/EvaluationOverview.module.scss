@@ -1,43 +1,6 @@
-@import "../../../variables";
-
-$concept-color: $secondary;
-
 .EvaluationOverview {
-  &__Concept {
-    display: flex;
-    margin-bottom: $spacer / 2;
-    flex-direction: row;
-    align-items: center;
-    border-radius: $border-radius;
-    border-color: $concept-color;
-    border-width: $border-width;
-    border-style: solid;
-    background-color: $card-bg;
-  }
-
-  &__ConceptName,
-  &__ConceptScore {
-    padding: $input-padding-y $input-padding-x;
-  }
-
-  &__ConceptName {
-    flex-grow: 1;
-  }
-
-  &__ConceptScore {
-    background: $concept-color;
-    flex-basis: 4rem;
-    text-align: center;
-    color: $body-color;
-    font-variant-numeric: tabular-nums;
-  }
-
   &__Evaluations,
   &__Introduction {
     text-align: center;
-  }
-
-  &__Section {
-    padding-top: 2 * $spacer;
   }
 }

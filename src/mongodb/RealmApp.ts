@@ -19,6 +19,17 @@ export type User = RealmUser<
   Partial<UserProfile>
 >;
 
+export function isOnlyAnonymous(user: User | null) {
+  if (user) {
+    return (
+      user.identities.length === 1 &&
+      user.identities[0].providerType === "anon-user"
+    );
+  } else {
+    return false;
+  }
+}
+
 type AppConfiguration = {
   name: string;
   appId: string;

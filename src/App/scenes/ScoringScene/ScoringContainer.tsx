@@ -23,6 +23,8 @@ import { CriterionSection } from "./CriterionSection";
 
 import styles from "./ScoringContainer.module.scss";
 import { useAuthentication } from "../../AuthenticationContext";
+import { EvaluationSurveyUrl } from "../../EvaluationSurveyUrl";
+import { LinkButton } from "../../LinkButton";
 
 type ScoringContainerProps = { evaluation: Evaluation };
 
@@ -40,6 +42,24 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   const [scores, setScores] = useState<number[][]>(initialScores);
   const [saved, setSaved] = useState<boolean | undefined>(undefined);
 
+  const isFacilitator = user && user.id === evaluation.facilitator;
+
+  function goToEvaluation() {
+    // Continue to the evaluations overview
+    history.push(`/evaluations/${evaluation._id.toHexString()}`);
+  }
+
+  /** Handle the completion of the survey */
+  function handleCompletion() {
+    if (isFacilitator) {
+      // The scoring is a survey and it's lacking participants - it's probably newly created
+      // In that case, let's not go to evaluation, to show the survey url
+      if (!evaluation.scoring.survey || evaluation.participants.length > 0) {
+        goToEvaluation();
+      }
+    }
+  }
+
   async function handleScores(scoreValues: number[]) {
     const newScores = [...scores];
     newScores[criterionIndex] = scoreValues;
@@ -56,8 +76,8 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
         );
         setSaved(success);
         setIsLoading(false);
-        if (success && user?.id === evaluation.facilitator) {
-          history.push(`/evaluations/${evaluation._id.toHexString()}`);
+        if (success) {
+          handleCompletion();
         }
       } catch (err) {
         setError(err);
@@ -80,16 +100,48 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
     setSaved(undefined);
   }
 
-  return (
-    <Container className={styles.ScoringContainer}>
-      {saved ? (
-        <Card className={styles.ScoringContainer__Card} body>
-          <div className={styles.ScoringContainer__Message}>
-            <ThumbsUp className={styles.ScoringContainer__Icon} size="4rem" />
-            Thank you! Your scores have been submitted!
-          </div>
-        </Card>
-      ) : (
+  if (saved) {
+    if (isFacilitator) {
+      return (
+        <Container className={styles.ScoringContainer}>
+          <Row>
+            <Col md={{ size: 6, offset: 3 }}>
+              <Card className={styles.ScoringContainer__Card} body>
+                <h6>Link to evaluation survey</h6>
+                <EvaluationSurveyUrl evaluation={evaluation} />
+                <LinkButton
+                  color="primary"
+                  to={`/evaluations/${evaluation._id.toHexString()}`}
+                >
+                  Continue to evaluation
+                </LinkButton>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      );
+    } else {
+      return (
+        <Container className={styles.ScoringContainer}>
+          <Row>
+            <Col md="8">
+              <Card className={styles.ScoringContainer__Card} body>
+                <div className={styles.ScoringContainer__Message}>
+                  <ThumbsUp
+                    className={styles.ScoringContainer__Icon}
+                    size="4rem"
+                  />
+                  Thank you! Your scores have been submitted!
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
+  } else {
+    return (
+      <Container className={styles.ScoringContainer}>
         <Row>
           <Col md="8">
             <LoadingOverlay isLoading={isLoading} error={error}>
@@ -150,7 +202,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
             </ListGroup>
           </Col>
         </Row>
-      )}
-    </Container>
-  );
+      </Container>
+    );
+  }
 }

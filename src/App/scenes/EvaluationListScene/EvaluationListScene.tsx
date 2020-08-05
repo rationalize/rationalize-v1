@@ -50,7 +50,7 @@ export function EvaluationListScene() {
         <LoadingOverlay isLoading={isLoading} error={error}>
           {evaluations.length > 0 ? (
             <>
-              <Container fluid>
+              <Container>
                 <h4>Evaluations</h4>
                 <Card body>
                   <Table>

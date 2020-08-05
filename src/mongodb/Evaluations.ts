@@ -24,6 +24,8 @@ export type Sharing = {
   mode: SharingMode;
 };
 
+export type Scores = { [userId: string]: Score[] };
+
 export type Scoring =
   | {
       facilitator: boolean;
@@ -42,7 +44,7 @@ export type Evaluation = {
   participants: string[];
   criteria: Criterion[];
   concepts: Concept[];
-  scores: { [userId: string]: Score[] };
+  scores: Scores;
   sharing: Sharing;
   scoring: Scoring;
   weights?: Weights;
@@ -65,7 +67,7 @@ export function flattenScores(
   scores: number[][],
   criteria: Criterion[],
   concepts: Concept[]
-) {
+): Score[] {
   return scores.flatMap((scores, criterionIndex) =>
     scores.map((value, conceptIndex) => ({
       criterion: criteria[criterionIndex].name,
@@ -91,4 +93,36 @@ export function unflattenScores(
     result[criterionIndex][conceptIndex] = value;
   }
   return result;
+}
+
+type WeightedScoredConcept = {
+  name: string;
+  score: { total: number; average: number };
+};
+
+export function weightedScoredConcepts(
+  concepts: Concept[],
+  flatScores: Score[],
+  weights: Weights
+): WeightedScoredConcept[] {
+  // Reduce the scores into an array of concepts and their scores accumulated over all criteria.
+  const scoredConcepts = concepts.map((concept) => {
+    const relevantScores = flatScores.filter((e) => e.concept === concept.name);
+    const totalValue = relevantScores.reduce(
+      (sum, { value, criterion }) => value * weights[criterion] + sum,
+      0
+    );
+    return {
+      name: concept.name,
+      score: {
+        total: totalValue,
+        average: totalValue / relevantScores.length,
+      },
+    };
+  });
+
+  // Sort the concepts based on accumulated score.
+  scoredConcepts.sort((a, b) => b.score.average - a.score.average);
+
+  return scoredConcepts;
 }

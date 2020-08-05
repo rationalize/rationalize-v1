@@ -1,5 +1,11 @@
+@import "../../../../variables";
+
 .AccountMenu {
     &__Toggle {
         cursor: pointer;
+    }
+
+    &__Toolbar > * {
+        margin-left: $spacer / 2;
     }
 }
