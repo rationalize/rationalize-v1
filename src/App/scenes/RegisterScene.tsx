@@ -20,6 +20,7 @@ export function RegisterScene() {
   return (
     <CenteredCard>
       <CardBody>
+        <h4>Register an account</h4>
         <RegisterUserForm onRegistered={handleRegistered} />
         <OrLine />
         <CardText>

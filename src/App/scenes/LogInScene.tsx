@@ -69,6 +69,7 @@ export function LogInScene() {
           }) => (
             <LoadingOverlay isLoading={isSubmitting}>
               <Form onSubmit={handleSubmit} onReset={handleReset}>
+                <h4>Log in</h4>
                 <FormGroup>
                   <Label for="email">Email</Label>
                   <Input
