@@ -110,6 +110,7 @@ export function RegisterUserForm({ onRegistered }: RegisterUserFormProps) {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 invalid={errors.email && touched.email ? true : false}
+                autoFocus
               />
               <FieldFeedback name="email" />
             </FormGroup>

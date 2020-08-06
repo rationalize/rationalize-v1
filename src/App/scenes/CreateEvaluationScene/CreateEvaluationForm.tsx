@@ -137,6 +137,8 @@ export function CreateEvaluationForm({
                 onChange={handleChange}
                 onBlur={handleBlur}
                 invalid={errors.name && touched.name ? true : false}
+                required
+                autoFocus
               />
               <FieldFeedback
                 name="name"

@@ -79,6 +79,7 @@ export function LogInScene() {
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    autoFocus
                   />
                 </FormGroup>
                 <FormGroup>
