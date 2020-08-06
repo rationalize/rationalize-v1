@@ -6,7 +6,7 @@ import {
   DropdownItem,
   DropdownToggle,
 } from "reactstrap";
-import { Lock, UserPlus, Settings } from "react-feather";
+import { Lock, UserPlus } from "react-feather";
 
 import { useAuthentication } from "../../../AuthenticationContext";
 import { User, app, isOnlyAnonymous } from "../../../../mongodb";

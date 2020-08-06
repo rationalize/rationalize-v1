@@ -3,7 +3,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { handleAuthRedirect } from "realm-web";
 import { createBrowserHistory } from "history";
 
-import { app } from "../mongodb";
+import { app, isOnlyAnonymous } from "../mongodb";
 import {
   AuthenticationProvider,
   AuthenticationConsumer,
@@ -47,7 +47,11 @@ export function App() {
           {({ user }) => (
             <Switch>
               {/* <Route exact path="/" component={GreetingScene} /> */}
-              <Redirect exact path="/" to={user ? "/evaluations" : "/log-in"} />
+              <Redirect
+                exact
+                path="/"
+                to={user && !isOnlyAnonymous(user) ? "/evaluations" : "/log-in"}
+              />
               <Route path="/log-in" component={LogInScene} />
               <Route path="/register" component={RegisterScene} />
               <Route path="/onboarding" component={OnboardingScene} />

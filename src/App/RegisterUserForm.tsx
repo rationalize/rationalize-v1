@@ -59,6 +59,7 @@ export function RegisterUserForm({ onRegistered }: RegisterUserFormProps) {
   ) {
     try {
       await app.emailPasswordAuth.registerUser(values.email, values.password);
+      gtag("event", "sign_up", { method: "local-userpass" });
       // Log in the user
       const credentials = Credentials.emailPassword(
         values.email,

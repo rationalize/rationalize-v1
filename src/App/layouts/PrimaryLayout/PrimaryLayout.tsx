@@ -5,26 +5,26 @@ import styles from "./PrimaryLayout.module.scss";
 
 import { TopBar } from "./TopBar";
 import { SideBar } from "./SideBar";
-import { app } from "../../../mongodb";
+import { isOnlyAnonymous } from "../../../mongodb";
+import { useAuthentication } from "../../AuthenticationContext";
 
 export type PrimaryLayoutProps = {
   children: React.ReactNode;
   sidebar?: "visible" | "hidden";
 };
 
-export function PrimaryLayout({
-  children,
-  sidebar = app.currentUser ? "visible" : "hidden",
-}: PrimaryLayoutProps) {
+export function PrimaryLayout({ children, sidebar }: PrimaryLayoutProps) {
+  const { user } = useAuthentication();
+  const visibleSidebar = sidebar
+    ? sidebar === "visible"
+    : !isOnlyAnonymous(user);
   return (
     <div className={styles.TopAndSideBar}>
       <TopBar className={styles.TopAndSideBar__TopBar} />
-      {sidebar === "visible" && (
-        <SideBar className={styles.TopAndSideBar__SideBar} />
-      )}
+      {visibleSidebar && <SideBar className={styles.TopAndSideBar__SideBar} />}
       <div
         className={classNames(styles.TopAndSideBar__Content, {
-          [styles["TopAndSideBar__Content--full-width"]]: sidebar === "hidden",
+          [styles["TopAndSideBar__Content--full-width"]]: !visibleSidebar,
         })}
       >
         {children}

@@ -122,19 +122,12 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   } else if (isSaved) {
     return (
       <Container className={styles.ScoringContainer}>
-        <Row>
-          <Col md="8">
-            <Card className={styles.ScoringContainer__Card} body>
-              <div className={styles.ScoringContainer__Message}>
-                <ThumbsUp
-                  className={styles.ScoringContainer__Icon}
-                  size="4rem"
-                />
-                Thank you! Your scores have been submitted!
-              </div>
-            </Card>
-          </Col>
-        </Row>
+        <Card className={styles.ScoringContainer__Card} body>
+          <div className={styles.ScoringContainer__Message}>
+            <ThumbsUp className={styles.ScoringContainer__Icon} size="4rem" />
+            Thank you! Your scores have been submitted!
+          </div>
+        </Card>
       </Container>
     );
   } else {

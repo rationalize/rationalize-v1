@@ -11,7 +11,7 @@ import { User } from "../mongodb";
 
 type AuthenticationContext = {
   user: User | null;
-  logIn: (credentials: Credentials<any>) => Promise<void>;
+  logIn: (credentials: Credentials<any>) => Promise<User>;
   logOut: () => Promise<void>;
   refreshCustomData: () => Promise<void>;
   switchUser: (user: User) => void;
@@ -49,6 +49,7 @@ export function AuthenticationProvider({
     await app.logIn(credentials);
     setUser(app.currentUser);
     gtag("event", "login", { method: credentials.providerType });
+    return app.currentUser as User;
   }
 
   async function logOut() {
