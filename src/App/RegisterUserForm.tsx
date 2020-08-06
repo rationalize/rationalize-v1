@@ -11,7 +11,6 @@ import { LegalLinks } from "./LegalLinks";
 export type FormValues = {
   email: string;
   password: string;
-  passwordAgain: string;
   acceptsTerms: boolean;
 };
 
@@ -21,9 +20,6 @@ function validate(values: FormValues) {
   const errors: ErrorObject<FormValues> = {};
   if (values.password.length < 8) {
     errors.password = "The password is too short";
-  }
-  if (values.password !== values.passwordAgain) {
-    errors.passwordAgain = "The passwords don't match";
   }
   if (!values.acceptsTerms) {
     errors.acceptsTerms = "You need to accept these to register";
@@ -87,7 +83,6 @@ export function RegisterUserForm({ onRegistered }: RegisterUserFormProps) {
       initialValues={{
         email: "",
         password: "",
-        passwordAgain: "",
         acceptsTerms: false,
       }}
       onSubmit={handleSubmit}
@@ -128,20 +123,6 @@ export function RegisterUserForm({ onRegistered }: RegisterUserFormProps) {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 invalid={errors.password && touched.password ? true : false}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="passwordAgain">Repeat password</Label>
-              <Input
-                type="password"
-                name="passwordAgain"
-                id="passwordAgain"
-                invalid={
-                  errors.passwordAgain && touched.passwordAgain ? true : false
-                }
-                value={values.passwordAgain}
-                onChange={handleChange}
-                onBlur={handleBlur}
               />
             </FormGroup>
             <FormGroup>
