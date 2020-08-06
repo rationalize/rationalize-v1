@@ -1,14 +1,14 @@
 import React from "react";
 import { UserProfileForm } from "../UserProfileForm";
-import { Card, CardText, Button, Row, Container, Col } from "reactstrap";
+import { CardText, Button, Row, Container, Col } from "reactstrap";
 import { app } from "../../mongodb";
 import { useAuthentication } from "../AuthenticationContext";
 import { PrimaryLayout } from "../layouts/PrimaryLayout";
 import { RestrictedArea } from "../RestrictedArea";
+import { SectionCard } from "../SectionCard";
+import { LinkButton } from "../LinkButton";
 
-export type UserProfileProps = {};
-
-export function UserProfileScene() {
+export function UserSettingsScene() {
   const { user } = useAuthentication();
 
   function handleSendResetPasswordEmail() {
@@ -23,25 +23,40 @@ export function UserProfileScene() {
     <PrimaryLayout>
       <RestrictedArea>
         <Container>
+          <h4>User settings</h4>
           <Row>
             <Col sm="12" md="6">
-              <h4>Profile</h4>
-              <Card body>
+              <SectionCard body>
+                <SectionCard.Header>Profile</SectionCard.Header>
                 <UserProfileForm />
-              </Card>
+              </SectionCard>
             </Col>
             <Col sm="12" md="6">
-              <h4>Change password</h4>
-              <Card body>
+              <SectionCard body>
+                <SectionCard.Header>Change password</SectionCard.Header>
                 <CardText>
                   To verify your email address, you change your password by
                   resetting it: This sends you an email with a link to a form
                   where you can enter a new password.
                 </CardText>
-                <Button onClick={handleSendResetPasswordEmail}>
+                <Button
+                  onClick={handleSendResetPasswordEmail}
+                  color="primary"
+                  outline
+                >
                   Send a password reset email
                 </Button>
-              </Card>
+              </SectionCard>
+              <SectionCard body>
+                <SectionCard.Header>Support</SectionCard.Header>
+                <CardText>
+                  We'd love to hear from you! If you have any questions about or
+                  suggetions for this product, please let us know.
+                </CardText>
+                <LinkButton to="/support" color="primary" outline>
+                  Go to support
+                </LinkButton>
+              </SectionCard>
             </Col>
           </Row>
         </Container>

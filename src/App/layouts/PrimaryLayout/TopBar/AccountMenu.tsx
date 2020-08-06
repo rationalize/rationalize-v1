@@ -6,6 +6,7 @@ import {
   DropdownItem,
   DropdownToggle,
 } from "reactstrap";
+import { Lock, UserPlus, Settings } from "react-feather";
 
 import { useAuthentication } from "../../../AuthenticationContext";
 import { User, app, isOnlyAnonymous } from "../../../../mongodb";
@@ -15,7 +16,6 @@ import styles from "./AccountMenu.module.scss";
 
 import { useHistory } from "react-router";
 import { LinkButton } from "../../../LinkButton";
-import { Lock, UserPlus } from "react-feather";
 
 function getUserDisplayName(user: User | null) {
   if (user && user.state === "active") {
@@ -59,7 +59,7 @@ export function AccountMenu() {
         {getUserDisplayName(user)}
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownLink to="/profile">Profile</DropdownLink>
+        <DropdownLink to="/user-settings">Settings</DropdownLink>
         <DropdownItem onClick={logOut}>Log out</DropdownItem>
         {otherActiveUsers.length >= 1 && (
           <>

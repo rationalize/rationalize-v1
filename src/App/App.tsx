@@ -14,7 +14,7 @@ import { RegisterScene } from "./scenes/RegisterScene";
 import { OnboardingScene } from "./scenes/OnboardingScene";
 import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 import { CreateEvaluationScene } from "./scenes/CreateEvaluationScene";
-import { UserProfileScene } from "./scenes/UserProfileScene";
+import { UserSettingsScene } from "./scenes/UserSettingsScene";
 import { EvaluationListScene } from "./scenes/EvaluationListScene";
 import { EvaluationOverviewScene } from "./scenes/EvaluationOverviewScene";
 import { ScoringScene } from "./scenes/ScoringScene";
@@ -54,7 +54,11 @@ export function App() {
               <Route path="/reset-password" component={ResetPasswordScene} />
               <Route path="/facebook-callback" component={OAuthCallback} />
               <Route path="/google-callback" component={OAuthCallback} />
-              <Route exact path="/profile" component={UserProfileScene} />
+              <Route
+                exact
+                path="/user-settings"
+                component={UserSettingsScene}
+              />
               <Route
                 exact
                 path="/evaluations"
