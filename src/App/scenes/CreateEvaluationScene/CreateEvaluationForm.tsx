@@ -1,6 +1,6 @@
 import React from "react";
-import { Formik, FormikHelpers, useFormikContext } from "formik";
-import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import { Formik, FormikHelpers } from "formik";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
 import { InputList } from "../../InputList";
 import {
@@ -14,6 +14,7 @@ import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
 import { SharingModeHelp } from "./ScoringModeHelp";
 import { LoadingOverlay } from "../../LoadingOverlay";
+import { FieldFeedback } from "../../FieldFeedback";
 
 export type ConceptValues = {
   name: string;
@@ -59,22 +60,10 @@ function validate(values: EvaluationValues) {
   if (concepts.length === 0) {
     errors.concepts = "The must be at least one concept.";
   }
+  if (!values.scoring.facilitator && !values.scoring.survey) {
+    errors.scoring = "You must select at least one scoring mode.";
+  }
   return errors;
-}
-
-type FieldFeedbackProps<Values> = {
-  name: keyof Values;
-  helper: string;
-};
-
-function FieldFeedback<Values>({ name, helper }: FieldFeedbackProps<Values>) {
-  const { errors, touched } = useFormikContext<Values>();
-  const showError = name in errors && name in touched;
-  return (
-    <FormText color={showError ? "danger" : undefined}>
-      {showError ? errors[name] : helper}
-    </FormText>
-  );
 }
 
 export function CreateEvaluationForm({
@@ -108,7 +97,6 @@ export function CreateEvaluationForm({
         scoring,
       };
       const { insertedId } = await evaluationsCollection.insertOne(evaluation);
-      helpers.setSubmitting(false);
       gtag("event", "create_evaluation");
       handleCreated({ ...evaluation, _id: insertedId });
     }
@@ -139,7 +127,7 @@ export function CreateEvaluationForm({
           <Form onSubmit={handleSubmit} onReset={handleReset}>
             <FormGroup>
               <Label for="name">
-                <h6>Name Evaluation Evaluation</h6>
+                <h6>Name Evaluation</h6>
               </Label>
               <Input
                 type="text"
@@ -232,14 +220,11 @@ export function CreateEvaluationForm({
                   <strong>Survey</strong> – I will ask others to score the
                   Concepts against the Criteria.
                 </Label>
-                <small>
-                  Note: We respect the privacy of our users thus Survey results
-                  cannot be made public:{" "}
-                  <a href="/public-vs-private-evaluations">
-                    See Public vs Private Evaluations
-                  </a>
-                </small>
               </FormGroup>
+              <FieldFeedback
+                name="scoring"
+                helper="Will you score concepts yourself, ask others to do it or both?"
+              />
             </FormGroup>
             <FormGroup>
               <Button

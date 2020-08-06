@@ -2,9 +2,11 @@ import classNames from "classnames";
 import React from "react";
 import { Plus } from "react-feather";
 
+import { LinkButton } from "../../../LinkButton";
+
 import styles from "./SideBar.module.scss";
 import { SideBarItem } from "./SideBarItem";
-import { LinkButton } from "../../../LinkButton";
+import { Link } from "react-router-dom";
 
 type SideBarProps = { className?: string };
 
@@ -32,6 +34,11 @@ export function SideBar({ className }: SideBarProps) {
         <SideBarItem to="/criteria" icon="CheckCircle" disabled>
           Criteria
         </SideBarItem>
+      </nav>
+      <nav className={styles.SideBar__Footer}>
+        <Link to="/legal" target="legal">
+          Terms and policies
+        </Link>
       </nav>
     </div>
   );

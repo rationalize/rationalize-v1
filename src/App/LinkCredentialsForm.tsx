@@ -1,47 +1,11 @@
 import React from "react";
-import { Formik, Form, FormikHelpers } from "formik";
-import { FormGroup, Label, Input, Button, Alert } from "reactstrap";
+import { FormGroup, Alert } from "reactstrap";
 
-import { LoadingOverlay } from "./LoadingOverlay";
 import { OrLine } from "./OrLine";
 import { IconButton } from "./icons";
 import { Credentials } from "realm-web";
 import { useAuthentication } from "./AuthenticationContext";
-import { app } from "../mongodb";
-
-export type FormValues = {
-  email: string;
-  password: string;
-  passwordAgain: string;
-};
-
-type ErrorObject<Values> = { [key in keyof Values]?: string };
-
-function validate(values: FormValues) {
-  const errors: ErrorObject<FormValues> = {};
-  if (values.password.length < 8) {
-    errors.password = "The password is too short";
-  }
-  if (values.password !== values.passwordAgain) {
-    errors.passwordAgain = "The passwords don't match";
-  }
-  return errors;
-}
-
-export type RegisterCredentials =
-  | {
-      type: "email-password";
-      email: string;
-      password: string;
-    }
-  | {
-      type: "google";
-      redirectUrl: string;
-    }
-  | {
-      type: "facebook";
-      redirectUrl: string;
-    };
+import { RegisterUserForm } from "./RegisterUserForm";
 
 export type LinkCredentialsFormProps = {
   onLinked: () => void;
@@ -60,18 +24,12 @@ export function LinkCredentialsForm({ onLinked }: LinkCredentialsFormProps) {
 
   async function linkCredentials(credentials: Credentials) {
     if (user) {
-      return user.linkCredentials(credentials);
+      await user.linkCredentials(credentials);
     }
   }
 
-  async function handleEmailPassword(
-    { email, password }: FormValues,
-    helpers: FormikHelpers<FormValues>
-  ) {
-    await app.emailPasswordAuth.registerUser(email, password);
-    const credentials = Credentials.emailPassword(email, password);
+  async function handleEmailPassword(credentials: Credentials) {
     await linkCredentials(credentials);
-    helpers.setSubmitting(false);
     onLinked();
   }
 
@@ -90,92 +48,31 @@ export function LinkCredentialsForm({ onLinked }: LinkCredentialsFormProps) {
   }
 
   return (
-    <Formik<FormValues>
-      initialValues={{
-        email: "",
-        password: "",
-        passwordAgain: "",
-      }}
-      onSubmit={handleEmailPassword}
-      validate={validate}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        handleReset,
-        isSubmitting,
-      }) => (
-        <LoadingOverlay isLoading={isSubmitting}>
-          <Form onSubmit={handleSubmit} onReset={handleReset}>
-            <FormGroup>
-              <Label for="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="passwordAgain">Repeat password</Label>
-              <Input
-                type="password"
-                name="passwordAgain"
-                id="passwordAgain"
-                invalid={
-                  errors.passwordAgain && touched.passwordAgain ? true : false
-                }
-                value={values.passwordAgain}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </FormGroup>
-            <Button type="submit" color="primary" disabled={isSubmitting} block>
-              Register an account
-            </Button>
-            <OrLine />
-            <FormGroup>
-              <IconButton
-                color="primary"
-                onClick={handleFacebook}
-                icon="Facebook"
-                block
-                outline
-              >
-                Register with Facebook
-              </IconButton>
-            </FormGroup>
-            <FormGroup>
-              <IconButton
-                color="primary"
-                onClick={handleGoogle}
-                icon="Google"
-                block
-                outline
-              >
-                Register with Google
-              </IconButton>
-            </FormGroup>
-          </Form>
-        </LoadingOverlay>
-      )}
-    </Formik>
+    <>
+      <RegisterUserForm onRegistered={handleEmailPassword} />
+      <OrLine />
+      <FormGroup>
+        <IconButton
+          color="primary"
+          onClick={handleFacebook}
+          icon="Facebook"
+          block
+          outline
+        >
+          Register with Facebook
+        </IconButton>
+      </FormGroup>
+      <FormGroup>
+        <IconButton
+          color="primary"
+          onClick={handleGoogle}
+          icon="Google"
+          block
+          outline
+        >
+          Register with Google
+        </IconButton>
+      </FormGroup>
+    </>
   );
 }

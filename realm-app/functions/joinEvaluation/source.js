@@ -2,7 +2,7 @@ exports = async function (eventId, token) {
   // Get the collection of events
   const eventsCollection = context.services
     .get("mongodb-atlas")
-    .db("rationalize-db")
+    .db(context.values.get("defaultDatabase"))
     .collection("Evaluations");
   // Add this user to the list of participants
   const { matchedCount } = await eventsCollection.updateOne(

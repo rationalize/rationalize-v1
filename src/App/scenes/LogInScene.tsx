@@ -10,7 +10,7 @@ import {
   CardText,
 } from "reactstrap";
 import { Credentials } from "realm-web";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 
 import { LoadingOverlay } from "../LoadingOverlay";
 import { CenteredCard } from "../layouts/CenteredCard";
@@ -24,13 +24,9 @@ export function LogInScene() {
   const history = useHistory();
   const { logIn } = useAuthentication();
 
-  async function handleLogIn(
-    { email, password }: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>
-  ) {
+  async function handleLogIn({ email, password }: FormValues) {
     const credentials = Credentials.emailPassword(email, password);
     await logIn(credentials);
-    setSubmitting(false);
     history.replace("/");
   }
 

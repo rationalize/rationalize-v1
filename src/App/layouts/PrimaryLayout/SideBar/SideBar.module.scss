@@ -14,5 +14,13 @@
 
   &__Navigation {
     padding-top: $spacer;
+    flex-grow: 1;
+  }
+  
+  &__Footer {
+    flex-shrink: 1;
+    padding: $spacer;
+    font-size: $small-font-size;
+    text-align: center;
   }
 }

@@ -40,7 +40,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
     ? unflattenScores(initialFlatScores, criteria, concepts)
     : [];
   const [scores, setScores] = useState<number[][]>(initialScores);
-  const [saved, setSaved] = useState<boolean | undefined>(undefined);
+  const [isSaved, setSaved] = useState<boolean | undefined>(undefined);
 
   const isFacilitator = user && user.id === evaluation.facilitator;
 
@@ -100,45 +100,43 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
     setSaved(undefined);
   }
 
-  if (saved) {
-    if (isFacilitator) {
-      return (
-        <Container className={styles.ScoringContainer}>
-          <Row>
-            <Col md={{ size: 6, offset: 3 }}>
-              <Card className={styles.ScoringContainer__Card} body>
-                <h6>Link to evaluation survey</h6>
-                <EvaluationSurveyUrl evaluation={evaluation} />
-                <LinkButton
-                  color="primary"
-                  to={`/evaluations/${evaluation._id.toHexString()}`}
-                >
-                  Continue to evaluation
-                </LinkButton>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      );
-    } else {
-      return (
-        <Container className={styles.ScoringContainer}>
-          <Row>
-            <Col md="8">
-              <Card className={styles.ScoringContainer__Card} body>
-                <div className={styles.ScoringContainer__Message}>
-                  <ThumbsUp
-                    className={styles.ScoringContainer__Icon}
-                    size="4rem"
-                  />
-                  Thank you! Your scores have been submitted!
-                </div>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      );
-    }
+  if (isFacilitator && (isSaved || !evaluation.scoring.facilitator)) {
+    return (
+      <Container className={styles.ScoringContainer}>
+        <Row>
+          <Col md={{ size: 6, offset: 3 }}>
+            <Card className={styles.ScoringContainer__Card} body>
+              <h6>Link to evaluation survey</h6>
+              <EvaluationSurveyUrl evaluation={evaluation} />
+              <LinkButton
+                color="primary"
+                to={`/evaluations/${evaluation._id.toHexString()}`}
+              >
+                Continue to evaluation
+              </LinkButton>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
+  } else if (isSaved) {
+    return (
+      <Container className={styles.ScoringContainer}>
+        <Row>
+          <Col md="8">
+            <Card className={styles.ScoringContainer__Card} body>
+              <div className={styles.ScoringContainer__Message}>
+                <ThumbsUp
+                  className={styles.ScoringContainer__Icon}
+                  size="4rem"
+                />
+                Thank you! Your scores have been submitted!
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
   } else {
     return (
       <Container className={styles.ScoringContainer}>
@@ -146,7 +144,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
           <Col md="8">
             <LoadingOverlay isLoading={isLoading} error={error}>
               <Card className={styles.ScoringContainer__Card} body>
-                {saved === false ? (
+                {isSaved === false ? (
                   <>
                     <div className={styles.ScoringContainer__Message}>
                       <AlertTriangle

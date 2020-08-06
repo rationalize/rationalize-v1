@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, FormGroup, Label, Input, Row, Col, Button } from "reactstrap";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { useHistory } from "react-router-dom";
 import { ObjectId } from "bson";
 
@@ -99,10 +99,7 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
     }
   }
 
-  async function handleWeightsSubmit(
-    values: WeightValues,
-    { setSubmitting }: FormikHelpers<WeightValues>
-  ) {
+  async function handleWeightsSubmit(values: WeightValues) {
     try {
       if (isFacilitator) {
         // Just update the weights
@@ -110,18 +107,15 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
           { _id: evaluation._id },
           { $set: { weights: values.weights } }
         );
-        setSubmitting(false);
         setInitialWeights(values.weights);
       } else if (user) {
         // TODO: Force user to register and link with another authentication provider if authenticated anonymously
         const newId = await forkEvaluation(values.weights);
-        setSubmitting(false);
         // Navigate to the new evaluation
         history.push(`/evaluations/${newId.toHexString()}`);
       }
     } catch (err) {
       console.error(err);
-      setSubmitting(false);
     }
   }
 

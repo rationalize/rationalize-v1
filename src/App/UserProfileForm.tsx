@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 
 import { LoadingOverlay } from "./LoadingOverlay";
 import { userProfilesCollection, UserProfile } from "../mongodb";
@@ -47,10 +47,7 @@ export type UserProfileFormProps = { onSaved?: () => void };
 export function UserProfileForm({ onSaved }: UserProfileFormProps) {
   const { user, refreshCustomData } = useAuthentication();
 
-  async function handleSubmit(
-    values: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>
-  ) {
+  async function handleSubmit(values: FormValues) {
     if (user) {
       const parsedValues: Partial<UserProfile> = {
         firstName: values.firstName,
@@ -84,7 +81,6 @@ export function UserProfileForm({ onSaved }: UserProfileFormProps) {
     } else {
       throw new Error("Cannot save profile without an authenticated user");
     }
-    setSubmitting(false);
     gtag("event", "save_user_profile");
     if (onSaved) {
       onSaved();

@@ -1,0 +1,5 @@
+{
+    "name": "defaultDatabase",
+    "value": "rationalize-db",
+    "from_secret": false
+}

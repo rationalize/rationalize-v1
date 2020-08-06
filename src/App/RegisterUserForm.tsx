@@ -1,16 +1,18 @@
 import React from "react";
 import { Formik, Form, FormikHelpers } from "formik";
-import { FormGroup, Label, Input, Button } from "reactstrap";
-import { Credentials } from "realm-web";
+import { FormGroup, Label, Input, Button, Alert } from "reactstrap";
+import { Credentials, MongoDBRealmError } from "realm-web";
 
 import { app } from "../mongodb";
 import { LoadingOverlay } from "./LoadingOverlay";
-import { useAuthentication } from "./AuthenticationContext";
+import { FieldFeedback } from "./FieldFeedback";
+import { LegalLinks } from "./LegalLinks";
 
 export type FormValues = {
   email: string;
   password: string;
   passwordAgain: string;
+  acceptsTerms: boolean;
 };
 
 type ErrorObject<Values> = { [key in keyof Values]?: string };
@@ -22,6 +24,9 @@ function validate(values: FormValues) {
   }
   if (values.password !== values.passwordAgain) {
     errors.passwordAgain = "The passwords don't match";
+  }
+  if (!values.acceptsTerms) {
+    errors.acceptsTerms = "You need to accept these to register";
   }
   return errors;
 }
@@ -42,26 +47,38 @@ export type RegisterCredentials =
     };
 
 export type RegisterUserFormProps = {
-  onRegister: () => Promise<void>;
+  onRegistered: (credentials: Credentials) => Promise<void>;
   google?: boolean;
   facebook?: boolean;
 };
 
-export function RegisterUserForm({ onRegister }: RegisterUserFormProps) {
-  const { logIn } = useAuthentication();
-
+export function RegisterUserForm({ onRegistered }: RegisterUserFormProps) {
   async function handleSubmit(
     values: FormValues,
-    helpers: FormikHelpers<FormValues>
+    { setFieldError }: FormikHelpers<FormValues>
   ) {
-    await app.emailPasswordAuth.registerUser(values.email, values.password);
-    // Log in the user
-    const credentials = Credentials.emailPassword(
-      values.email,
-      values.password
-    );
-    await logIn(credentials);
-    onRegister();
+    try {
+      await app.emailPasswordAuth.registerUser(values.email, values.password);
+      // Log in the user
+      const credentials = Credentials.emailPassword(
+        values.email,
+        values.password
+      );
+      onRegistered(credentials);
+    } catch (err) {
+      if (
+        err instanceof MongoDBRealmError &&
+        err.errorCode === "AccountNameInUse"
+      ) {
+        setFieldError(
+          "email",
+          "Another user already registered an account with this email"
+        );
+      } else if (err instanceof MongoDBRealmError && err.error) {
+        setFieldError("email", err.error);
+      }
+      throw err;
+    }
   }
 
   return (
@@ -70,6 +87,7 @@ export function RegisterUserForm({ onRegister }: RegisterUserFormProps) {
         email: "",
         password: "",
         passwordAgain: "",
+        acceptsTerms: false,
       }}
       onSubmit={handleSubmit}
       validate={validate}
@@ -95,7 +113,9 @@ export function RegisterUserForm({ onRegister }: RegisterUserFormProps) {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                invalid={errors.email && touched.email ? true : false}
               />
+              <FieldFeedback name="email" />
             </FormGroup>
             <FormGroup>
               <Label for="password">Password</Label>
@@ -106,6 +126,7 @@ export function RegisterUserForm({ onRegister }: RegisterUserFormProps) {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                invalid={errors.password && touched.password ? true : false}
               />
             </FormGroup>
             <FormGroup>
@@ -121,6 +142,32 @@ export function RegisterUserForm({ onRegister }: RegisterUserFormProps) {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+            </FormGroup>
+            <FormGroup>
+              <Alert
+                color={
+                  errors.acceptsTerms && touched.acceptsTerms
+                    ? "danger"
+                    : "secondary"
+                }
+              >
+                <FormGroup check>
+                  <Input
+                    type="checkbox"
+                    name="acceptsTerms"
+                    id="acceptsTerms"
+                    checked={values.acceptsTerms}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    invalid={
+                      errors.acceptsTerms && touched.acceptsTerms ? true : false
+                    }
+                  />
+                  <Label for="acceptsTerms" check>
+                    I accept the <LegalLinks />
+                  </Label>
+                </FormGroup>
+              </Alert>
             </FormGroup>
             <Button type="submit" color="primary" disabled={isSubmitting} block>
               Register an account

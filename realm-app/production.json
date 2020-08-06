@@ -1,0 +1,18 @@
+{
+  "config.json": {
+    "app_id": "rationalize-prod-flova",
+    "hosting": {
+      "custom_domain": "app.rationalize.io",
+      "app_default_domain": "rationalize-prod-flova.mongodbstitch.com"
+    },
+    "custom_user_data_config": {
+      "database_name": "rationalize-prod"
+    }
+  },
+  "values/defaultDatabase.json": {
+    "value": "rationalize-prod"
+  },
+  "services/mongodb-atlas/rules/*.json": {
+    "database": "rationalize-prod"
+  }
+}
