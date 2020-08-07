@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Form, FormGroup, Label, Input, Row, Col, Button } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Row,
+  Col,
+  Button,
+  CardBody,
+} from "reactstrap";
 import { Formik } from "formik";
 import { useHistory } from "react-router-dom";
 import { ObjectId } from "bson";
@@ -157,82 +166,77 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
         {(props) => (
           <Row>
             <Col sm="12" md="6">
-              <SectionCard body>
+              <SectionCard>
                 <SectionCard.Header>
                   Criteria Weights <WeightsHelp />
                 </SectionCard.Header>
                 <LoadingOverlay isLoading={props.isSubmitting || isSaving}>
-                  <Form
-                    onSubmit={props.handleSubmit}
-                    onReset={props.handleReset}
-                  >
-                    {evaluation.criteria.map((criterion, index) => (
-                      <FormGroup key={index}>
-                        <Label for={`criterion-${index}`}>
-                          {criterion.name}
-                        </Label>
-                        <Input
-                          type="range"
-                          id={`criterion-${index}`}
-                          name={`weights.${criterion.name}`}
-                          value={props.values.weights[criterion.name]}
-                          onChange={props.handleChange}
-                          onBlur={props.handleBlur}
-                          step={0.1}
-                          min={0}
-                          max={1}
-                        />
-                      </FormGroup>
-                    ))}
-                    {isFacilitator ? (
-                      <Row>
-                        <Col>
-                          <Button
-                            type="submit"
-                            color="primary"
-                            disabled={!props.dirty || props.isSubmitting}
-                            block
-                          >
-                            Save weights
-                          </Button>
-                        </Col>
-                        <Col>
-                          <Button
-                            type="reset"
-                            color="primary"
-                            disabled={!props.dirty || props.isSubmitting}
-                            block
-                            outline
-                          >
-                            Reset weights
-                          </Button>
-                        </Col>
-                      </Row>
-                    ) : (
-                      <Row>
-                        <Col>
-                          {isAnonymous ? (
+                  <CardBody>
+                    <Form
+                      onSubmit={props.handleSubmit}
+                      onReset={props.handleReset}
+                    >
+                      {evaluation.criteria.map((criterion, index) => (
+                        <FormGroup key={index}>
+                          <Label for={`criterion-${index}`}>
+                            {criterion.name}
+                          </Label>
+                          <Input
+                            type="range"
+                            id={`criterion-${index}`}
+                            name={`weights.${criterion.name}`}
+                            value={props.values.weights[criterion.name]}
+                            onChange={props.handleChange}
+                            onBlur={props.handleBlur}
+                            step={0.1}
+                            min={0}
+                            max={1}
+                          />
+                        </FormGroup>
+                      ))}
+                      {isFacilitator ? (
+                        <Row>
+                          <Col>
                             <Button
                               type="submit"
                               color="primary"
-                              onClick={handleRegister.bind(
-                                null,
-                                props.values.weights
-                              )}
+                              disabled={!props.dirty || props.isSubmitting}
                               block
                             >
-                              Register account to clone evaluation and save
-                              weights
+                              Save weights
                             </Button>
-                          ) : (
-                            <Button type="submit" color="primary" block>
-                              Clone evaluation and save weights
+                          </Col>
+                          <Col>
+                            <Button
+                              type="reset"
+                              color="primary"
+                              disabled={!props.dirty || props.isSubmitting}
+                              block
+                              outline
+                            >
+                              Reset weights
                             </Button>
+                          </Col>
+                        </Row>
+                      ) : isAnonymous ? (
+                        <Button
+                          type="submit"
+                          color="primary"
+                          onClick={handleRegister.bind(
+                            null,
+                            props.values.weights
                           )}
-                        </Col>
-                      </Row>
-                    )}
-                  </Form>
+                          block
+                        >
+                          Register account to clone evaluation and save weights
+                        </Button>
+                      ) : (
+                        <Button type="submit" color="primary" block>
+                          Clone evaluation and save weights
+                        </Button>
+                      )}
+                    </Form>
+                  </CardBody>
                 </LoadingOverlay>
               </SectionCard>
             </Col>

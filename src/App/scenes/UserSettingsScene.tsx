@@ -1,6 +1,14 @@
 import React from "react";
 import { UserProfileForm } from "../UserProfileForm";
-import { CardText, Button, Row, Container, Col } from "reactstrap";
+import {
+  CardText,
+  Button,
+  Row,
+  Container,
+  Col,
+  CardBody,
+  CardFooter,
+} from "reactstrap";
 import { app } from "../../mongodb";
 import { useAuthentication } from "../AuthenticationContext";
 import { PrimaryLayout } from "../layouts/PrimaryLayout";
@@ -26,36 +34,47 @@ export function UserSettingsScene() {
           <h4>User settings</h4>
           <Row>
             <Col sm="12" md="6">
-              <SectionCard body>
+              <SectionCard>
                 <SectionCard.Header>Profile</SectionCard.Header>
-                <UserProfileForm />
+                <CardBody>
+                  <UserProfileForm />
+                </CardBody>
               </SectionCard>
             </Col>
             <Col sm="12" md="6">
-              <SectionCard body>
+              <SectionCard>
                 <SectionCard.Header>Change password</SectionCard.Header>
-                <CardText>
-                  To verify your email address, you change your password by
-                  resetting it: This sends you an email with a link to a form
-                  where you can enter a new password.
-                </CardText>
-                <Button
-                  onClick={handleSendResetPasswordEmail}
-                  color="primary"
-                  outline
-                >
-                  Send a password reset email
-                </Button>
+                <CardBody>
+                  <CardText>
+                    To verify your email address, you change your password by
+                    resetting it: This sends you an email with a link to a form
+                    where you can enter a new password.
+                  </CardText>
+                </CardBody>
+                <CardFooter>
+                  <Button
+                    onClick={handleSendResetPasswordEmail}
+                    color="primary"
+                    outline
+                    block
+                  >
+                    Send a password reset email
+                  </Button>
+                </CardFooter>
               </SectionCard>
-              <SectionCard body>
+              <SectionCard>
                 <SectionCard.Header>Support</SectionCard.Header>
-                <CardText>
-                  We'd love to hear from you! If you have any questions about or
-                  suggetions for this product, please let us know.
-                </CardText>
-                <LinkButton to="/support" color="primary" outline>
-                  Go to support
-                </LinkButton>
+                <CardBody>
+                  <CardText>
+                    We'd love to hear from you! If you have any questions about
+                    or suggetions for this product, please let us know.
+                  </CardText>
+                </CardBody>
+                <CardFooter>
+                  <LinkButton to="/support" color="primary" outline block>
+                    Go to support
+                  </LinkButton>
+                </CardFooter>
               </SectionCard>
             </Col>
           </Row>

@@ -12,7 +12,7 @@ import {
 } from "../../../mongodb";
 import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
-import { SharingModeHelp } from "./ScoringModeHelp";
+import { ScoringModeHelp } from "./ScoringModeHelp";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { FieldFeedback } from "../../FieldFeedback";
 
@@ -192,7 +192,7 @@ export function CreateEvaluationForm({
             <FormGroup>
               <Label>
                 <h6>
-                  Define Scoring Mode <SharingModeHelp />
+                  Define Scoring Mode <ScoringModeHelp />
                 </h6>
               </Label>
               <FormGroup check>

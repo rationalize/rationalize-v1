@@ -1,5 +1,14 @@
 @import "../variables";
 
 .SectionCard {
-  padding-top: 2 * $spacer;
+  margin-bottom: $spacer;
+
+  &__Header {
+    padding-bottom: 0;
+  }
+
+  &__Heading {
+    margin: 0;
+    margin-top: $spacer / 2;
+  }
 }

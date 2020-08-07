@@ -7,10 +7,10 @@ import qs from "qs";
 import { CenteredCard } from "../layouts/CenteredCard";
 import { LoadingOverlay } from "../LoadingOverlay";
 import { app } from "../../mongodb";
+import { FieldFeedback } from "../FieldFeedback";
 
 type FormValues = {
   password: string;
-  passwordAgain: string;
 };
 
 type ErrorObject<Values> = { [key in keyof Values]?: string };
@@ -19,9 +19,6 @@ function validate(values: FormValues) {
   const errors: ErrorObject<FormValues> = {};
   if (values.password.length < 8) {
     errors.password = "The password is too short";
-  }
-  if (values.password !== values.passwordAgain) {
-    errors.passwordAgain = "The passwords don't match";
   }
   return errors;
 }
@@ -49,15 +46,12 @@ export function ResetPasswordScene() {
         <Formik<FormValues>
           initialValues={{
             password: "",
-            passwordAgain: "",
           }}
           onSubmit={handleSubmit}
           validate={validate}
         >
           {({
             values,
-            errors,
-            touched,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -66,6 +60,7 @@ export function ResetPasswordScene() {
           }) => (
             <LoadingOverlay isLoading={isSubmitting}>
               <Form onSubmit={handleSubmit} onReset={handleReset}>
+                <h4>Change password</h4>
                 <FormGroup>
                   <Label for="password">Password</Label>
                   <Input
@@ -75,22 +70,11 @@ export function ResetPasswordScene() {
                     value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    autoFocus
                   />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="passwordAgain">Repeat password</Label>
-                  <Input
-                    type="password"
-                    name="passwordAgain"
-                    id="passwordAgain"
-                    invalid={
-                      errors.passwordAgain && touched.passwordAgain
-                        ? true
-                        : false
-                    }
-                    value={values.passwordAgain}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                  <FieldFeedback
+                    name="password"
+                    helper="Choose a password which is 8 characters or longer"
                   />
                 </FormGroup>
                 <Button

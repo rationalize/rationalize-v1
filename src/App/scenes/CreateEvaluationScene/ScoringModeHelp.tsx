@@ -1,7 +1,7 @@
 import React from "react";
 import { HelpPopover } from "../../HelpPopover";
 
-export function SharingModeHelp() {
+export function ScoringModeHelp() {
   return (
     <HelpPopover>
       Scoring mode simply allows you to decide how you want to score the

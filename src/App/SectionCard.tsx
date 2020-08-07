@@ -1,27 +1,24 @@
 import React, { ReactNode } from "react";
-import { CardProps, Card } from "reactstrap";
+import { CardProps, Card, CardHeader } from "reactstrap";
 
 import styles from "./SectionCard.module.scss";
 
 export type SectionCardHeaderProps = { children: ReactNode };
 
 export function Header({ children }: SectionCardHeaderProps) {
-  return <h6>{children}</h6>;
+  return (
+    <CardHeader className={styles.SectionCard__Header}>
+      <h6 className={styles.SectionCard__Heading}>{children}</h6>
+    </CardHeader>
+  );
 }
 
 export type SectionCardProps = CardProps;
 
-export function SectionCard({ children, ...props }: SectionCardProps) {
-  const header = Array.isArray(children)
-    ? children.find((c: any) => c.type === Header)
-    : null;
-  const restOfChildren = Array.isArray(children)
-    ? children.filter((c) => c !== header)
-    : children;
+export function SectionCard(props: SectionCardProps) {
   return (
     <section className={styles.SectionCard}>
-      {header}
-      <Card {...props} children={restOfChildren} />
+      <Card {...props} />
     </section>
   );
 }
