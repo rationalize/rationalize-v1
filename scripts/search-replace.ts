@@ -15,6 +15,7 @@ const destinationPath = path.resolve(args[2]);
 
 // console.log(`Replacing ${mappingPath} in ${appPath} to ${destinationPath}`);
 console.log(`Copying ${appPath} to ${destinationPath} (overwriting)`);
+fs.removeSync(destinationPath);
 fs.copySync(appPath, destinationPath, { overwrite: true });
 
 const mapping = fs.readJSONSync(mappingPath);
