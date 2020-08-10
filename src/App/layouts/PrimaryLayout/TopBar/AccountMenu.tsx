@@ -40,7 +40,7 @@ export function AccountMenu() {
   const onlyAnonymous = isOnlyAnonymous(user);
 
   const otherActiveUsers = app.allUsers.filter(
-    (u) => u !== user && u.state === "active"
+    (u) => u !== user && u.state === "active" && !isOnlyAnonymous(user)
   );
 
   function handleUserSwitch(otherUser: User) {
