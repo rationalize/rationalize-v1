@@ -16,7 +16,7 @@ import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
 import { CreateEvaluationScene } from "./scenes/CreateEvaluationScene";
 import { UserSettingsScene } from "./scenes/UserSettingsScene";
 import { EvaluationListScene } from "./scenes/EvaluationListScene";
-import { EvaluationOverviewScene } from "./scenes/EvaluationOverviewScene";
+import { EvaluationDashboardScene } from "./scenes/EvaluationDashboardScene";
 import { ScoringScene } from "./scenes/ScoringScene";
 import { ContentfulScene } from "./scenes/ContentfulScene";
 import { JoinEvaluationScene } from "./scenes/JoinEvaluationScene";
@@ -76,7 +76,7 @@ export function App() {
               <Route
                 exact
                 path="/evaluations/:id"
-                component={EvaluationOverviewScene}
+                component={EvaluationDashboardScene}
               />
               <Route
                 exact

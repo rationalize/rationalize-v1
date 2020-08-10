@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import { EvaluationOverview } from "./EvaluationOverview";
+import { EvaluationDashboard } from "./EvaluationDashboard";
 import { PrimaryLayout } from "../../layouts/PrimaryLayout";
 import { EvaluationLoader } from "../../EvaluationLoader";
 import { useAuthentication } from "../../AuthenticationContext";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { Credentials } from "realm-web";
 
-export function EvaluationOverviewScene() {
+export function EvaluationDashboardScene() {
   const { user, logIn } = useAuthentication();
   const [error, setError] = useState<Error | null>(null);
   const [isAuthenticating, setAuthenticating] = useState(user === null);
@@ -29,7 +29,7 @@ export function EvaluationOverviewScene() {
     <LoadingOverlay isLoading={isAuthenticating} error={error}>
       {user ? (
         <PrimaryLayout>
-          <EvaluationLoader component={EvaluationOverview} />
+          <EvaluationLoader component={EvaluationDashboard} />
         </PrimaryLayout>
       ) : null}
     </LoadingOverlay>

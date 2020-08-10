@@ -112,7 +112,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                 color="primary"
                 to={`/evaluations/${evaluation._id.toHexString()}`}
               >
-                Continue to evaluation
+                Continue to Evaluation Dashboard
               </LinkButton>
             </Card>
           </Col>
