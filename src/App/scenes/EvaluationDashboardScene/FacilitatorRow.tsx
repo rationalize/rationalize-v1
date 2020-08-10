@@ -11,6 +11,10 @@ import { SharingHelp } from "./SharingHelp";
 export type FacilitatorRowProps = { evaluation: Evaluation };
 
 export function FacilitatorRow({ evaluation }: FacilitatorRowProps) {
+  const participantAcceptedCount = evaluation.participants.length;
+  const participantCompletedCount = Object.keys(evaluation.scores).filter(
+    (id) => id !== evaluation.facilitator
+  ).length;
   return (
     <Row>
       <Col sm="12" md="6">
@@ -35,7 +39,8 @@ export function FacilitatorRow({ evaluation }: FacilitatorRowProps) {
             <CardBody>
               <EvaluationSurveyUrl evaluation={evaluation} />
               <CardText>
-                {Object.keys(evaluation.scores).length} participants have
+                {participantAcceptedCount} participant(s) accepted the
+                invitation and {participantCompletedCount} participant(s) have
                 completed the survey.
               </CardText>
             </CardBody>

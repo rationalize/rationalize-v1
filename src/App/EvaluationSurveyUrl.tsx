@@ -13,7 +13,9 @@ export function EvaluationSurveyUrl({ evaluation }: EvaluationSurveyUrlProps) {
     const scoreUrl = `${evaluationUrl}/score/${evaluation.scoring.token}`;
     return (
       <FormGroup>
-        <Label for="evaluation-link">Send this link to participants:</Label>
+        <Label for="evaluation-link">
+          Send this link to invite participants:
+        </Label>
         <CopyToClipboardInput id="evaluation-link" text={scoreUrl} />
       </FormGroup>
     );

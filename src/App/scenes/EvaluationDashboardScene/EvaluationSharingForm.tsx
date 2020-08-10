@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
 import { Evaluation, Sharing, evaluationsCollection } from "../../../mongodb";
@@ -12,7 +12,7 @@ export type EvaluationSharingFormProps = { evaluation: Evaluation };
 export function EvaluationSharingForm({
   evaluation,
 }: EvaluationSharingFormProps) {
-  async function handleSubmit(values: Sharing, helpers: FormikHelpers<Values>) {
+  async function handleSubmit(values: Sharing) {
     await evaluationsCollection.updateOne(
       { _id: { $eq: evaluation._id } },
       { $set: { sharing: values } }
