@@ -5,8 +5,6 @@ import styles from "./PrimaryLayout.module.scss";
 
 import { TopBar } from "./TopBar";
 import { SideBar } from "./SideBar";
-import { isOnlyAnonymous } from "../../../mongodb";
-import { useAuthentication } from "../../AuthenticationContext";
 
 export type PrimaryLayoutProps = {
   children: React.ReactNode;
@@ -14,10 +12,14 @@ export type PrimaryLayoutProps = {
 };
 
 export function PrimaryLayout({ children, sidebar }: PrimaryLayoutProps) {
+  /*
   const { user } = useAuthentication();
   const visibleSidebar = sidebar
     ? sidebar === "visible"
     : !isOnlyAnonymous(user);
+  */
+  // Sidebar is disabled until we have an actual need for it
+  const visibleSidebar = false;
   return (
     <div className={styles.TopAndSideBar}>
       <TopBar className={styles.TopAndSideBar__TopBar} />
