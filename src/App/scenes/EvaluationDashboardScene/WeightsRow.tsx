@@ -164,9 +164,9 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
         onSubmit={handleWeightsSubmit}
       >
         {(props) => (
-          <Row>
-            <Col sm="12" md="6">
-              <SectionCard>
+          <SectionCard>
+            <Row>
+              <Col sm="12" md="6">
                 <SectionCard.Header>
                   Criteria Weights <WeightsHelp />
                 </SectionCard.Header>
@@ -238,15 +238,20 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
                     </Form>
                   </CardBody>
                 </LoadingOverlay>
-              </SectionCard>
-            </Col>
-            <Col sm="12" md="6">
-              <ConceptList
-                evaluation={evaluation}
-                weights={props.values.weights}
-              />
-            </Col>
-          </Row>
+              </Col>
+              <Col sm="12" md="6">
+                <SectionCard.Header>
+                  Prioritized Concept List
+                </SectionCard.Header>
+                <CardBody>
+                  <ConceptList
+                    evaluation={evaluation}
+                    weights={props.values.weights}
+                  />
+                </CardBody>
+              </Col>
+            </Row>
+          </SectionCard>
         )}
       </Formik>
       <LinkCredentialsModal
