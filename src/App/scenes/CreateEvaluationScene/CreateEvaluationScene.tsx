@@ -26,11 +26,11 @@ export function CreateEvaluationScene() {
       <RestrictedArea>
         <Container>
           <Row>
-            <Col md={{ size: 6, offset: 3 }}>
+            <Col md={{ size: 8, offset: 2 }}>
               <h4>
                 Create New Evaluation <EvaluationHelp />
               </h4>
-              <Card body>
+              <Card>
                 <CreateEvaluationForm handleCreated={handleCreated} />
               </Card>
             </Col>

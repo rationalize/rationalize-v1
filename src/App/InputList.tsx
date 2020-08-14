@@ -53,6 +53,7 @@ export function InputList<Item extends BaseItem>({
                 key={isLastItem ? "last" : index}
                 type="text"
                 name={itemPath}
+                id={itemPath}
                 value={item[propertyName]}
                 onChange={handleChange}
                 onBlur={handleBlur}
