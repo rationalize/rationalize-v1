@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { useState } from "react";
-import { ThumbsUp, AlertTriangle, CheckSquare, Square } from "react-feather";
+import { ThumbsUp, AlertTriangle } from "react-feather";
 import {
   Button,
   Card,
@@ -25,6 +25,7 @@ import styles from "./ScoringContainer.module.scss";
 import { useAuthentication } from "../../AuthenticationContext";
 import { EvaluationSurveyUrl } from "../../EvaluationSurveyUrl";
 import { LinkButton } from "../../LinkButton";
+import { Icon } from "../../icons";
 
 type ScoringContainerProps = { evaluation: Evaluation };
 
@@ -186,8 +187,10 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                   <span className={styles.ScoringContainer__ListGroupItemName}>
                     {c.name}
                   </span>
-                  {i < criterionIndex && <CheckSquare />}
-                  {i >= criterionIndex && <Square />}
+                  <Icon
+                    className={styles.ScoringContainer__ListGroupItemIcon}
+                    name={i < criterionIndex ? "CheckSquare" : "Square"}
+                  />
                 </ListGroupItem>
               ))}
             </ListGroup>

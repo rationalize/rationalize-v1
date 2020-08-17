@@ -28,7 +28,7 @@ export function CreateEvaluationScene() {
           <Row>
             <Col md={{ size: 6, offset: 3 }}>
               <h4>
-                Create New Evaluation Evaluation <EvaluationHelp />
+                Create New Evaluation <EvaluationHelp />
               </h4>
               <Card body>
                 <CreateEvaluationForm handleCreated={handleCreated} />

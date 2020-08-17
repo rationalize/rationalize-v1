@@ -31,4 +31,8 @@
   &__ListGroupItemName {
     flex-grow: 1;
   }
+
+  &__ListGroupItemIcon {
+    flex-shrink: 0;
+  }
 }
