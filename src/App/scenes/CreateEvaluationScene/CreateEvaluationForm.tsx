@@ -271,7 +271,7 @@ export function CreateEvaluationForm({
                 </Col>
                 <Col sm="5" className={styles.CreateEvaluationForm__Sidebar}>
                   <CardBody>
-                    <DetailedEvaluationFields />
+                    <DetailedEvaluationFields name={values.name} />
                   </CardBody>
                 </Col>
               </Row>

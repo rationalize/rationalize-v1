@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Card, Row, Col } from "reactstrap";
+import { Container, Card } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
 import { CreateEvaluationForm } from "./CreateEvaluationForm";
@@ -25,16 +25,12 @@ export function CreateEvaluationScene() {
     <PrimaryLayout>
       <RestrictedArea>
         <Container>
-          <Row>
-            <Col md={{ size: 8, offset: 2 }}>
-              <h4>
-                Create New Evaluation <EvaluationHelp />
-              </h4>
-              <Card>
-                <CreateEvaluationForm handleCreated={handleCreated} />
-              </Card>
-            </Col>
-          </Row>
+          <h4>
+            Create New Evaluation <EvaluationHelp />
+          </h4>
+          <Card>
+            <CreateEvaluationForm handleCreated={handleCreated} />
+          </Card>
         </Container>
       </RestrictedArea>
     </PrimaryLayout>
