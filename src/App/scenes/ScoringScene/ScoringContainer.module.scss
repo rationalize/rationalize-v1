@@ -16,8 +16,14 @@
     margin-bottom: $spacer;
   }
 
-  &__ListGroupItem {
+  &__Criterion {
     display: flex;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $gray-300;
+      margin-bottom: $spacer / 2;
+      padding-bottom: $spacer / 2;
+    }
 
     &--answered {
       color: $gray-500;
@@ -28,11 +34,11 @@
     }
   }
 
-  &__ListGroupItemName {
+  &__CriterionName {
     flex-grow: 1;
   }
 
-  &__ListGroupItemIcon {
+  &__CriterionIcon {
     flex-shrink: 0;
   }
 }

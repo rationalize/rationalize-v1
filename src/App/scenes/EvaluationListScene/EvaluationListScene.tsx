@@ -53,7 +53,7 @@ export function EvaluationListScene() {
               <Container>
                 <h4>Evaluations</h4>
                 <Card body>
-                  <Table>
+                  <Table striped>
                     <thead>
                       <tr>
                         <th>Name</th>

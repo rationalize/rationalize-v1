@@ -1,15 +1,7 @@
 import classNames from "classnames";
 import React, { useState } from "react";
-import { ThumbsUp, AlertTriangle } from "react-feather";
-import {
-  Button,
-  Card,
-  Row,
-  Col,
-  ListGroup,
-  ListGroupItem,
-  Container,
-} from "reactstrap";
+import { ThumbsUp, AlertTriangle, Check } from "react-feather";
+import { Button, Card, Row, Col, Container, CardBody } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
 import {
@@ -25,7 +17,7 @@ import styles from "./ScoringContainer.module.scss";
 import { useAuthentication } from "../../AuthenticationContext";
 import { EvaluationSurveyUrl } from "../../EvaluationSurveyUrl";
 import { LinkButton } from "../../LinkButton";
-import { Icon } from "../../icons";
+import { SectionCard } from "../../SectionCard";
 
 type ScoringContainerProps = { evaluation: Evaluation };
 
@@ -134,12 +126,13 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   } else {
     return (
       <Container className={styles.ScoringContainer}>
+        <h4>Score Concepts Against Criteria</h4>
         <Row>
           <Col md="8">
             <LoadingOverlay isLoading={isLoading} error={error}>
-              <Card className={styles.ScoringContainer__Card} body>
+              <SectionCard className={styles.ScoringContainer__Card}>
                 {isSaved === false ? (
-                  <>
+                  <CardBody>
                     <div className={styles.ScoringContainer__Message}>
                       <AlertTriangle
                         className={styles.ScoringContainer__Icon}
@@ -150,7 +143,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                     <Button color="primary" onClick={handleReset}>
                       Reset and try again
                     </Button>
-                  </>
+                  </CardBody>
                 ) : (
                   <CriterionSection
                     index={criterionIndex}
@@ -162,38 +155,47 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                     onBack={handleBack}
                   />
                 )}
-              </Card>
+              </SectionCard>
             </LoadingOverlay>
           </Col>
           <Col md="4">
-            <Card className={styles.ScoringContainer__Card} body>
-              <h5>{evaluation.name}</h5>
-              <em>This evaluation has no description.</em>
+            <Card className={styles.ScoringContainer__Card}>
+              <SectionCard.Header>{evaluation.name}</SectionCard.Header>
+              <CardBody>
+                <em>This evaluation has no description.</em>
+              </CardBody>
             </Card>
-            <ListGroup className={styles.ScoringContainer__Card}>
-              {criteria.map((c, i) => (
-                <ListGroupItem
-                  key={i}
-                  className={classNames(
-                    styles.ScoringContainer__ListGroupItem,
-                    {
-                      [styles["ScoringContainer__ListGroupItem--answered"]]:
+            <SectionCard className={styles.ScoringContainer__Card}>
+              <SectionCard.Header>Criteria Progress</SectionCard.Header>
+              <CardBody>
+                {criteria.map((c, i) => (
+                  <div
+                    key={i}
+                    className={classNames(styles.ScoringContainer__Criterion, {
+                      [styles["ScoringContainer__Criterion--answered"]]:
                         i < criterionIndex,
-                      [styles["ScoringContainer__ListGroupItem--active"]]:
+                      [styles["ScoringContainer__Criterion--active"]]:
                         i === criterionIndex,
-                    }
-                  )}
-                >
-                  <span className={styles.ScoringContainer__ListGroupItemName}>
-                    {c.name}
-                  </span>
-                  <Icon
-                    className={styles.ScoringContainer__ListGroupItemIcon}
-                    name={i < criterionIndex ? "CheckSquare" : "Square"}
-                  />
-                </ListGroupItem>
-              ))}
-            </ListGroup>
+                    })}
+                  >
+                    <span className={styles.ScoringContainer__CriterionName}>
+                      {c.name}
+                    </span>
+                    {/*
+                    <Icon
+                      className={styles.ScoringContainer__CriterionIcon}
+                      name={i < criterionIndex ? "CheckCircle" : "Check"}
+                    />
+                    */}
+                    {i < criterionIndex ? (
+                      <Check
+                        className={styles.ScoringContainer__CriterionIcon}
+                      />
+                    ) : null}
+                  </div>
+                ))}
+              </CardBody>
+            </SectionCard>
           </Col>
         </Row>
       </Container>
