@@ -174,6 +174,8 @@ export function CreateEvaluationForm({
       const { insertedId } = await evaluationsCollection.insertOne(evaluation);
       gtag("event", "create_evaluation");
       handleCreated({ ...evaluation, _id: insertedId });
+    } else {
+      throw new Error("Need an authenticated user to create an evaluation.");
     }
   };
 

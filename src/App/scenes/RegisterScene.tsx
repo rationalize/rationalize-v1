@@ -7,13 +7,18 @@ import { OrLine } from "../OrLine";
 import { RegisterUserForm } from "../RegisterUserForm";
 import { Credentials } from "realm-web";
 import { useAuthentication } from "../AuthenticationContext";
+import { isOnlyAnonymous } from "../../mongodb";
 
 export function RegisterScene() {
   const history = useHistory();
-  const { logIn } = useAuthentication();
+  const { user, logIn } = useAuthentication();
 
   async function handleRegistered(credentials: Credentials) {
-    await logIn(credentials);
+    if (user && isOnlyAnonymous(user)) {
+      await user.linkCredentials(credentials);
+    } else {
+      await logIn(credentials);
+    }
     history.push("/onboarding");
   }
 

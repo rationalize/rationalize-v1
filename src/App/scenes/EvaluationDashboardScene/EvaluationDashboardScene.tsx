@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Credentials } from "realm-web";
 
 import { EvaluationDashboard } from "./EvaluationDashboard";
 import { PrimaryLayout } from "../../layouts/PrimaryLayout";
 import { EvaluationLoader } from "../../EvaluationLoader";
 import { useAuthentication } from "../../AuthenticationContext";
 import { LoadingOverlay } from "../../LoadingOverlay";
-import { Credentials } from "realm-web";
 
 export function EvaluationDashboardScene() {
   const { user, logIn } = useAuthentication();
