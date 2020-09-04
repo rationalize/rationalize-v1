@@ -2,6 +2,11 @@ import { ObjectId } from "bson";
 
 import { db } from "./RealmApp";
 
+export type Link = {
+  url: string;
+  title?: string;
+};
+
 export type Criterion = {
   name: string;
 };
@@ -40,6 +45,8 @@ export type Scoring =
 export type Evaluation = {
   _id: ObjectId;
   name: string;
+  description?: string;
+  links: Link[];
   facilitator: string;
   participants: string[];
   criteria: Criterion[];

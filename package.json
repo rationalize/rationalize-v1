@@ -53,7 +53,7 @@
     "realm:deploy:production": "REALM_APP_ID=rationalize-prod-flova REALM_APP_PATH=production-realm-app npm run realm:deploy",
     "search-replace-app": "ts-node --project scripts/tsconfig.json scripts/search-replace.ts",
     "migration:list": "migrate list --chdir src/mongodb/migrate --compiler='ts:./register.js' --store ./store.ts",
-    "migration:create": "migrate create --chdir src/mongodb/migrate --compiler='ts:./register.js' --template-file ./template.ts --store ./store.ts",
+    "migration:create": "migrate create --chdir src/mongodb/migrate --template-file ./template.ts",
     "migration:up": "migrate up --chdir src/mongodb/migrate --compiler='ts:./register.js' --store ./store.ts",
     "migration:down": "migrate down --chdir src/mongodb/migrate --compiler='ts:./register.js' --store ./store.ts"
   },

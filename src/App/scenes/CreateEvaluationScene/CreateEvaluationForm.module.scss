@@ -1,6 +1,7 @@
 @import "../../../variables";
 
-$form-sidebar-color: $gray-400 !default;
+$form-sidebar-color: $white !default;
+$form-sidebar-border-color: $gray-300 !default;
 
 .CreateEvaluationForm {
   &__FormGroup {
@@ -8,8 +9,8 @@ $form-sidebar-color: $gray-400 !default;
   }
 
   &__Sidebar {
-    background: $gray-600;
-    color: $white;
+    border-left: 1px solid $form-sidebar-border-color;
+    background: $form-sidebar-color;
     @include border-radius(0 $card-inner-border-radius $card-inner-border-radius 0);
   }
 }

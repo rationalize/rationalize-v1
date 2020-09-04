@@ -12,13 +12,14 @@ import {
   Container,
 } from "reactstrap";
 
-import { InputList } from "../../InputList";
+import { ListField, ListFieldInputItem } from "../../ListField";
 import {
   app,
   evaluationsCollection,
   Scoring,
   generateSharingToken,
   Evaluation,
+  Link,
 } from "../../../mongodb";
 import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
@@ -29,7 +30,7 @@ import { NameHelp } from "./NameHelp";
 
 import styles from "./CreateEvaluationForm.module.scss";
 
-import { DetailedEvaluationFields } from "./DetailedEvaluationFields";
+import { EvaluationSidebar } from "./EvaluationSidebar/EvaluationSidebar";
 
 export type ConceptValues = {
   name: string;
@@ -46,6 +47,8 @@ export type ScoringValue = {
 
 export type EvaluationValues = {
   name: string;
+  description: string;
+  links: Link[];
   criteria: CriterionValues[];
   concepts: ConceptValues[];
   scoring: ScoringValue;
@@ -88,6 +91,17 @@ export function CreateEvaluationForm({
     if (app.currentUser) {
       const criteria = values.criteria.filter((c) => c.name);
       const concepts = values.concepts.filter((a) => a.name);
+      // Filter out links without a URL and undefine empty titles
+      const links = values.links
+        .filter((l) => l.url)
+        .map(({ url, title }) => {
+          // Transform an empty title a proper undefined
+          if (title) {
+            return { url, title };
+          } else {
+            return { url };
+          }
+        });
       if (criteria.length === 0) {
         helpers.setFieldError(
           "criteria",
@@ -106,6 +120,8 @@ export function CreateEvaluationForm({
         participants: [],
         scores: {},
         name: values.name,
+        description: values.description,
+        links,
         criteria,
         concepts,
         sharing: { mode: "disabled" },
@@ -121,6 +137,8 @@ export function CreateEvaluationForm({
     <Formik<EvaluationValues>
       initialValues={{
         name: "",
+        description: "",
+        links: [{ url: "" }],
         concepts: [{ name: "" }],
         criteria: [{ name: "" }],
         scoring: { facilitator: true, survey: false },
@@ -180,16 +198,14 @@ export function CreateEvaluationForm({
                         name="concepts"
                         helper="These are the ideas or options you are evaluating."
                       />
-                      <InputList
+                      <ListField
                         items={values.concepts}
                         itemsPath="concepts"
-                        propertyName="name"
                         addText="Add New Concept"
-                        /*
-                        extraControls={() => (
-                          <Button color="success">Add more information</Button>
+                        generateNewItem={() => ({ name: "" })}
+                        renderItem={(props) => (
+                          <ListFieldInputItem {...props} propertyName="name" />
                         )}
-                        */
                       />
                     </FormGroup>
                     <FormGroup
@@ -204,16 +220,14 @@ export function CreateEvaluationForm({
                         name="criteria"
                         helper="These are dimensions or attributes used to evaluate and prioritize the concepts."
                       />
-                      <InputList
+                      <ListField
                         items={values.criteria}
                         itemsPath="criteria"
-                        propertyName="name"
                         addText="Add New Criterion"
-                        /*
-                        extraControls={() => (
-                          <Button color="success">Add more information</Button>
+                        generateNewItem={() => ({ name: "" })}
+                        renderItem={(props) => (
+                          <ListFieldInputItem {...props} propertyName="name" />
                         )}
-                        */
                       />
                     </FormGroup>
                     <FormGroup
@@ -271,7 +285,7 @@ export function CreateEvaluationForm({
                 </Col>
                 <Col sm="5" className={styles.CreateEvaluationForm__Sidebar}>
                   <CardBody>
-                    <DetailedEvaluationFields name={values.name} />
+                    <EvaluationSidebar name={values.name} />
                   </CardBody>
                 </Col>
               </Row>
