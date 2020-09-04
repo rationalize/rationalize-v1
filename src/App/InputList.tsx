@@ -62,12 +62,14 @@ export function InputList<Item extends BaseItem>({
                   isLastItem
                 )}
               >
-                <Button
-                  color="transparent"
-                  onClick={() => arrayHelpers.remove(index)}
-                >
-                  <X size="1rem" />
-                </Button>
+                {items.length > 1 && (
+                  <Button
+                    color="transparent"
+                    onClick={() => arrayHelpers.remove(index)}
+                  >
+                    <X size="1rem" />
+                  </Button>
+                )}
                 {extraControls(item, index)}
               </InputWithControls>
             );

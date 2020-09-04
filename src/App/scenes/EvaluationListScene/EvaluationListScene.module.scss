@@ -3,8 +3,5 @@
 .EvaluationsOverviewScene {
   &__EvaluationRow {
     cursor: pointer;
-    &:hover, &:active, &:focus {
-      background: $gray-100;
-    }
   }
 }

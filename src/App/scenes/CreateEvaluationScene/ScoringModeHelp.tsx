@@ -4,10 +4,9 @@ import { HelpPopover } from "../../HelpPopover";
 export function ScoringModeHelp() {
   return (
     <HelpPopover>
-      Scoring mode simply allows you to decide how you want to score the
-      concepts against the criteria. If you want to do the scoring yourself,
-      select “Individual”; if you would like to poll others select “Survey”; If
-      you would like to do both, check both of the checkmarks.
+      Choose how you will score your options. You can either score your options
+      individually as a next step, or by sending out a link to a team of
+      collaborators. If you’d like to do both, check both boxes.
     </HelpPopover>
   );
 }

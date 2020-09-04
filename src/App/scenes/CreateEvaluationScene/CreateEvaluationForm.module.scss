@@ -1,0 +1,7 @@
+@import "../../../variables";
+
+.CreateEvaluationForm {
+  &__FormGroup {
+    margin-bottom: $spacer * 2;
+  }
+}

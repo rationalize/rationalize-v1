@@ -4,7 +4,6 @@ import { Container } from "reactstrap";
 import { Evaluation } from "../../../mongodb";
 import { RestrictedArea } from "../../RestrictedArea";
 
-import styles from "./EvaluationDashboard.module.scss";
 import { FacilitatorRow } from "./FacilitatorRow";
 import { WeightsRow } from "./WeightsRow";
 import { useAuthentication } from "../../AuthenticationContext";
@@ -18,7 +17,8 @@ export function EvaluationDashboard({ evaluation }: EvaluationDashboardProps) {
   return (
     <RestrictedArea>
       <Container>
-        <h4 className={styles.EvaluationScreen__Heading}>{evaluation.name}</h4>
+        <h4>Evaluation Results</h4>
+        <h6>{evaluation.name}</h6>
         <WeightsRow evaluation={evaluation} />
         {isFacilitator && <FacilitatorRow evaluation={evaluation} />}
       </Container>

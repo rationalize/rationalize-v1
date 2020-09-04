@@ -168,7 +168,7 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
             <Row>
               <Col sm="12" md="6">
                 <SectionCard.Header>
-                  Criteria Weights <WeightsHelp />
+                  Adjust Criteria Weights <WeightsHelp />
                 </SectionCard.Header>
                 <LoadingOverlay isLoading={props.isSubmitting || isSaving}>
                   <CardBody>

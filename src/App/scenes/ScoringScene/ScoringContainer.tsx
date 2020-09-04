@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React, { useState } from "react";
 import { ThumbsUp, AlertTriangle, Check } from "react-feather";
-import { Button, Card, Row, Col, Container, CardBody } from "reactstrap";
+import { Button, Row, Col, Container, CardBody } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
 import {
@@ -18,6 +18,7 @@ import { useAuthentication } from "../../AuthenticationContext";
 import { EvaluationSurveyUrl } from "../../EvaluationSurveyUrl";
 import { LinkButton } from "../../LinkButton";
 import { SectionCard } from "../../SectionCard";
+import { EvaluationCard } from "../../EvaluationCard";
 
 type ScoringContainerProps = { evaluation: Evaluation };
 
@@ -98,16 +99,19 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
       <Container className={styles.ScoringContainer}>
         <Row>
           <Col md={{ size: 6, offset: 3 }}>
-            <Card className={styles.ScoringContainer__Card} body>
-              <h6>Link to evaluation survey</h6>
-              <EvaluationSurveyUrl evaluation={evaluation} />
-              <LinkButton
-                color="primary"
-                to={`/evaluations/${evaluation._id.toHexString()}`}
-              >
-                Continue to Evaluation Dashboard
-              </LinkButton>
-            </Card>
+            <SectionCard>
+              <SectionCard.Header>Link to survey</SectionCard.Header>
+              <CardBody>
+                <EvaluationSurveyUrl evaluation={evaluation} />
+                <LinkButton
+                  color="primary"
+                  to={`/evaluations/${evaluation._id.toHexString()}`}
+                  block
+                >
+                  Continue to Evaluation Dashboard
+                </LinkButton>
+              </CardBody>
+            </SectionCard>
           </Col>
         </Row>
       </Container>
@@ -115,12 +119,12 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   } else if (isSaved) {
     return (
       <Container className={styles.ScoringContainer}>
-        <Card className={styles.ScoringContainer__Card} body>
+        <SectionCard body>
           <div className={styles.ScoringContainer__Message}>
             <ThumbsUp className={styles.ScoringContainer__Icon} size="4rem" />
             Thank you! Your scores have been submitted!
           </div>
-        </Card>
+        </SectionCard>
       </Container>
     );
   } else {
@@ -130,7 +134,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
         <Row>
           <Col md="8">
             <LoadingOverlay isLoading={isLoading} error={error}>
-              <SectionCard className={styles.ScoringContainer__Card}>
+              <SectionCard>
                 {isSaved === false ? (
                   <CardBody>
                     <div className={styles.ScoringContainer__Message}>
@@ -159,13 +163,8 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
             </LoadingOverlay>
           </Col>
           <Col md="4">
-            <Card className={styles.ScoringContainer__Card}>
-              <SectionCard.Header>{evaluation.name}</SectionCard.Header>
-              <CardBody>
-                <em>This evaluation has no description.</em>
-              </CardBody>
-            </Card>
-            <SectionCard className={styles.ScoringContainer__Card}>
+            <EvaluationCard evaluation={evaluation} />
+            <SectionCard>
               <SectionCard.Header>Criteria Progress</SectionCard.Header>
               <CardBody>
                 {criteria.map((c, i) => (

@@ -2,27 +2,29 @@ import React from "react";
 import { Formik } from "formik";
 import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
-import { Evaluation, Sharing, evaluationsCollection } from "../../../mongodb";
+import { Evaluation, evaluationsCollection } from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
 
-type Values = Sharing;
+type Values = { public: boolean };
 
 export type EvaluationSharingFormProps = { evaluation: Evaluation };
 
 export function EvaluationSharingForm({
   evaluation,
 }: EvaluationSharingFormProps) {
-  async function handleSubmit(values: Sharing) {
+  async function handleSubmit(values: Values) {
     await evaluationsCollection.updateOne(
       { _id: { $eq: evaluation._id } },
-      { $set: { sharing: values } }
+      { $set: { sharing: { mode: values.public ? "public" : "disabled" } } }
     );
   }
 
   return (
     <Formik<Values>
       initialValues={{
-        mode: evaluation.sharing ? evaluation.sharing.mode : "disabled",
+        public: evaluation.sharing
+          ? evaluation.sharing.mode === "public"
+          : false,
       }}
       onSubmit={handleSubmit}
     >
@@ -36,20 +38,20 @@ export function EvaluationSharingForm({
       }) => (
         <LoadingOverlay isLoading={isSubmitting}>
           <Form onSubmit={handleSubmit} onReset={handleReset}>
-            <FormGroup>
-              <Label for="mode">Sharing mode</Label>
-              <Input
-                type="select"
-                name="mode"
-                id="mode"
-                value={values.mode}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              >
-                <option value="disabled">Disabled</option>
-                <option value="public">Public</option>
-              </Input>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="checkbox"
+                  name="public"
+                  id="public"
+                  checked={values.public}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />{" "}
+                Make evaluation public
+              </Label>
             </FormGroup>
+            <br />
             <Button
               color="primary"
               type="submit"
@@ -57,7 +59,7 @@ export function EvaluationSharingForm({
               outline
               block
             >
-              Save sharing settings
+              Save Privacy Settings
             </Button>
           </Form>
         </LoadingOverlay>

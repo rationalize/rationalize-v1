@@ -10,6 +10,7 @@ import { PrimaryLayout } from "../../layouts/PrimaryLayout";
 
 import styles from "./EvaluationListScene.module.scss";
 import { RestrictedArea } from "../../RestrictedArea";
+import { EvaluationsListHelp } from "./EvaluationsListHelp";
 
 export function EvaluationListScene() {
   const [evaluations, setEvaluations] = useState<Evaluation[]>([]);
@@ -51,9 +52,11 @@ export function EvaluationListScene() {
           {evaluations.length > 0 ? (
             <>
               <Container>
-                <h4>Evaluations</h4>
+                <h4>
+                  Your Evaluations <EvaluationsListHelp />
+                </h4>
                 <Card body>
-                  <Table striped>
+                  <Table striped hover>
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -79,7 +82,7 @@ export function EvaluationListScene() {
                   </Table>
 
                   <LinkButton to="/evaluations/create" color="primary">
-                    Create evaluation
+                    Create New Evaluation
                   </LinkButton>
                 </Card>
               </Container>

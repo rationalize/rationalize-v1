@@ -15,6 +15,9 @@ import { ConceptHelp } from "./ConceptHelp";
 import { ScoringModeHelp } from "./ScoringModeHelp";
 import { LoadingOverlay } from "../../LoadingOverlay";
 import { FieldFeedback } from "../../FieldFeedback";
+import { NameHelp } from "./NameHelp";
+
+import styles from "./CreateEvaluationForm.module.scss";
 
 export type ConceptValues = {
   name: string;
@@ -125,10 +128,16 @@ export function CreateEvaluationForm({
       }) => (
         <LoadingOverlay isLoading={isSubmitting}>
           <Form onSubmit={handleSubmit} onReset={handleReset}>
-            <FormGroup>
+            <FormGroup className={styles.CreateEvaluationForm__FormGroup}>
               <Label for="name">
-                <h6>Name Evaluation</h6>
+                <h6>
+                  1. Name Evaluation <NameHelp />
+                </h6>
               </Label>
+              <FieldFeedback
+                name="name"
+                helper="Make sure it's descriptive so that you can identify it later."
+              />
               <Input
                 type="text"
                 name="name"
@@ -140,39 +149,17 @@ export function CreateEvaluationForm({
                 required
                 autoFocus
               />
-              <FieldFeedback
-                name="name"
-                helper="Evaluations have names, making it easer to tell them apart."
-              />
             </FormGroup>
-            <FormGroup>
+            <FormGroup className={styles.CreateEvaluationForm__FormGroup}>
               <Label>
                 <h6>
-                  Define Criteria <CriteriaHelp />
+                  2. Define Concepts <ConceptHelp />
                 </h6>
               </Label>
-              <InputList
-                items={values.criteria}
-                itemsPath="criteria"
-                propertyName="name"
-                addText="Add New Criterion"
-                /*
-              extraControls={() => (
-                <Button color="success">Add more information</Button>
-              )}
-              */
-              />
               <FieldFeedback
-                name="criteria"
-                helper="A list of criteria that would make someone choose one concept over the other."
+                name="concepts"
+                helper="These are the ideas or options you are evaluating."
               />
-            </FormGroup>
-            <FormGroup>
-              <Label>
-                <h6>
-                  Define Concepts <ConceptHelp />
-                </h6>
-              </Label>
               <InputList
                 items={values.concepts}
                 itemsPath="concepts"
@@ -184,17 +171,39 @@ export function CreateEvaluationForm({
               )}
               */
               />
-              <FieldFeedback
-                name="concepts"
-                helper="What are the different potential outcomes from the evaluation?"
-              />
             </FormGroup>
-            <FormGroup>
+            <FormGroup className={styles.CreateEvaluationForm__FormGroup}>
               <Label>
                 <h6>
-                  Define Scoring Mode <ScoringModeHelp />
+                  3. Define Criteria <CriteriaHelp />
                 </h6>
               </Label>
+              <FieldFeedback
+                name="criteria"
+                helper="These are dimensions or attributes used to evaluate and prioritize the concepts."
+              />
+              <InputList
+                items={values.criteria}
+                itemsPath="criteria"
+                propertyName="name"
+                addText="Add New Criterion"
+                /*
+              extraControls={() => (
+                <Button color="success">Add more information</Button>
+              )}
+              */
+              />
+            </FormGroup>
+            <FormGroup className={styles.CreateEvaluationForm__FormGroup}>
+              <Label>
+                <h6>
+                  4. Define Scoring Mode <ScoringModeHelp />
+                </h6>
+              </Label>
+              <FieldFeedback
+                name="scoring"
+                helper="Both modes can be selected for an evaluation."
+              />
               <FormGroup check>
                 <Input
                   type="checkbox"
@@ -223,10 +232,6 @@ export function CreateEvaluationForm({
                   Concepts against the Criteria.
                 </Label>
               </FormGroup>
-              <FieldFeedback
-                name="scoring"
-                helper="Will you score concepts yourself, ask others to do it or both?"
-              />
             </FormGroup>
             <FormGroup>
               <Button
@@ -235,7 +240,7 @@ export function CreateEvaluationForm({
                 disabled={isSubmitting}
                 block
               >
-                Create evaluation
+                Create Evaluation (and continue to scoring)
               </Button>
             </FormGroup>
           </Form>

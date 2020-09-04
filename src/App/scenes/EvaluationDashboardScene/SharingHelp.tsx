@@ -1,11 +1,12 @@
 import React from "react";
 import { HelpPopover } from "../../HelpPopover";
 
-export function SharingHelp() {
+export function PrivacyHelp() {
   return (
     <HelpPopover>
-      Sharing the evaluation makes it possible for others to discover, get
-      inspirated by and clone your evaluation.
+      Others will not be able to adjust Concept Scores or Criteria Weights for
+      your evaluation. They will, however, be able to clone this evaluation into
+      their account and adjust scores for that event.
     </HelpPopover>
   );
 }
