@@ -13,15 +13,17 @@ export type EvaluationCardProps = {
 
 export function EvaluationCard({ evaluation }: EvaluationCardProps) {
   return (
-    <SectionCard>
+    <SectionCard className={styles.EvaluationCard}>
       <SectionCard.Header>{evaluation.name}</SectionCard.Header>
       <CardBody>
         {evaluation.description ? (
-          <section>{evaluation.description}</section>
+          <section className={styles.EvaluationCard__Description}>
+            {evaluation.description}
+          </section>
         ) : (
           <em>This evaluation has no description.</em>
         )}
-        {evaluation.links && (
+        {evaluation.links.length > 0 && (
           <ul className={styles.EvaluationCard__List}>
             {evaluation.links.map(({ url, title }, index) => (
               <li className={styles.EvaluationCard__ListItem} key={index}>

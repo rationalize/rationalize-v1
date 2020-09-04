@@ -1,6 +1,10 @@
 @import "../variables";
 
 .EvaluationCard {
+  &__Description {
+    white-space: pre-line;
+  }
+
   &__List {
     list-style-type: none;
     padding: 0;

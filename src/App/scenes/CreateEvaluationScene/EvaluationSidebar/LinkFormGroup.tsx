@@ -19,7 +19,7 @@ export function LinkFormGroup(props: LinkFormGroupProps) {
       />
       <Input
         value={props.item.title || ""}
-        placeholder="Title"
+        placeholder="Link title"
         onChange={handleChange}
         onBlur={handleBlur}
         name={`${props.itemPath}.title`}

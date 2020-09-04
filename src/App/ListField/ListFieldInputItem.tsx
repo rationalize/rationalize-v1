@@ -46,7 +46,6 @@ export function ListFieldInputItem<ItemType extends object>({
   return (
     <InputWithControls
       className={styles.ListFieldInputItem}
-      key={isLastItem ? "last" : index}
       type="text"
       name={valuePath}
       id={valuePath}

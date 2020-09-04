@@ -43,7 +43,7 @@ export function ListField<Item extends object>({
                 arrayHelpers.remove(index);
               }
 
-              return renderItem({
+              const renderedItem = renderItem({
                 item,
                 index,
                 itemCount: items.length,
@@ -51,6 +51,14 @@ export function ListField<Item extends object>({
                 onAddItem: handleAddItem,
                 onRemoveItem: handleRemoveItem,
               });
+
+              const isLastItem = index === items.length - 1;
+
+              return (
+                <React.Fragment key={isLastItem ? "last" : index}>
+                  {renderedItem}
+                </React.Fragment>
+              );
             })}
             <Button
               size="sm"
