@@ -11,6 +11,7 @@ import styles from "./ListFieldInputItem.module.scss";
 export type ListFieldInputItemProps<ItemType extends object> = {
   propertyName: keyof ItemType;
   placeholder?: string;
+  onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
 } & ListFieldItemProps<ItemType>;
 
 export function ListFieldInputItem<ItemType extends object>({
@@ -20,6 +21,7 @@ export function ListFieldInputItem<ItemType extends object>({
   item,
   onAddItem,
   onRemoveItem,
+  onFocus,
   propertyName,
   placeholder,
 }: ListFieldInputItemProps<ItemType>) {
@@ -51,6 +53,7 @@ export function ListFieldInputItem<ItemType extends object>({
       id={valuePath}
       value={value}
       onChange={handleChange}
+      onFocus={onFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       placeholder={placeholder}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FocusEvent, useState } from "react";
 import { Formik, FormikHelpers } from "formik";
 import {
   Button,
@@ -31,6 +31,7 @@ import { NameHelp } from "./NameHelp";
 import styles from "./CreateEvaluationForm.module.scss";
 
 import { EvaluationSidebar } from "./EvaluationSidebar/EvaluationSidebar";
+import { FocusIndicator } from "./FocusIndicator";
 
 export type ConceptValues = {
   name: string;
@@ -133,6 +134,16 @@ export function CreateEvaluationForm({
     }
   };
 
+  // TODO: Fix when items are removed from lists.
+  const [focusOffset, setFocusOffset] = useState<number | undefined>();
+
+  function handleFocus(e: FocusEvent<HTMLElement>) {
+    const parent = e.target.parentElement;
+    const element =
+      parent && parent.classList.contains("form-control") ? parent : e.target;
+    setFocusOffset(element.offsetTop + element.offsetHeight / 2);
+  }
+
   return (
     <Formik<EvaluationValues>
       initialValues={{
@@ -180,6 +191,7 @@ export function CreateEvaluationForm({
                         id="name"
                         value={values.name}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                         onBlur={handleBlur}
                         invalid={errors.name && touched.name ? true : false}
                         required
@@ -204,7 +216,11 @@ export function CreateEvaluationForm({
                         addText="Add New Concept"
                         generateNewItem={() => ({ name: "" })}
                         renderItem={(props) => (
-                          <ListFieldInputItem {...props} propertyName="name" />
+                          <ListFieldInputItem
+                            {...props}
+                            onFocus={handleFocus}
+                            propertyName="name"
+                          />
                         )}
                       />
                     </FormGroup>
@@ -226,7 +242,11 @@ export function CreateEvaluationForm({
                         addText="Add New Criterion"
                         generateNewItem={() => ({ name: "" })}
                         renderItem={(props) => (
-                          <ListFieldInputItem {...props} propertyName="name" />
+                          <ListFieldInputItem
+                            {...props}
+                            onFocus={handleFocus}
+                            propertyName="name"
+                          />
                         )}
                       />
                     </FormGroup>
@@ -282,6 +302,10 @@ export function CreateEvaluationForm({
                       </Button>
                     </FormGroup>
                   </CardBody>
+                  <FocusIndicator
+                    className={styles.CreateEvaluationForm__FocusIndicator}
+                    offset={focusOffset}
+                  />
                 </Col>
                 <Col sm="5" className={styles.CreateEvaluationForm__Sidebar}>
                   <CardBody>

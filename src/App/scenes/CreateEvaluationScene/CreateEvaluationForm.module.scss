@@ -1,15 +1,22 @@
 @import "../../../variables";
 
 $form-sidebar-color: $white !default;
-$form-sidebar-border-color: $gray-300 !default;
 
 .CreateEvaluationForm {
+  position: relative;
+
   &__FormGroup {
     margin-bottom: $spacer * 2;
   }
 
+  &__FocusIndicator {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
   &__Sidebar {
-    border-left: 1px solid $form-sidebar-border-color;
     background: $form-sidebar-color;
     @include border-radius(0 $card-inner-border-radius $card-inner-border-radius 0);
   }
