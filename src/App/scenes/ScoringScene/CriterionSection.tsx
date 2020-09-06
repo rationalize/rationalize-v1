@@ -3,9 +3,10 @@ import { Button, Label, Input, FormGroup, Form, CardBody } from "reactstrap";
 import { Formik } from "formik";
 
 import { Concept, Criterion } from "../../../mongodb";
+import { SectionCard } from "../../SectionCard";
+import { DetailsCardBody } from "../../DetailsCardBody";
 
 import styles from "./CriterionSection.module.scss";
-import { SectionCard } from "../../SectionCard";
 
 type CriterionCardProps = {
   className?: string;
@@ -46,6 +47,10 @@ export function CriterionSection({
   return (
     <>
       <SectionCard.Header>{criterion.name}</SectionCard.Header>
+      <DetailsCardBody
+        description={criterion.description}
+        links={criterion.links}
+      />
       <CardBody>
         <Formik<Values>
           initialValues={{ scores: initialScores }}

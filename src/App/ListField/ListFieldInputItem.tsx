@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormikContext } from "formik";
-import { Button } from "reactstrap";
+import { Button, InputProps } from "reactstrap";
 import { X } from "react-feather";
 
 import { InputWithControls } from "../InputWithControls";
@@ -12,7 +12,8 @@ export type ListFieldInputItemProps<ItemType extends object> = {
   propertyName: keyof ItemType;
   placeholder?: string;
   onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
-} & ListFieldItemProps<ItemType>;
+} & ListFieldItemProps<ItemType> &
+  InputProps;
 
 export function ListFieldInputItem<ItemType extends object>({
   itemPath,
@@ -24,6 +25,7 @@ export function ListFieldInputItem<ItemType extends object>({
   onFocus,
   propertyName,
   placeholder,
+  ...rest
 }: ListFieldInputItemProps<ItemType>) {
   const { handleChange, handleBlur } = useFormikContext<any>();
 
@@ -35,12 +37,18 @@ export function ListFieldInputItem<ItemType extends object>({
     throw new Error(`Expected string value, got ${typeof value}`);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
       e.stopPropagation();
       if (isLastItem) {
         onAddItem();
+        // Refocus to trigger a focus event, moving the focus indicator
+        const target = e.currentTarget;
+        setTimeout(() => {
+          target.blur();
+          target.focus();
+        });
       }
     }
   }
@@ -57,6 +65,7 @@ export function ListFieldInputItem<ItemType extends object>({
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       placeholder={placeholder}
+      {...rest}
     >
       {itemCount > 1 && (
         <Button color="transparent" onClick={() => onRemoveItem()}>

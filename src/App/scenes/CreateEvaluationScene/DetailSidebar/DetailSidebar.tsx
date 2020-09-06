@@ -8,27 +8,29 @@ import { DescriptionFormGroup } from "./DescriptionFormGroup";
 import { LinkFormGroup } from "./LinkFormGroup";
 import { ListField } from "../../../ListField";
 
-type EvaluationSidebarProps = {
-  name: string;
+export type DetailSidebarProps = {
+  title: string;
+  namePrefix?: string;
 };
 
-export function EvaluationSidebar({ name }: EvaluationSidebarProps) {
-  const [{ value: links }] = useField<Link[]>({ name: "links" });
+export function DetailSidebar({ title, namePrefix }: DetailSidebarProps) {
+  const linksName = namePrefix ? `${namePrefix}.links` : "links";
+  const [{ value: links }] = useField<Link[]>(linksName);
   return (
     <section>
-      <h4>{name || "Evaluation details"}</h4>
-      <DescriptionFormGroup />
+      <h4>{title}</h4>
+      <DescriptionFormGroup namePrefix={namePrefix} />
       <FormGroup>
         <Label>
           <h6>Links (optional)</h6>
         </Label>
-        <FieldFeedback name="links" />
+        <FieldFeedback name={linksName} />
         <ListField
           items={links}
-          itemsPath="links"
+          itemsPath={linksName}
           addText="Add New Link"
           generateNewItem={() => ({ title: "", url: "" })}
-          renderItem={(props) => <LinkFormGroup {...props} />}
+          renderItem={(props) => <LinkFormGroup key={props.index} {...props} />}
         />
       </FormGroup>
     </section>

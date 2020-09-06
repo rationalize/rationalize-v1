@@ -2,6 +2,11 @@ import { ObjectId } from "bson";
 
 import { db } from "./RealmApp";
 
+export type Details = {
+  description?: string;
+  links: Link[];
+};
+
 export type Link = {
   url: string;
   title?: string;
@@ -9,11 +14,11 @@ export type Link = {
 
 export type Criterion = {
   name: string;
-};
+} & Details;
 
 export type Concept = {
   name: string;
-};
+} & Details;
 
 export type Weights = { [criterion: string]: number };
 
@@ -45,8 +50,6 @@ export type Scoring =
 export type Evaluation = {
   _id: ObjectId;
   name: string;
-  description?: string;
-  links: Link[];
   facilitator: string;
   participants: string[];
   criteria: Criterion[];
@@ -56,7 +59,7 @@ export type Evaluation = {
   scoring: Scoring;
   weights?: Weights;
   copyOf?: ObjectId;
-};
+} & Details;
 
 export function generateSharingToken(length = 8) {
   const buffer = new Uint8Array(length);

@@ -1,4 +1,4 @@
-import { withTransaction, getDb } from "../utils";
+import { withTransaction } from "../utils";
 
 export async function up() {
   await withTransaction(async (collection) => {

@@ -20,6 +20,11 @@ button > svg {
   top: -2px;
 }
 
+// Drop shadow from cards
+.card {
+  box-shadow: $shadow-color 0 $shadow-offset $shadow-radius;
+}
+
 // Remove the margin in the bottom of the last form group, to enable a more compact layout.
 /*
 .form-group:last-child {

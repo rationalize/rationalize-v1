@@ -4,8 +4,16 @@ import { FormGroup, Label, Input } from "reactstrap";
 
 import { FieldFeedback } from "../../../FieldFeedback";
 
-export function DescriptionFormGroup() {
-  const [field] = useField<string>({ name: "description" });
+type DescriptionFormGroupProps = {
+  namePrefix?: string;
+};
+
+export function DescriptionFormGroup({
+  namePrefix,
+}: DescriptionFormGroupProps) {
+  const [field] = useField<string>(
+    namePrefix ? `${namePrefix}.description` : "description"
+  );
   return (
     <FormGroup>
       <Label for="description">

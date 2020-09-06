@@ -1,11 +1,10 @@
 import React from "react";
-
-import { SectionCard } from "./SectionCard";
-import { Evaluation } from "../mongodb";
 import { CardBody } from "reactstrap";
 
-import styles from "./EvaluationCard.module.scss";
-import { Link } from "react-feather";
+import { Evaluation } from "../mongodb";
+
+import { SectionCard } from "./SectionCard";
+import { DetailsCardBody } from "./DetailsCardBody";
 
 export type EvaluationCardProps = {
   evaluation: Evaluation;
@@ -13,37 +12,17 @@ export type EvaluationCardProps = {
 
 export function EvaluationCard({ evaluation }: EvaluationCardProps) {
   return (
-    <SectionCard className={styles.EvaluationCard}>
+    <SectionCard>
       <SectionCard.Header>{evaluation.name}</SectionCard.Header>
-      <CardBody>
-        {evaluation.description ? (
-          <section className={styles.EvaluationCard__Description}>
-            {evaluation.description}
-          </section>
-        ) : (
-          <em>This evaluation has no description.</em>
-        )}
-        {evaluation.links.length > 0 && (
-          <ul className={styles.EvaluationCard__List}>
-            {evaluation.links.map(({ url, title }, index) => (
-              <li className={styles.EvaluationCard__ListItem} key={index}>
-                <Link
-                  className={styles.EvaluationCard__ListItemIcon}
-                  size="1em"
-                />
-                <a
-                  href={url}
-                  title={title}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {title || url}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </CardBody>
+      <DetailsCardBody
+        description={evaluation.description}
+        links={evaluation.links}
+      />
+      {!evaluation.description ? (
+        <CardBody>
+          <em>This evaluation has no description ...</em>
+        </CardBody>
+      ) : null}
     </SectionCard>
   );
 }

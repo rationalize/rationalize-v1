@@ -13,6 +13,9 @@ $gray-800: #343a40 !default;
 $body-bg: $gray-150;
 $body-color: $gray-700;
 $card-border-width: 0;
+// The background of the card headers
+$card-cap-bg: transparent;
+
 $list-group-border-width: 0;
 
 $yiq-contrasted-threshold: 200;
@@ -26,9 +29,6 @@ $yiq-contrasted-threshold: 200;
 $topbar-height: 3.5 * $spacer;
 $sidebar-width: 250px;
 
-$shadow-color: rgba($gray-600, .25);
+$shadow-color: rgba($gray-600, .2);
 $shadow-offset: .2 * $spacer;
-$shadow-radius: $spacer;
-
-// The background of the card headers
-$card-cap-bg: $white;
+$shadow-radius: .5 * $spacer;

@@ -1,9 +1,9 @@
 @import "../variables";
 
 .SectionCard {
-  margin-bottom: $spacer;
+  margin-bottom: $grid-gutter-width;
 
-  &__Header {
+  &__Header:not(:last-child) {
     padding-bottom: 0;
   }
 

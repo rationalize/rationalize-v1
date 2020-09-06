@@ -1,4 +1,4 @@
-import { EvaluationCard } from "../../EvaluationCard";
+import { ObjectId } from "bson";
 
 type EvaluationFocus = {
   kind: "evaluation";
@@ -6,12 +6,12 @@ type EvaluationFocus = {
 
 type ConceptFocus = {
   kind: "concept";
-  index: number;
+  _id: ObjectId;
 };
 
 type CriterionFocus = {
   kind: "criterion";
-  index: number;
+  _id: ObjectId;
 };
 
 export type Focus = EvaluationFocus | ConceptFocus | CriterionFocus;

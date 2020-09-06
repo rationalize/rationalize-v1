@@ -1,26 +1,51 @@
-import React from "react";
+import React, { useRef } from "react";
 import classNames from "classnames";
 
 import styles from "./FocusIndicator.module.scss";
 import { ChevronLeft } from "react-feather";
 
+const ICON_HEIGHT = 20;
+
 export type FocusIndicatorProps = {
   className?: string;
-  offset?: number;
+  focussedElement: HTMLElement | null;
 };
 
-export function FocusIndicator({ className, offset }: FocusIndicatorProps) {
-  const correctedOffset = offset && offset - 10;
+function calculateOffset(
+  indicatorElement: HTMLElement | null,
+  focussedElement: HTMLElement | null
+) {
+  if (indicatorElement && focussedElement) {
+    const indicatorBounds = indicatorElement.getBoundingClientRect();
+    const focusBounds = focussedElement.getBoundingClientRect();
+    return (
+      focusBounds.top +
+      focusBounds.height / 2 -
+      indicatorBounds.top -
+      ICON_HEIGHT / 2
+    );
+  }
+}
+
+export function FocusIndicator({
+  className,
+  focussedElement,
+}: FocusIndicatorProps) {
+  const focusRef = useRef<HTMLDivElement | null>(null);
+  const offset = calculateOffset(focusRef.current, focussedElement);
   return (
-    <div className={classNames(className, styles.FocusIndicator)}>
+    <div
+      className={classNames(className, styles.FocusIndicator)}
+      ref={focusRef}
+    >
       <div
         className={styles.FocusIndicator__Before}
-        style={{ flexBasis: correctedOffset }}
+        style={{ flexBasis: offset }}
       />
       <ChevronLeft
         className={styles.FocusIndicator__Icon}
         style={{
-          display: typeof offset === "number" ? "block" : "none",
+          display: focussedElement ? "block" : "none",
         }}
       />
       <div className={styles.FocusIndicator__After} />

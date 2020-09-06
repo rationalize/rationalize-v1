@@ -1,4 +1,4 @@
-import React, { FocusEvent, useState } from "react";
+import React, { useState } from "react";
 import { Formik, FormikHelpers } from "formik";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   CardBody,
   Container,
 } from "reactstrap";
+import { ObjectId } from "bson";
 
 import { ListField, ListFieldInputItem } from "../../ListField";
 import {
@@ -30,30 +31,16 @@ import { NameHelp } from "./NameHelp";
 
 import styles from "./CreateEvaluationForm.module.scss";
 
-import { EvaluationSidebar } from "./EvaluationSidebar/EvaluationSidebar";
+import { DetailSidebar, DetailSidebarProps } from "./DetailSidebar";
 import { FocusIndicator } from "./FocusIndicator";
-
-export type ConceptValues = {
-  name: string;
-};
-
-export type CriterionValues = {
-  name: string;
-};
-
-export type ScoringValue = {
-  facilitator: boolean;
-  survey: boolean;
-};
-
-export type EvaluationValues = {
-  name: string;
-  description: string;
-  links: Link[];
-  criteria: CriterionValues[];
-  concepts: ConceptValues[];
-  scoring: ScoringValue;
-};
+import {
+  EvaluationValues,
+  DetailValues,
+  CriterionValues,
+  ConceptValues,
+} from "./Values";
+import { Focus } from "./Focus";
+import { FocusResetter } from "./FocusResetter";
 
 export type CreateEvaluationHandler = (
   value: EvaluationValues,
@@ -85,33 +72,89 @@ function validate(values: EvaluationValues) {
   return errors;
 }
 
+function getFocussedElementName(
+  values: EvaluationValues,
+  focus: Focus | null
+): string {
+  if (focus?.kind === "concept") {
+    const index = values.concepts.findIndex((c) => c._id === focus._id);
+    return `concepts.${index}.name`;
+  } else if (focus?.kind === "criterion") {
+    const index = values.criteria.findIndex((c) => c._id === focus._id);
+    return `criteria.${index}.name`;
+  } else {
+    return "name";
+  }
+}
+
+function getFocussedElement(
+  values: EvaluationValues,
+  focus: Focus | null
+): HTMLElement | null {
+  const elementName = getFocussedElementName(values, focus);
+  const element = document.getElementsByName(elementName)[0];
+  // Fallback to the element named "name"
+  return element || document.getElementsByName("name")[0];
+}
+
+function getDetailSidebarProps(
+  values: EvaluationValues,
+  focus: Focus | null
+): DetailSidebarProps {
+  if (focus?.kind === "concept") {
+    const concept = values.concepts.find((c) => c._id === focus._id);
+    if (concept) {
+      const index = values.concepts.indexOf(concept);
+      return {
+        title: concept.name || "Concept Details",
+        namePrefix: `concepts.${index}`,
+      };
+    }
+  } else if (focus?.kind === "criterion") {
+    const criterion = values.criteria.find((c) => c._id === focus._id);
+    if (criterion) {
+      const index = values.criteria.indexOf(criterion);
+      return {
+        title: criterion.name || "Criterion Details",
+        namePrefix: `criteria.${index}`,
+      };
+    }
+  }
+  return { title: values.name || "Evaluation Details" };
+}
+
+function cleanLink({ url, title }: Link): Link {
+  return title ? { url, title } : { url };
+}
+
+function cleanLinks(links: Link[]): Link[] {
+  return links.filter(({ url }) => url).map(cleanLink);
+}
+
+function cleanDetails<V extends DetailValues>({ links, ...rest }: V): V {
+  return { ...rest, links: cleanLinks(links) } as V;
+}
+
+// TODO: Split this function in two if their schema starts diverging.
+function createConceptOrCriterion(): ConceptValues | CriterionValues {
+  return {
+    _id: new ObjectId(),
+    name: "",
+    description: "",
+    links: [{ url: "" }],
+  };
+}
+
 export function CreateEvaluationForm({
   handleCreated,
 }: CreateEvaluationFormProps) {
   const handleSubmit: CreateEvaluationHandler = async (values, helpers) => {
     if (app.currentUser) {
-      const criteria = values.criteria.filter((c) => c.name);
-      const concepts = values.concepts.filter((a) => a.name);
       // Filter out links without a URL and undefine empty titles
-      const links = values.links
-        .filter((l) => l.url)
-        .map(({ url, title }) => {
-          // Transform an empty title a proper undefined
-          if (title) {
-            return { url, title };
-          } else {
-            return { url };
-          }
-        });
-      if (criteria.length === 0) {
-        helpers.setFieldError(
-          "criteria",
-          "The must be at least one criterion."
-        );
-      }
-      if (concepts.length === 0) {
-        helpers.setFieldError("concepts", "The must be at least one concept.");
-      }
+      const criteria = values.criteria.filter((c) => c.name).map(cleanDetails);
+      const concepts = values.concepts.filter((a) => a.name).map(cleanDetails);
+      const links = cleanLinks(values.links);
+      // Generate sharing token
       const scoring: Scoring = {
         ...values.scoring,
         token: generateSharingToken(),
@@ -123,8 +166,8 @@ export function CreateEvaluationForm({
         name: values.name,
         description: values.description,
         links,
-        criteria,
         concepts,
+        criteria,
         sharing: { mode: "disabled" },
         scoring,
       };
@@ -134,15 +177,7 @@ export function CreateEvaluationForm({
     }
   };
 
-  // TODO: Fix when items are removed from lists.
-  const [focusOffset, setFocusOffset] = useState<number | undefined>();
-
-  function handleFocus(e: FocusEvent<HTMLElement>) {
-    const parent = e.target.parentElement;
-    const element =
-      parent && parent.classList.contains("form-control") ? parent : e.target;
-    setFocusOffset(element.offsetTop + element.offsetHeight / 2);
-  }
+  const [focus, setFocus] = useState<Focus | null>(null);
 
   return (
     <Formik<EvaluationValues>
@@ -150,8 +185,8 @@ export function CreateEvaluationForm({
         name: "",
         description: "",
         links: [{ url: "" }],
-        concepts: [{ name: "" }],
-        criteria: [{ name: "" }],
+        concepts: [createConceptOrCriterion()],
+        criteria: [createConceptOrCriterion()],
         scoring: { facilitator: true, survey: false },
       }}
       validate={validate}
@@ -168,6 +203,7 @@ export function CreateEvaluationForm({
         handleChange,
       }) => (
         <LoadingOverlay isLoading={isSubmitting}>
+          <FocusResetter values={values} focus={focus} setFocus={setFocus} />
           <Form onSubmit={handleSubmit} onReset={handleReset}>
             <Container>
               <Row>
@@ -190,8 +226,13 @@ export function CreateEvaluationForm({
                         name="name"
                         id="name"
                         value={values.name}
+                        autoComplete="off"
                         onChange={handleChange}
-                        onFocus={handleFocus}
+                        onFocus={() =>
+                          setFocus({
+                            kind: "evaluation",
+                          })
+                        }
                         onBlur={handleBlur}
                         invalid={errors.name && touched.name ? true : false}
                         required
@@ -214,12 +255,23 @@ export function CreateEvaluationForm({
                         items={values.concepts}
                         itemsPath="concepts"
                         addText="Add New Concept"
-                        generateNewItem={() => ({ name: "" })}
+                        generateNewItem={createConceptOrCriterion}
                         renderItem={(props) => (
                           <ListFieldInputItem
                             {...props}
-                            onFocus={handleFocus}
+                            key={
+                              props.index < props.itemCount - 1
+                                ? props.item._id.toHexString()
+                                : "last"
+                            }
                             propertyName="name"
+                            autoComplete="off"
+                            onFocus={() =>
+                              setFocus({
+                                kind: "concept",
+                                _id: props.item._id,
+                              })
+                            }
                           />
                         )}
                       />
@@ -240,12 +292,23 @@ export function CreateEvaluationForm({
                         items={values.criteria}
                         itemsPath="criteria"
                         addText="Add New Criterion"
-                        generateNewItem={() => ({ name: "" })}
+                        generateNewItem={createConceptOrCriterion}
                         renderItem={(props) => (
                           <ListFieldInputItem
                             {...props}
-                            onFocus={handleFocus}
+                            key={
+                              props.index < props.itemCount - 1
+                                ? props.item._id.toHexString()
+                                : "last"
+                            }
                             propertyName="name"
+                            autoComplete="off"
+                            onFocus={() =>
+                              setFocus({
+                                kind: "criterion",
+                                _id: props.item._id,
+                              })
+                            }
                           />
                         )}
                       />
@@ -304,12 +367,12 @@ export function CreateEvaluationForm({
                   </CardBody>
                   <FocusIndicator
                     className={styles.CreateEvaluationForm__FocusIndicator}
-                    offset={focusOffset}
+                    focussedElement={getFocussedElement(values, focus)}
                   />
                 </Col>
                 <Col sm="5" className={styles.CreateEvaluationForm__Sidebar}>
                   <CardBody>
-                    <EvaluationSidebar name={values.name} />
+                    <DetailSidebar {...getDetailSidebarProps(values, focus)} />
                   </CardBody>
                 </Col>
               </Row>
