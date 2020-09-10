@@ -134,8 +134,8 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
         <Row>
           <Col md="8">
             <LoadingOverlay isLoading={isLoading} error={error}>
-              <SectionCard>
-                {isSaved === false ? (
+              {isSaved === false ? (
+                <SectionCard>
                   <CardBody>
                     <div className={styles.ScoringContainer__Message}>
                       <AlertTriangle
@@ -148,18 +148,18 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
                       Reset and try again
                     </Button>
                   </CardBody>
-                ) : (
-                  <CriterionSection
-                    index={criterionIndex}
-                    scores={scores}
-                    count={criteria.length}
-                    criterion={criteria[criterionIndex]}
-                    concepts={concepts}
-                    onScores={handleScores}
-                    onBack={handleBack}
-                  />
-                )}
-              </SectionCard>
+                </SectionCard>
+              ) : (
+                <CriterionSection
+                  index={criterionIndex}
+                  scores={scores}
+                  count={criteria.length}
+                  criterion={criteria[criterionIndex]}
+                  concepts={concepts}
+                  onScores={handleScores}
+                  onBack={handleBack}
+                />
+              )}
             </LoadingOverlay>
           </Col>
           <Col md="4">
