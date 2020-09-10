@@ -5,6 +5,8 @@ import styles from "./PrimaryLayout.module.scss";
 
 import { TopBar } from "./TopBar";
 import { SideBar } from "./SideBar";
+import { AlertContainer } from "./AlertContainer";
+import { AlertProvider } from "./AlertContext";
 
 export type PrimaryLayoutProps = {
   children: React.ReactNode;
@@ -21,16 +23,21 @@ export function PrimaryLayout({ children, sidebar }: PrimaryLayoutProps) {
   // Sidebar is disabled until we have an actual need for it
   const visibleSidebar = false;
   return (
-    <div className={styles.TopAndSideBar}>
-      <TopBar className={styles.TopAndSideBar__TopBar} />
-      {visibleSidebar && <SideBar className={styles.TopAndSideBar__SideBar} />}
-      <div
-        className={classNames(styles.TopAndSideBar__Content, {
-          [styles["TopAndSideBar__Content--full-width"]]: !visibleSidebar,
-        })}
-      >
-        {children}
+    <AlertProvider>
+      <div className={styles.TopAndSideBar}>
+        <TopBar className={styles.TopAndSideBar__TopBar} />
+        {visibleSidebar && (
+          <SideBar className={styles.TopAndSideBar__SideBar} />
+        )}
+        <div
+          className={classNames(styles.TopAndSideBar__Content, {
+            [styles["TopAndSideBar__Content--full-width"]]: !visibleSidebar,
+          })}
+        >
+          <AlertContainer />
+          {children}
+        </div>
       </div>
-    </div>
+    </AlertProvider>
   );
 }

@@ -9,11 +9,15 @@ import { RegisterUserForm } from "./RegisterUserForm";
 
 export type LinkCredentialsFormProps = {
   onLinked: () => void;
+  onError?: (err: Error) => void;
   google?: boolean;
   facebook?: boolean;
 };
 
-export function LinkCredentialsForm({ onLinked }: LinkCredentialsFormProps) {
+export function LinkCredentialsForm({
+  onLinked,
+  onError = console.error,
+}: LinkCredentialsFormProps) {
   const { user } = useAuthentication();
 
   if (user === null) {
@@ -25,6 +29,8 @@ export function LinkCredentialsForm({ onLinked }: LinkCredentialsFormProps) {
   async function linkCredentials(credentials: Credentials) {
     if (user) {
       await user.linkCredentials(credentials);
+    } else {
+      throw new Error("Can't link without a user");
     }
   }
 
@@ -33,18 +39,16 @@ export function LinkCredentialsForm({ onLinked }: LinkCredentialsFormProps) {
     onLinked();
   }
 
-  async function handleFacebook() {
+  function handleFacebook() {
     const redirectUrl = window.location.origin + "/facebook-callback";
     const credentials = Credentials.facebook(redirectUrl);
-    await linkCredentials(credentials);
-    onLinked();
+    linkCredentials(credentials).then(onLinked).catch(onError);
   }
 
-  async function handleGoogle() {
+  function handleGoogle() {
     const redirectUrl = window.location.origin + "/google-callback";
     const credentials = Credentials.google(redirectUrl);
-    await linkCredentials(credentials);
-    onLinked();
+    linkCredentials(credentials).then(onLinked).catch(onError);
   }
 
   return (

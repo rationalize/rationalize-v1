@@ -1,0 +1,14 @@
+.AnonymousAlertMessage {
+  display: flex;
+
+  &__Text {
+    flex-grow: 1;
+
+    display: flex;
+    align-items: center;
+  }
+
+  &__Controls {
+    flex-shrink: 1;
+  }
+}

@@ -37,7 +37,6 @@ export function AccountMenu() {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const { user, logOut, switchUser } = useAuthentication();
   const history = useHistory();
-  const onlyAnonymous = isOnlyAnonymous(user);
 
   const otherActiveUsers = app.allUsers.filter(
     (u) => u !== user && u.state === "active" && !isOnlyAnonymous(user)
@@ -48,7 +47,7 @@ export function AccountMenu() {
     history.push("/");
   }
 
-  return user && !onlyAnonymous ? (
+  return user ? (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
         tag="span"
