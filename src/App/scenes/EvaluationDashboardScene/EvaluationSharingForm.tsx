@@ -4,6 +4,7 @@ import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
 import { Evaluation, evaluationsCollection } from "../../../mongodb";
 import { LoadingOverlay } from "../../LoadingOverlay";
+import { CopyToClipboardInput } from "../../CopyToClipboardInput";
 
 type Values = { public: boolean };
 
@@ -18,6 +19,8 @@ export function EvaluationSharingForm({
       { $set: { sharing: { mode: values.public ? "public" : "disabled" } } }
     );
   }
+  const evaluationUrl =
+    global.location.origin + `/evaluations/${evaluation._id.toHexString()}`;
 
   return (
     <Formik<Values>
@@ -38,20 +41,31 @@ export function EvaluationSharingForm({
       }) => (
         <LoadingOverlay isLoading={isSubmitting}>
           <Form onSubmit={handleSubmit} onReset={handleReset}>
-            <FormGroup check>
-              <Label check>
-                <Input
-                  type="checkbox"
-                  name="public"
-                  id="public"
-                  checked={values.public}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />{" "}
-                Make evaluation public
-              </Label>
+            <Label>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="checkbox"
+                    name="public"
+                    id="public"
+                    checked={values.public}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />{" "}
+                  Make evaluation public
+                </Label>
+              </FormGroup>
+            </Label>
+            <FormGroup>
+              <CopyToClipboardInput
+                text={evaluationUrl}
+                disabled={!values.public}
+              />
             </FormGroup>
-            <br />
+            <p>
+              Sharing this link publicly will enable visitors to view the
+              results and copy the evaluation concepts and criteria.
+            </p>
             <Button
               color="primary"
               type="submit"
@@ -59,7 +73,7 @@ export function EvaluationSharingForm({
               outline
               block
             >
-              Save Privacy Settings
+              Save Sharing Settings
             </Button>
           </Form>
         </LoadingOverlay>

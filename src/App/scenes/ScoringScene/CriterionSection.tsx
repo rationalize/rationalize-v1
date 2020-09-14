@@ -7,6 +7,8 @@ import { SectionCard } from "../../SectionCard";
 import { Details } from "../../Details";
 
 import styles from "./CriterionSection.module.scss";
+import { CriterionIcon } from "../../icons/CriterionIcon";
+import { ConceptIcon } from "../../icons/ConceptIcon";
 
 type CriterionCardProps = {
   index: number;
@@ -44,10 +46,15 @@ export function CriterionSection({
 
   return (
     <>
-      <SectionCard>
-        <SectionCard.Header>{criterion.name}</SectionCard.Header>
+      <SectionCard className={styles.CriterionSection__Criterion}>
+        <SectionCard.Header
+          className={styles.CriterionSection__CriterionHeader}
+        >
+          <CriterionIcon />
+          {criterion.name}
+        </SectionCard.Header>
         {criterion.description || criterion.links.length > 0 ? (
-          <CardBody>
+          <CardBody className={styles.CriterionSection__CriterionDetails}>
             <Details
               description={criterion.description}
               links={criterion.links}
@@ -63,11 +70,19 @@ export function CriterionSection({
         {({ handleSubmit, values, handleChange, handleBlur }) => (
           <Form onSubmit={handleSubmit}>
             {concepts.map((concept, index) => (
-              <SectionCard>
-                <SectionCard.Header>
-                  <Label for={`scores.${index}`}>{concept.name}</Label>
+              <SectionCard className={styles.CriterionSection__Concept}>
+                <SectionCard.Header
+                  className={styles.CriterionSection__ConceptHeader}
+                >
+                  <ConceptIcon />
+                  <Label
+                    className={styles.CriterionSection__ConceptLabel}
+                    for={`scores.${index}`}
+                  >
+                    {concept.name}
+                  </Label>
                 </SectionCard.Header>
-                <CardBody>
+                <CardBody className={styles.CriterionSection__ConceptDetails}>
                   <FormGroup key={index}>
                     <Details
                       description={concept.description}

@@ -11,18 +11,13 @@ export function Details({ description, links }: DetailsProps) {
   return (
     <>
       {description && (
-        <section className={styles.Details__Description}>
-          {description}
-        </section>
+        <section className={styles.Details__Description}>{description}</section>
       )}
       {links.length > 0 && (
         <ul className={styles.Details__List}>
           {links.map(({ url, title }, index) => (
             <li className={styles.Details__ListItem} key={index}>
-              <Link
-                className={styles.Details__ListItemIcon}
-                size="1em"
-              />
+              <Link className={styles.Details__ListItemIcon} size="1em" />
               <a
                 href={url}
                 title={title}

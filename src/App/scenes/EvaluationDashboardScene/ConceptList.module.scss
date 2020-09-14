@@ -1,7 +1,5 @@
 @import "../../../variables";
 
-$concept-color: $secondary;
-
 .ConceptList {
   &__Concept {
     display: flex;
@@ -9,10 +7,11 @@ $concept-color: $secondary;
     flex-direction: row;
     align-items: center;
     border-radius: $border-radius;
-    border-color: $concept-color;
+    border-color: $gray-200;
     border-width: $border-width;
     border-style: solid;
     background-color: $card-bg;
+    border-left: 5px solid $concept;
   }
 
   &__ConceptName,
@@ -25,10 +24,10 @@ $concept-color: $secondary;
   }
 
   &__ConceptScore {
-    background: $concept-color;
+    background: $gray-200;
     flex-basis: 4rem;
     text-align: center;
-    color: $body-color;
+    color: $black;
     font-variant-numeric: tabular-nums;
   }
 }

@@ -16,6 +16,7 @@ export type CopyToClipboardInputProps = {
 
 export function CopyToClipboardInput({
   text,
+  disabled,
   ...rest
 }: CopyToClipboardInputProps) {
   const [clicks, setClicks] = useState(0);
@@ -41,10 +42,11 @@ export function CopyToClipboardInput({
       value={text}
       onChange={() => {}}
       onFocus={handleFocus}
+      disabled={disabled}
       {...rest}
     >
       <CopyToClipboard text={text} onCopy={handleCopy}>
-        <Button color="transparent">
+        <Button disabled={disabled} color="transparent">
           {clicks > 0 ? <Check size="1rem" /> : <Clipboard size="1rem" />}
         </Button>
       </CopyToClipboard>

@@ -54,15 +54,9 @@ export function FacilitatorRow({ evaluation }: FacilitatorRowProps) {
       <Col sm="12" md="6">
         <SectionCard>
           <SectionCard.Header>
-            Privacy <PrivacyHelp />
+            Share Results With Others <PrivacyHelp />
           </SectionCard.Header>
           <CardBody>
-            <CardText>
-              If you make your evaluation Public, others will not be able to
-              adjust Concept Scores or Criteria Weights for your evaluation.
-              They will, however, be able to clone this evaluation into their
-              account and adjust scores for that event.
-            </CardText>
             <EvaluationSharingForm evaluation={evaluation} />
           </CardBody>
         </SectionCard>

@@ -1,10 +1,11 @@
 // $primary: #394e77;
 // $secondary: #498e99;
 // $danger: #cc614e;
-$primary: #70bbfd;
+$primary: #70bbfd; // #2196FD;
 $secondary: #e7e2e2;
 $success: #4ce1b6;
 $danger: #ff4861;
+$purple: #88f;
 
 $gray-150: #f2f4f7 !default;
 $gray-700: #495057 !default;
@@ -25,6 +26,11 @@ $yiq-contrasted-threshold: 200;
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+
+// $evaluation: $primary;
+$evaluation: $gray-600;
+$criterion: $purple;
+$concept: $success;
 
 $topbar-height: 3.5 * $spacer;
 $sidebar-width: 250px;

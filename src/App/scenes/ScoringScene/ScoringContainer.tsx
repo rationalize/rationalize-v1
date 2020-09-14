@@ -165,7 +165,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
           <Col md="4">
             <EvaluationCard evaluation={evaluation} />
             <SectionCard>
-              <SectionCard.Header>Criteria Progress</SectionCard.Header>
+              <SectionCard.Header>Evaluation Progress</SectionCard.Header>
               <CardBody>
                 {criteria.map((c, i) => (
                   <div
