@@ -16,7 +16,7 @@ import { LoadingOverlay } from "../LoadingOverlay";
 import { CenteredCard } from "../layouts/CenteredCard";
 import { useAuthentication } from "../AuthenticationContext";
 import { OrLine } from "../OrLine";
-import { IconButton } from "../icons";
+import { ButtonIcon } from "../icons";
 
 type FormValues = { email: string; password: string };
 
@@ -108,26 +108,16 @@ export function LogInScene() {
           )}
         </Formik>
         <FormGroup>
-          <IconButton
-            color="primary"
-            onClick={handleFacebookLogin}
-            icon="Facebook"
-            block
-            outline
-          >
+          <Button color="primary" onClick={handleFacebookLogin} block outline>
+            <ButtonIcon icon="Facebook" />
             Log in with Facebook
-          </IconButton>
+          </Button>
         </FormGroup>
         <FormGroup>
-          <IconButton
-            color="primary"
-            onClick={handleGoogleLogin}
-            icon="Google"
-            block
-            outline
-          >
+          <Button color="primary" onClick={handleGoogleLogin} block outline>
+            <ButtonIcon icon="Google" />
             Log in with Google
-          </IconButton>
+          </Button>
         </FormGroup>
         <OrLine />
         <CardText>

@@ -1,12 +1,17 @@
 import React from "react";
-import { AlertConsumer } from "./AlertContext";
 import { Alert, Container } from "reactstrap";
 
-export function AlertContainer() {
+import { AlertConsumer } from "../../AlertContext";
+
+type AlertContainerProps = {
+  className?: string;
+};
+
+export function AlertContainer({ className }: AlertContainerProps) {
   return (
     <AlertConsumer>
       {({ alerts, dismissAlert }) => (
-        <Container>
+        <Container className={className}>
           {alerts.map((alert, index) => {
             function handleToggle() {
               dismissAlert(alert);

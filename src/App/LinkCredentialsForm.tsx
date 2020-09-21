@@ -1,24 +1,63 @@
-import React from "react";
-import { FormGroup, Alert } from "reactstrap";
+import React, { useCallback, useEffect } from "react";
+import { FormGroup, Alert, Button } from "reactstrap";
 
 import { OrLine } from "./OrLine";
-import { IconButton } from "./icons";
 import { Credentials } from "realm-web";
 import { useAuthentication } from "./AuthenticationContext";
 import { RegisterUserForm } from "./RegisterUserForm";
+import { ButtonIcon } from "./icons";
 
 export type LinkCredentialsFormProps = {
   onLinked: () => void;
   onError?: (err: Error) => void;
   google?: boolean;
   facebook?: boolean;
+  initialAction?: "google" | "facebook";
 };
 
 export function LinkCredentialsForm({
   onLinked,
   onError = console.error,
+  initialAction,
 }: LinkCredentialsFormProps) {
   const { user } = useAuthentication();
+
+  const linkCredentials = useCallback(
+    async (credentials: Credentials) => {
+      if (user) {
+        await user.linkCredentials(credentials);
+      } else {
+        throw new Error("Can't link without a user");
+      }
+    },
+    [user]
+  );
+
+  async function handleEmailPassword(credentials: Credentials) {
+    await linkCredentials(credentials);
+    onLinked();
+  }
+
+  const handleFacebook = useCallback(() => {
+    const redirectUrl = window.location.origin + "/facebook-callback";
+    const credentials = Credentials.facebook(redirectUrl);
+    linkCredentials(credentials).then(onLinked).catch(onError);
+  }, [linkCredentials, onError, onLinked]);
+
+  const handleGoogle = useCallback(() => {
+    const redirectUrl = window.location.origin + "/google-callback";
+    const credentials = Credentials.google(redirectUrl);
+    linkCredentials(credentials).then(onLinked).catch(onError);
+  }, [linkCredentials, onError, onLinked]);
+
+  // Initiate the initial action when component mounts
+  useEffect(() => {
+    if (initialAction === "google") {
+      handleGoogle();
+    } else if (initialAction === "facebook") {
+      handleFacebook();
+    }
+  }, [handleFacebook, handleGoogle, initialAction]);
 
   if (user === null) {
     return (
@@ -26,56 +65,21 @@ export function LinkCredentialsForm({
     );
   }
 
-  async function linkCredentials(credentials: Credentials) {
-    if (user) {
-      await user.linkCredentials(credentials);
-    } else {
-      throw new Error("Can't link without a user");
-    }
-  }
-
-  async function handleEmailPassword(credentials: Credentials) {
-    await linkCredentials(credentials);
-    onLinked();
-  }
-
-  function handleFacebook() {
-    const redirectUrl = window.location.origin + "/facebook-callback";
-    const credentials = Credentials.facebook(redirectUrl);
-    linkCredentials(credentials).then(onLinked).catch(onError);
-  }
-
-  function handleGoogle() {
-    const redirectUrl = window.location.origin + "/google-callback";
-    const credentials = Credentials.google(redirectUrl);
-    linkCredentials(credentials).then(onLinked).catch(onError);
-  }
-
   return (
     <>
       <RegisterUserForm onRegistered={handleEmailPassword} />
       <OrLine />
       <FormGroup>
-        <IconButton
-          color="primary"
-          onClick={handleFacebook}
-          icon="Facebook"
-          block
-          outline
-        >
+        <Button color="primary" onClick={handleFacebook} block outline>
+          <ButtonIcon icon="Facebook" />
           Register with Facebook
-        </IconButton>
+        </Button>
       </FormGroup>
       <FormGroup>
-        <IconButton
-          color="primary"
-          onClick={handleGoogle}
-          icon="Google"
-          block
-          outline
-        >
+        <Button color="primary" onClick={handleGoogle} block outline>
+          <ButtonIcon icon="Google" />
           Register with Google
-        </IconButton>
+        </Button>
       </FormGroup>
     </>
   );

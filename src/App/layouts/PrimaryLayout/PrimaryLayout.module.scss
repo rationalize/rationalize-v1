@@ -1,7 +1,9 @@
 @import "../../../variables";
 
-.TopAndSideBar {
+.PrimaryLayout {
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 
     &__TopBar {
         position: fixed;
@@ -22,7 +24,6 @@
 
     &__Content {
         position: relative;
-        min-height: 100%;
         flex-grow: 1;
         margin-left: $sidebar-width;
 
@@ -34,5 +35,9 @@
         &--full-width {
             margin-left: 0;
         }
+    }
+
+    &__AlertContainer {
+        flex-shrink: 1;
     }
 }
