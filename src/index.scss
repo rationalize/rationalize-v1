@@ -20,8 +20,8 @@ button > svg {
   top: -2px;
 }
 
-// Drop shadow from cards
-.card {
+// Drop shadow from alerts and cards
+.alert, .card {
   box-shadow: $shadow-color 0 $shadow-offset $shadow-radius;
 }
 

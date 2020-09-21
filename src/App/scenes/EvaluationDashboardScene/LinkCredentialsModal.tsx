@@ -8,10 +8,12 @@ type LinkCredentialsModalState = "linking" | "onboarding";
 
 export type LinkCredentialsModalProps = {
   onLinked: () => void;
+  initialAction?: "google" | "facebook";
 } & ModalProps;
 
 export function LinkCredentialsModal({
   onLinked,
+  initialAction,
   ...props
 }: LinkCredentialsModalProps) {
   const [state, setState] = useState<LinkCredentialsModalState>("linking");
@@ -21,6 +23,7 @@ export function LinkCredentialsModal({
   }
 
   function handleProfileSaved() {
+    console.log("handleProfileSaved called");
     onLinked();
   }
 
@@ -28,7 +31,10 @@ export function LinkCredentialsModal({
     <Modal {...props}>
       <ModalBody>
         {state === "linking" ? (
-          <LinkCredentialsForm onLinked={handleLinked} />
+          <LinkCredentialsForm
+            onLinked={handleLinked}
+            initialAction={initialAction}
+          />
         ) : (
           <UserProfileForm onSaved={handleProfileSaved} />
         )}

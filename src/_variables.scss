@@ -5,6 +5,7 @@ $primary: #70bbfd; // #2196FD;
 $secondary: #e7e2e2;
 $success: #4ce1b6;
 $danger: #ff4861;
+$warning: #e1d24c;
 $purple: #88f;
 
 $gray-150: #f2f4f7 !default;
@@ -14,6 +15,9 @@ $gray-800: #343a40 !default;
 $body-bg: $gray-150;
 $body-color: $gray-700;
 $card-border-width: 0;
+// Making the border of an Alert stand out a bit more
+$alert-border-width: 5px;
+$alert-border-level: -6;
 // The background of the card headers
 $card-cap-bg: transparent;
 
