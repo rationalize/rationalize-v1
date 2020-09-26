@@ -18,6 +18,10 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run build
+    - run: npx realm-cli login --api-key $REALM_PUBLIC_KEY --private-api-key $REALM_PRIVATE_KEY
+      env:
+        REALM_PUBLIC_KEY: secrets.REALM_PUBLIC_KEY
+        REALM_PRIVATE_KEY: secrets.REALM_PRIVATE_KEY
     - run: npm test
     - if: github.ref == 'refs/heads/master'
       run: npm run realm:deploy:production
