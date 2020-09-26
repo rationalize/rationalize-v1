@@ -23,16 +23,6 @@ import { JoinEvaluationScene } from "./scenes/JoinEvaluationScene";
 import { ConfigurationSelector } from "../mongodb/ConfigurationSelector";
 import { AlertProvider } from "./AlertContext";
 
-const history = createBrowserHistory();
-
-history.listen((location) => {
-  gtag("config", GA_TRACKING_ID, {
-    page_title: document.title,
-    page_location: window.location.href,
-    page_path: location.pathname,
-  });
-});
-
 function OAuthCallback() {
   useEffect(() => {
     handleAuthRedirect();
@@ -40,7 +30,19 @@ function OAuthCallback() {
   return null;
 }
 
+const history = createBrowserHistory();
+
 export function App() {
+  useEffect(() => {
+    history.listen((location) => {
+      gtag("config", GA_TRACKING_ID, {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: location.pathname,
+      });
+    });
+  }, []);
+
   return (
     <Router history={history}>
       <AlertProvider>
