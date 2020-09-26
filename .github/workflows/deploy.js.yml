@@ -1,0 +1,25 @@
+name: Deploy to MongoDB Realm
+
+on:
+  push:
+    branches: [ master, staging ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run build
+    - run: npm test
+    - if: ${{ github.ref == "master" }}
+      run: npm run deploy:production
+    - if: ${{ github.ref == "staging" }}
+      run: npm run deploy:staging
