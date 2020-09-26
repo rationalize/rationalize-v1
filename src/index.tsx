@@ -4,8 +4,14 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import "./input-range.scss";
 
-import { App } from "./App/App";
+import { App } from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+if (typeof gtag !== "function") {
+  global.gtag = () => {
+    throw new Error("gtag was never defined");
+  };
+}
 
 ReactDOM.render(
   <React.StrictMode>
