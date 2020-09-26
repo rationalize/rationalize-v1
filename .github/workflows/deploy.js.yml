@@ -19,7 +19,7 @@ jobs:
     - run: npm run lint
     - run: npm run build
     - run: npm test
-    - if: ${{ github.ref == 'master' }}
+    - if: github.ref == 'refs/heads/master'
       run: npm run deploy:production
-    - if: ${{ github.ref == 'staging' }}
+    - if: github.ref == 'refs/heads/staging'
       run: npm run deploy:staging
