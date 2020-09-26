@@ -15,17 +15,25 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12'
+
     - run: npm ci
     - run: npm run lint
     - run: npm run build
     - run: npm test
+      
     # Log into the MongoDB Realm CLI
     - run: npx realm-cli login --api-key $REALM_PUBLIC_KEY --private-api-key $REALM_PRIVATE_KEY
       env:
         REALM_PUBLIC_KEY: ${{ secrets.REALM_PUBLIC_KEY }}
         REALM_PRIVATE_KEY: ${{ secrets.REALM_PRIVATE_KEY }}
     # Deploy to the right environment
-    - if: github.ref == 'refs/heads/master'
-      run: npm run realm:deploy:production
     - if: github.ref == 'refs/heads/staging'
-      run: npm run realm:deploy:staging
+      run: npm run realm:import
+      env:
+        REALM_APP_ID: rationalize-iwbgr
+        REALM_APP_PATH: realm-app
+    - if: github.ref == 'refs/heads/master'
+      run: npm run realm:import
+      env:
+        REALM_APP_ID: rationalize-prod-flova
+        REALM_APP_PATH: production-realm-app
