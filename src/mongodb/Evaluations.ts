@@ -5,11 +5,18 @@ import { db } from "./RealmApp";
 export type Details = {
   description?: string;
   links: Link[];
+  files: File[];
 };
 
 export type Link = {
   url: string;
   title?: string;
+};
+
+export type File = {
+  filename: string;
+  mimetype: string;
+  url: string;
 };
 
 export type Criterion = {

@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-feather";
 
 import { Details as DetailsValues } from "../mongodb";
-
 import styles from "./Details.module.scss";
 
 export type DetailsProps = DetailsValues;
 
-export function Details({ description, links }: DetailsProps) {
+export function Details({ description, links, files }: DetailsProps) {
+  console.log("Details", files);
   return (
     <>
       {description && (
@@ -25,6 +25,18 @@ export function Details({ description, links }: DetailsProps) {
                 rel="noopener noreferrer"
               >
                 {title || url}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {files.length > 0 && (
+        <ul className={styles.Details__List}>
+          {files.map(({ url, filename }, index) => (
+            <li className={styles.Details__ListItem} key={index}>
+              <Link className={styles.Details__ListItemIcon} size="1em" />
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {filename}
               </a>
             </li>
           ))}

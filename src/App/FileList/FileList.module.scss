@@ -1,0 +1,28 @@
+@import '../../variables';
+
+.FileList {
+  &__FileItem {
+    padding-bottom: $spacer;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 0;
+  }
+
+  &__FileLink {
+    flex-grow: 1;
+
+    > a:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__DeleteButton {
+  }
+
+  &__FileInput {
+    visibility: hidden;
+    position: absolute;
+    height: 1px;
+    width: 1px;
+  }
+}

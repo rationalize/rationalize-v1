@@ -12,6 +12,7 @@ export interface Functions {
     evaluationId: string,
     token: string
   ): Promise<{ success: boolean }>;
+  uploadFileSignedURL(): Promise<string>;
 }
 
 export type User = RealmUser<

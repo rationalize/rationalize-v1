@@ -1,0 +1,4 @@
+{
+  "name": "S3 Pre-Signed URL",
+  "actions": ["s3:*"]
+}

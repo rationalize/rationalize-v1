@@ -1,14 +1,13 @@
-import React from "react";
-import { Button, Label, Input, FormGroup, Form, CardBody } from "reactstrap";
 import { Formik } from "formik";
+import React from "react";
+import { Button, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
 
 import { Concept, Criterion } from "../../../mongodb";
-import { SectionCard } from "../../SectionCard";
 import { Details } from "../../Details";
-
-import styles from "./CriterionSection.module.scss";
-import { CriterionIcon } from "../../icons/CriterionIcon";
 import { ConceptIcon } from "../../icons/ConceptIcon";
+import { CriterionIcon } from "../../icons/CriterionIcon";
+import { SectionCard } from "../../SectionCard";
+import styles from "./CriterionSection.module.scss";
 
 type CriterionCardProps = {
   index: number;
@@ -58,6 +57,7 @@ export function CriterionSection({
             <Details
               description={criterion.description}
               links={criterion.links}
+              files={criterion.files}
             />
           </CardBody>
         ) : null}
@@ -70,7 +70,10 @@ export function CriterionSection({
         {({ handleSubmit, values, handleChange, handleBlur }) => (
           <Form onSubmit={handleSubmit}>
             {concepts.map((concept, index) => (
-              <SectionCard className={styles.CriterionSection__Concept}>
+              <SectionCard
+                key={index}
+                className={styles.CriterionSection__Concept}
+              >
                 <SectionCard.Header
                   className={styles.CriterionSection__ConceptHeader}
                 >
@@ -87,6 +90,7 @@ export function CriterionSection({
                     <Details
                       description={concept.description}
                       links={concept.links}
+                      files={concept.files}
                     />
                     <Input
                       type="range"

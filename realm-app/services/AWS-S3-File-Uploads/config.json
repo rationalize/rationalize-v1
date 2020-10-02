@@ -1,0 +1,11 @@
+{
+  "name": "AWS-S3-File-Uploads",
+  "type": "aws",
+  "config": {
+    "accessKeyId": "AKIARXEI6UCSV3KHOZPN"
+  },
+  "secret_config": {
+    "secretAccessKey": "Todds-Dev-AWS-account"
+  },
+  "version": 1
+}

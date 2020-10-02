@@ -1,8 +1,7 @@
 import React from "react";
-import { Flipper, Flipped } from "react-flip-toolkit";
+import { Flipped, Flipper } from "react-flip-toolkit";
 
-import { Evaluation, Weights, weightedScoredConcepts } from "../../../mongodb";
-
+import { Evaluation, weightedScoredConcepts, Weights } from "../../../mongodb";
 import styles from "./ConceptList.module.scss";
 
 export type ConceptListProps = { evaluation: Evaluation; weights: Weights };

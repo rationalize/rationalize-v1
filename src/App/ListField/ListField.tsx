@@ -1,6 +1,6 @@
+import { FieldArray } from "formik";
 import React from "react";
 import { Button } from "reactstrap";
-import { FieldArray } from "formik";
 
 export type ListFieldItemProps<ItemType extends object> = {
   itemPath: string;

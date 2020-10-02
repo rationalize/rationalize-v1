@@ -1,10 +1,11 @@
 import { ObjectId } from "bson";
 
-import { Link } from "../../../mongodb";
+import { File, Link } from "../../../mongodb";
 
 export type DetailValues = {
   description: string;
   links: Link[];
+  files: File[];
 };
 
 export type ConceptValues = {

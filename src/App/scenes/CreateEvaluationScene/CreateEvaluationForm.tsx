@@ -1,46 +1,45 @@
-import React, { useState } from "react";
+import { ObjectId } from "bson";
 import { Formik, FormikHelpers } from "formik";
+import React, { useState } from "react";
 import {
   Button,
+  CardBody,
+  Col,
+  Container,
   Form,
   FormGroup,
-  Label,
   Input,
+  Label,
   Row,
-  Col,
-  CardBody,
-  Container,
 } from "reactstrap";
-import { ObjectId } from "bson";
 
-import { ListField, ListFieldInputItem } from "../../ListField";
 import {
   app,
-  evaluationsCollection,
-  Scoring,
-  generateSharingToken,
   Evaluation,
+  evaluationsCollection,
+  File,
+  generateSharingToken,
   Link,
+  Scoring,
 } from "../../../mongodb";
-import { CriteriaHelp } from "./CriteriaHelp";
-import { ConceptHelp } from "./ConceptHelp";
-import { ScoringModeHelp } from "./ScoringModeHelp";
-import { LoadingOverlay } from "../../LoadingOverlay";
 import { FieldFeedback } from "../../FieldFeedback";
-import { NameHelp } from "./NameHelp";
-
+import { ListField, ListFieldInputItem } from "../../ListField";
+import { LoadingOverlay } from "../../LoadingOverlay";
+import { ConceptHelp } from "./ConceptHelp";
 import styles from "./CreateEvaluationForm.module.scss";
-
+import { CriteriaHelp } from "./CriteriaHelp";
 import { DetailSidebar, DetailSidebarProps } from "./DetailSidebar";
-import { FocusIndicator } from "./FocusIndicator";
-import {
-  EvaluationValues,
-  DetailValues,
-  CriterionValues,
-  ConceptValues,
-} from "./Values";
 import { Focus } from "./Focus";
+import { FocusIndicator } from "./FocusIndicator";
 import { FocusResetter } from "./FocusResetter";
+import { NameHelp } from "./NameHelp";
+import { ScoringModeHelp } from "./ScoringModeHelp";
+import {
+  ConceptValues,
+  CriterionValues,
+  DetailValues,
+  EvaluationValues,
+} from "./Values";
 
 export type CreateEvaluationHandler = (
   value: EvaluationValues,
@@ -131,8 +130,16 @@ function cleanLinks(links: Link[]): Link[] {
   return links.filter(({ url }) => url).map(cleanLink);
 }
 
-function cleanDetails<V extends DetailValues>({ links, ...rest }: V): V {
-  return { ...rest, links: cleanLinks(links) } as V;
+function cleanFile({ filename, mimetype, url }: File): File {
+  return { filename, mimetype, url };
+}
+
+function cleanFiles(files: File[]): File[] {
+  return files.filter(({ url }) => url).map(cleanFile);
+}
+
+function cleanDetails<V extends DetailValues>({ links, files, ...rest }: V): V {
+  return { ...rest, links: cleanLinks(links), files: cleanFiles(files) } as V;
 }
 
 // TODO: Split this function in two if their schema starts diverging.
@@ -142,6 +149,7 @@ function createConceptOrCriterion(): ConceptValues | CriterionValues {
     name: "",
     description: "",
     links: [{ url: "" }],
+    files: [],
   };
 }
 
@@ -154,6 +162,7 @@ export function CreateEvaluationForm({
       const criteria = values.criteria.filter((c) => c.name).map(cleanDetails);
       const concepts = values.concepts.filter((a) => a.name).map(cleanDetails);
       const links = cleanLinks(values.links);
+      const files = cleanFiles(values.files);
       // Generate sharing token
       const scoring: Scoring = {
         ...values.scoring,
@@ -166,6 +175,7 @@ export function CreateEvaluationForm({
         name: values.name,
         description: values.description,
         links,
+        files,
         concepts,
         criteria,
         sharing: { mode: "disabled" },
@@ -187,6 +197,7 @@ export function CreateEvaluationForm({
         name: "",
         description: "",
         links: [{ url: "" }],
+        files: [],
         concepts: [createConceptOrCriterion()],
         criteria: [createConceptOrCriterion()],
         scoring: { facilitator: true, survey: false },
