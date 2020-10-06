@@ -1,4 +1,4 @@
-name: Deploy to MongoDB Realm
+name: Lint, build and test
 
 on:
   pull_request
