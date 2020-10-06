@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { Button } from "reactstrap";
+
+import { ButtonIcon } from "icons";
+
+import { LinkCredentialsModal } from "./LinkCredentialsModal";
 
 import styles from "./AnonymousAlertMessage.module.scss";
-import { LinkCredentialsModal } from "./LinkCredentialsModal";
-import { Button } from "reactstrap";
-import { ButtonIcon } from "../../icons/ButtonIcon";
 
 type AnonymousAlertMessageProps = {
   onDismiss: () => void;

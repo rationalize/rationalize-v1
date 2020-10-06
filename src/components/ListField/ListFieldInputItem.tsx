@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import { Button, InputProps } from "reactstrap";
 import { X } from "react-feather";
 
-import { InputWithControls } from "../InputWithControls";
+import { InputWithControls } from "components/InputWithControls";
 import { ListFieldItemProps } from "components/ListField";
 
 import styles from "./ListFieldInputItem.module.scss";

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Document } from "@contentful/rich-text-types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useParams } from "react-router-dom";
+import { Container, Card } from "reactstrap";
+
+import { LoadingOverlay } from "components/LoadingOverlay";
+import { NotFound } from "components/NotFound";
 
 import { client } from "./client";
-
-import { LoadingOverlay } from "../LoadingOverlay";
-import { NotFound } from "../NotFound";
-import { Container, Card } from "reactstrap";
 
 export type ContentfulPageProps = {
   slug?: string;
