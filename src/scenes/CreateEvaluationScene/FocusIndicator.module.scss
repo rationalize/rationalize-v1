@@ -1,0 +1,28 @@
+@import "../../variables";
+
+$focus-indicator-color: $gray-600 !default;
+
+.FocusIndicator {
+  display: flex;
+  flex-direction: column;
+
+  &__Before {
+    border-right: 1px solid $focus-indicator-color;
+    flex-shrink: 1;
+  }
+
+  &__After {
+    border-right: 1px solid $focus-indicator-color;
+    flex-grow: 1;
+  }
+
+  &__Icon {
+    color: $focus-indicator-color;
+    height: 40px;
+    width: 40px;
+    margin-top: -11px;
+    margin-bottom: -11px;
+    margin-right: -16px;
+    stroke-width: .05rem;
+  }
+}

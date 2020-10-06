@@ -3,25 +3,23 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { handleAuthRedirect } from "realm-web";
 import { createBrowserHistory } from "history";
 
-import { app } from "../mongodb";
+import { AlertProvider } from "components/AlertContext";
 import {
   AuthenticationProvider,
   AuthenticationConsumer,
-} from "./AuthenticationContext";
-
-import { LogInScene } from "./scenes/LogInScene";
-import { RegisterScene } from "./scenes/RegisterScene";
-import { OnboardingScene } from "./scenes/OnboardingScene";
-import { ResetPasswordScene } from "./scenes/ResetPasswordScene";
-import { CreateEvaluationScene } from "./scenes/CreateEvaluationScene";
-import { UserSettingsScene } from "./scenes/UserSettingsScene";
-import { EvaluationListScene } from "./scenes/EvaluationListScene";
-import { EvaluationDashboardScene } from "./scenes/EvaluationDashboardScene";
-import { ScoringScene } from "./scenes/ScoringScene";
-import { ContentfulScene } from "./scenes/ContentfulScene";
-import { JoinEvaluationScene } from "./scenes/JoinEvaluationScene";
-import { ConfigurationSelector } from "../mongodb/ConfigurationSelector";
-import { AlertProvider } from "./AlertContext";
+} from "components/AuthenticationContext";
+import { app, ConfigurationSelector } from "mongodb-realm";
+import { LogInScene } from "scenes/LogInScene";
+import { RegisterScene } from "scenes/RegisterScene";
+import { OnboardingScene } from "scenes/OnboardingScene";
+import { ResetPasswordScene } from "scenes/ResetPasswordScene";
+import { CreateEvaluationScene } from "scenes/CreateEvaluationScene";
+import { UserSettingsScene } from "scenes/UserSettingsScene";
+import { EvaluationListScene } from "scenes/EvaluationListScene";
+import { EvaluationDashboardScene } from "scenes/EvaluationDashboardScene";
+import { ScoringScene } from "scenes/ScoringScene";
+import { ContentfulScene } from "scenes/ContentfulScene";
+import { JoinEvaluationScene } from "scenes/JoinEvaluationScene";
 
 function OAuthCallback() {
   useEffect(() => {
