@@ -97,8 +97,8 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
         // Assume sharing is disabled until the user actively change this themselves
         sharing: { mode: "disabled" },
       };
-      // Ask the server to pick a new ID for this evalutation
-      delete newEvalutaion._id;
+      // Pick a new ID for this evalutation
+      newEvalutaion._id = new ObjectId();
       // Insert the new evaluation
       const { insertedId } = await evaluationsCollection.insertOne(
         newEvalutaion
