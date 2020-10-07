@@ -1,0 +1,33 @@
+@import "../../variables";
+
+.ConceptList {
+  &__Concept {
+    display: flex;
+    margin-bottom: $spacer / 2;
+    flex-direction: row;
+    align-items: center;
+    border-radius: $border-radius;
+    border-color: $gray-200;
+    border-width: $border-width;
+    border-style: solid;
+    background-color: $card-bg;
+    border-left: 5px solid $concept;
+  }
+
+  &__ConceptName,
+  &__ConceptScore {
+    padding: $input-padding-y $input-padding-x;
+  }
+
+  &__ConceptName {
+    flex-grow: 1;
+  }
+
+  &__ConceptScore {
+    background: $gray-200;
+    flex-basis: 4rem;
+    text-align: center;
+    color: $black;
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -1,0 +1,50 @@
+@import "../../variables";
+
+.CriterionSection {
+  &__Controls {
+    display: flex;
+    /*justify-content: flex-end;*/
+    justify-content: space-between;
+
+    & > button {
+      flex-grow: 1;
+    }
+
+    & > button:not(:last-child) {
+      margin-right: $spacer / 2;
+    }
+  }
+
+  &__CriterionHeader {
+    // background: $criterion;
+    border-top: 5px solid $criterion;
+  }
+
+  &__ConceptHeader {
+    // background: $concept;
+    border-top: 5px solid $concept;
+    // color: $white;
+  }
+
+  &__CriterionDetails {
+    padding-top: 0;
+  }
+
+  &__ConceptDetails {
+    padding-top: 0;
+  }
+
+  &__Criterion {
+  }
+
+  &__Concept {
+  }
+
+  &__ConceptLabel {
+    margin: 0;
+  }
+
+  &__Separator {
+    margin-bottom: 0;
+  }
+}

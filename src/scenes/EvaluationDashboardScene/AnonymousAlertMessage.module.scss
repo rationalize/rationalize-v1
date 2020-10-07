@@ -1,0 +1,21 @@
+@import "../../variables";
+
+.AnonymousAlertMessage {
+  display: flex;
+  flex-direction: column;
+
+  &__Text {
+    text-align: center;
+  }
+
+  &__Controls {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    margin-top: $spacer;
+
+    & > * {
+      margin: 0 $spacer / 2;
+    }
+  }
+}
