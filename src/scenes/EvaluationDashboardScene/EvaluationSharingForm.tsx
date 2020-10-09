@@ -4,7 +4,7 @@ import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { CopyToClipboardInput } from "components/CopyToClipboardInput";
-import { Evaluation, evaluationsCollection } from "mongodb-realm";
+import { Evaluation, useEvaluations } from "mongodb-realm";
 
 type Values = { public: boolean };
 
@@ -13,6 +13,8 @@ export type EvaluationSharingFormProps = { evaluation: Evaluation };
 export function EvaluationSharingForm({
   evaluation,
 }: EvaluationSharingFormProps) {
+  const evaluationsCollection = useEvaluations();
+
   async function handleSubmit(values: Values) {
     await evaluationsCollection.updateOne(
       { _id: { $eq: evaluation._id } },

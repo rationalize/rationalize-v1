@@ -70,7 +70,10 @@ export function CriterionSection({
         {({ handleSubmit, values, handleChange, handleBlur }) => (
           <Form onSubmit={handleSubmit}>
             {concepts.map((concept, index) => (
-              <SectionCard className={styles.CriterionSection__Concept}>
+              <SectionCard
+                className={styles.CriterionSection__Concept}
+                key={index}
+              >
                 <SectionCard.Header
                   className={styles.CriterionSection__ConceptHeader}
                 >

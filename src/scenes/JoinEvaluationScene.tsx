@@ -17,8 +17,10 @@ export function JoinEvaluationScene() {
   useEffect(() => {
     async function authenticateAndJoin(id: string, token: string) {
       const authenticatedUser = user || (await logIn(Credentials.anonymous()));
-      const app = authenticatedUser.app;
-      const { success } = await app.functions.joinEvaluation(id, token);
+      const { success } = await authenticatedUser.functions.joinEvaluation(
+        id,
+        token
+      );
       if (success) {
         history.replace(`/evaluations/${id}/score`);
       } else {

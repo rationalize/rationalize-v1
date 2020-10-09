@@ -1,4 +1,6 @@
 import { ObjectId } from "bson";
+import { useAuthentication } from "components/AuthenticationContext";
+import { useMemo } from "react";
 import { App, User as RealmUser } from "realm-web";
 
 import { UserProfile } from "./UserProfiles";
@@ -79,5 +81,38 @@ export function selectConfiguration(name: string) {
 export const config = getAppConfiguration();
 export const app = new App<Functions, UserProfile | {}>(config.appId);
 
-export const mongodb = app.services.mongodb("mongodb-atlas");
-export const db = mongodb.db(config.databaseName);
+export function useMongoClient(serviceName = "mongodb-atlas") {
+  const { user } = useAuthentication();
+  const client = useMemo(() => (user ? user.mongoClient(serviceName) : null), [
+    serviceName,
+    user,
+  ]);
+  if (client) {
+    return client;
+  } else {
+    throw new Error("Expected an authenticated user!");
+  }
+}
+
+export function useMongoDb(dbName = config.databaseName) {
+  const client = useMongoClient();
+  return useMemo(() => client.db(dbName), [client, dbName]);
+}
+
+export function useMongoCollection<T extends Realm.Services.MongoDB.Document>(
+  collectionName: string,
+  dbName = config.databaseName
+) {
+  const db = useMongoDb(dbName);
+  return useMemo(() => db.collection<T>(collectionName), [db, collectionName]);
+}
+
+export function useFunctions() {
+  const { user } = useAuthentication();
+  const client = useMemo(() => (user ? user.functions : null), [user]);
+  if (client) {
+    return client;
+  } else {
+    throw new Error("Expected an authenticated user!");
+  }
+}

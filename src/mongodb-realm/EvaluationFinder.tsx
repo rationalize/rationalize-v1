@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { evaluationsCollection, Evaluation } from "./Evaluations";
+import { useEvaluations, Evaluation } from "./Evaluations";
 import { ObjectId } from "bson";
 
 export type EvaluationFinderState = {
@@ -16,6 +16,7 @@ export type EvaluationFinderProps = {
 export function EvaluationFinder({ id, children }: EvaluationFinderProps) {
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [isLoading, setLoading] = useState(true);
+  const evaluationsCollection = useEvaluations();
 
   useEffect(() => {
     if (id) {
@@ -32,7 +33,7 @@ export function EvaluationFinder({ id, children }: EvaluationFinderProps) {
       setLoading(false);
       setEvaluation(null);
     }
-  }, [id]);
+  }, [evaluationsCollection, id]);
 
   return children({ evaluation, isLoading });
 }

@@ -4,7 +4,7 @@ import { ThumbsUp, AlertTriangle, Check } from "react-feather";
 import { Button, Row, Col, Container, CardBody } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
-import { Evaluation, app, flattenScores, unflattenScores } from "mongodb-realm";
+import { Evaluation, flattenScores, unflattenScores } from "mongodb-realm";
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { useAuthentication } from "components/AuthenticationContext";
 import { EvaluationSurveyUrl } from "components/EvaluationSurveyUrl";
@@ -51,6 +51,9 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   }
 
   async function handleScores(scoreValues: number[]) {
+    if (!user) {
+      throw new Error("Expected an authenticated user");
+    }
     const newScores = [...scores];
     newScores[criterionIndex] = scoreValues;
     setScores(newScores);
@@ -60,7 +63,7 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
       try {
         setIsLoading(true);
         const flatScores = flattenScores(newScores, criteria, concepts);
-        const { success } = await app.functions.updateEvaluationScore(
+        const { success } = await user.functions.updateEvaluationScore(
           evaluation._id,
           flatScores
         );

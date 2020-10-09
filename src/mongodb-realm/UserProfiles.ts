@@ -1,5 +1,9 @@
 import { ObjectId } from "bson";
-import { db } from "./RealmApp";
+import { useMongoCollection } from "./RealmApp";
+
+export function useUserProfiles() {
+  return useMongoCollection<UserProfile>("UserProfiles");
+}
 
 type ProfessionalProfile = {
   use: "professional";
@@ -14,7 +18,3 @@ export type UserProfile = {
   firstName: string;
   lastName: string;
 } & (ProfessionalProfile | { use: "individual" });
-
-export const userProfilesCollection = db.collection<UserProfile>(
-  "UserProfiles"
-);

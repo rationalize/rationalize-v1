@@ -19,7 +19,7 @@ import { SectionCard } from "components/SectionCard";
 import {
   Weights,
   Evaluation,
-  evaluationsCollection,
+  useEvaluations,
   isOnlyAnonymous,
 } from "mongodb-realm";
 
@@ -56,6 +56,7 @@ type UserProfileModalState =
 export function WeightsRow({ evaluation }: WeightsRowProps) {
   const { user } = useAuthentication();
   const history = useHistory();
+  const evaluationsCollection = useEvaluations();
 
   // Read weights from the evaluation or generate as fallback
   const defaultWeights = Object.fromEntries(

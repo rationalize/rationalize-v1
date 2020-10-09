@@ -18,7 +18,7 @@ import { LoadingOverlay } from "components/LoadingOverlay";
 import { FieldFeedback } from "components/FieldFeedback";
 import {
   app,
-  evaluationsCollection,
+  useEvaluations,
   Scoring,
   generateSharingToken,
   Evaluation,
@@ -149,6 +149,8 @@ function createConceptOrCriterion(): ConceptValues | CriterionValues {
 export function CreateEvaluationForm({
   handleCreated,
 }: CreateEvaluationFormProps) {
+  const evaluationsCollection = useEvaluations();
+
   const handleSubmit: CreateEvaluationHandler = async (values, helpers) => {
     if (app.currentUser) {
       // Filter out links without a URL and undefine empty titles

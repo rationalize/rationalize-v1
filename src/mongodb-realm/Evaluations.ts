@@ -1,6 +1,5 @@
 import { ObjectId } from "bson";
-
-import { db } from "./RealmApp";
+import { useMongoCollection } from "./RealmApp";
 
 export type Details = {
   description?: string;
@@ -61,6 +60,10 @@ export type Evaluation = {
   copyOf?: ObjectId;
 } & Details;
 
+export function useEvaluations() {
+  return useMongoCollection<Evaluation>("Evaluations");
+}
+
 export function generateSharingToken(length = 8) {
   const buffer = new Uint8Array(length);
   window.crypto.getRandomValues(buffer);
@@ -69,8 +72,6 @@ export function generateSharingToken(length = 8) {
   );
   return chars.join("");
 }
-
-export const evaluationsCollection = db.collection<Evaluation>("Evaluations");
 
 /** Turn an array of array of scores (values per concept per criteria) into a flat array of score objects (criteria, concept, value) */
 export function flattenScores(
