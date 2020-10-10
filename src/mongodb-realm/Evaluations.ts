@@ -1,5 +1,4 @@
 import { ObjectId } from "bson";
-import { useMongoCollection } from "./RealmApp";
 
 export type Details = {
   description?: string;
@@ -59,10 +58,6 @@ export type Evaluation = {
   weights?: Weights;
   copyOf?: ObjectId;
 } & Details;
-
-export function useEvaluations() {
-  return useMongoCollection<Evaluation>("Evaluations");
-}
 
 export function generateSharingToken(length = 8) {
   const buffer = new Uint8Array(length);

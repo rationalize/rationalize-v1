@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { useEvaluations, Evaluation } from "./Evaluations";
+import { Evaluation } from "./Evaluations";
 import { ObjectId } from "bson";
+import { useAuthentication } from "components/AuthenticationContext";
 
 export type EvaluationFinderState = {
   evaluation: Evaluation | null;
@@ -16,12 +17,12 @@ export type EvaluationFinderProps = {
 export function EvaluationFinder({ id, children }: EvaluationFinderProps) {
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [isLoading, setLoading] = useState(true);
-  const evaluationsCollection = useEvaluations();
+  const { user } = useAuthentication();
 
   useEffect(() => {
-    if (id) {
+    if (id && user) {
       setLoading(true);
-      evaluationsCollection
+      user.evaluations
         .findOne({
           _id: { $eq: ObjectId.createFromHexString(id) },
         })
@@ -33,7 +34,7 @@ export function EvaluationFinder({ id, children }: EvaluationFinderProps) {
       setLoading(false);
       setEvaluation(null);
     }
-  }, [evaluationsCollection, id]);
+  }, [id, user]);
 
   return children({ evaluation, isLoading });
 }

@@ -16,14 +16,7 @@ import { ObjectId } from "bson";
 import { ListField, ListFieldInputItem } from "components/ListField";
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { FieldFeedback } from "components/FieldFeedback";
-import {
-  app,
-  useEvaluations,
-  Scoring,
-  generateSharingToken,
-  Evaluation,
-  Link,
-} from "mongodb-realm";
+import { Scoring, generateSharingToken, Evaluation, Link } from "mongodb-realm";
 
 import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
@@ -42,6 +35,7 @@ import {
 } from "./Values";
 import { Focus } from "./Focus";
 import { FocusResetter } from "./FocusResetter";
+import { useAuthentication } from "components/AuthenticationContext";
 
 export type CreateEvaluationHandler = (
   value: EvaluationValues,
@@ -149,10 +143,10 @@ function createConceptOrCriterion(): ConceptValues | CriterionValues {
 export function CreateEvaluationForm({
   handleCreated,
 }: CreateEvaluationFormProps) {
-  const evaluationsCollection = useEvaluations();
+  const { user } = useAuthentication();
 
   const handleSubmit: CreateEvaluationHandler = async (values, helpers) => {
-    if (app.currentUser) {
+    if (user) {
       // Filter out links without a URL and undefine empty titles
       const criteria = values.criteria.filter((c) => c.name).map(cleanDetails);
       const concepts = values.concepts.filter((a) => a.name).map(cleanDetails);
@@ -163,7 +157,7 @@ export function CreateEvaluationForm({
         token: generateSharingToken(),
       };
       const evaluation: Omit<Evaluation, "_id"> = {
-        facilitator: app.currentUser.id,
+        facilitator: user.id,
         participants: [],
         scores: {},
         name: values.name,
@@ -174,7 +168,7 @@ export function CreateEvaluationForm({
         sharing: { mode: "disabled" },
         scoring,
       };
-      const { insertedId } = await evaluationsCollection.insertOne(evaluation);
+      const { insertedId } = await user.evaluations.insertOne(evaluation);
       gtag("event", "create_evaluation");
       handleCreated({ ...evaluation, _id: insertedId });
     } else {

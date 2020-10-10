@@ -16,12 +16,7 @@ import { ObjectId } from "bson";
 import { useAuthentication } from "components/AuthenticationContext";
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { SectionCard } from "components/SectionCard";
-import {
-  Weights,
-  Evaluation,
-  useEvaluations,
-  isOnlyAnonymous,
-} from "mongodb-realm";
+import { Weights, Evaluation, isOnlyAnonymous } from "mongodb-realm";
 
 import { ConceptList } from "./ConceptList";
 import { LinkCredentialsModal } from "./LinkCredentialsModal";
@@ -56,7 +51,6 @@ type UserProfileModalState =
 export function WeightsRow({ evaluation }: WeightsRowProps) {
   const { user } = useAuthentication();
   const history = useHistory();
-  const evaluationsCollection = useEvaluations();
 
   // Read weights from the evaluation or generate as fallback
   const defaultWeights = Object.fromEntries(
@@ -101,9 +95,7 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
       // Pick a new ID for this evalutation
       newEvalutaion._id = new ObjectId();
       // Insert the new evaluation
-      const { insertedId } = await evaluationsCollection.insertOne(
-        newEvalutaion
-      );
+      const { insertedId } = await user.evaluations.insertOne(newEvalutaion);
       return insertedId;
     } else {
       throw new Error("Expected an authenticated user");
@@ -112,9 +104,9 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
 
   async function handleWeightsSubmit(values: WeightValues) {
     try {
-      if (isFacilitator) {
+      if (user && isFacilitator) {
         // Just update the weights
-        await evaluationsCollection.updateOne(
+        await user.evaluations.updateOne(
           { _id: evaluation._id },
           { $set: { weights: values.weights } }
         );
@@ -124,6 +116,8 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
         const newId = await forkEvaluation(values.weights);
         // Navigate to the new evaluation
         history.push(`/evaluations/${newId.toHexString()}`);
+      } else {
+        throw new Error("Expected an authenticated user");
       }
     } catch (err) {
       console.error(err);

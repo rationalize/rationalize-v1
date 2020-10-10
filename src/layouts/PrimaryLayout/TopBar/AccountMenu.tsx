@@ -17,6 +17,7 @@ import { User, app, isOnlyAnonymous } from "mongodb-realm";
 import styles from "./AccountMenu.module.scss";
 
 function getUserDisplayName(user: User | null) {
+  console.log(user && user.state);
   if (user && user.state === "active") {
     const { firstName, lastName } = user.customData;
     if (typeof firstName === "string" && typeof lastName === "string") {

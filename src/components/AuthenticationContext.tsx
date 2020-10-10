@@ -4,13 +4,14 @@ import React, {
   useContext,
   useReducer,
   useEffect,
+  useMemo,
 } from "react";
 import { Credentials, App } from "realm-web";
 
-import { User } from "mongodb-realm";
+import { User, EnhancedUser, enhanceUser } from "mongodb-realm";
 
 type AuthenticationContext = {
-  user: User | null;
+  user: EnhancedUser | null;
   logIn: (credentials: Credentials<any>) => Promise<User>;
   logOut: () => Promise<void>;
   refreshCustomData: () => Promise<void>;
@@ -85,9 +86,19 @@ export function AuthenticationProvider({
     }
   }
 
+  const enhancedUser = useMemo(() => {
+    return user ? enhanceUser(user) : null;
+  }, [user]);
+
   return (
     <Provider
-      value={{ user, logIn, logOut, switchUser, refreshCustomData }}
+      value={{
+        user: enhancedUser,
+        logIn,
+        logOut,
+        switchUser,
+        refreshCustomData,
+      }}
       children={children}
     />
   );

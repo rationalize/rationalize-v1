@@ -3,7 +3,7 @@ import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 import { Formik } from "formik";
 
 import { LoadingOverlay } from "components/LoadingOverlay";
-import { useUserProfiles, UserProfile } from "mongodb-realm";
+import { UserProfile } from "mongodb-realm";
 import { useAuthentication } from "components/AuthenticationContext";
 
 type FormValues = {
@@ -46,7 +46,6 @@ export type UserProfileFormProps = { onSaved?: () => void };
 
 export function UserProfileForm({ onSaved }: UserProfileFormProps) {
   const { user, refreshCustomData } = useAuthentication();
-  const userProfilesCollection = useUserProfiles();
 
   async function handleSubmit(values: FormValues) {
     if (user) {
@@ -65,10 +64,7 @@ export function UserProfileForm({ onSaved }: UserProfileFormProps) {
           values.work === "other" ? values.workOther : values.work;
       }
       // Submit the parsed values
-      const {
-        upsertedId,
-        modifiedCount,
-      } = await userProfilesCollection.updateOne(
+      const { upsertedId, modifiedCount } = await user.userProfiles.updateOne(
         { userId: user.id },
         { $set: parsedValues },
         { upsert: true }
