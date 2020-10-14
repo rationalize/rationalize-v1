@@ -27,6 +27,7 @@ import { LinkCredentialsModal } from "./LinkCredentialsModal";
 import { UserProfileModal } from "./UserProfileModal";
 import { WeightsHelp } from "./WeightsHelp";
 import { useUser } from "components/UserContext";
+import { EvaluationTable } from "./EvaluationTable";
 
 export type WeightValues = { weights: Weights };
 
@@ -160,94 +161,106 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
         onSubmit={handleWeightsSubmit}
       >
         {(props) => (
-          <SectionCard>
-            <Row>
-              <Col sm="12" md="6">
-                <SectionCard.Header>
-                  Adjust Criteria Weights <WeightsHelp />
-                </SectionCard.Header>
-                <LoadingOverlay isLoading={props.isSubmitting || isSaving}>
+          <>
+            <SectionCard>
+              <Row>
+                <Col sm="12" md="6">
+                  <SectionCard.Header>
+                    Adjust Criteria Weights <WeightsHelp />
+                  </SectionCard.Header>
+                  <LoadingOverlay isLoading={props.isSubmitting || isSaving}>
+                    <CardBody>
+                      <Form
+                        onSubmit={props.handleSubmit}
+                        onReset={props.handleReset}
+                      >
+                        {evaluation.criteria.map((criterion, index) => (
+                          <FormGroup key={index}>
+                            <Label for={`criterion-${index}`}>
+                              {criterion.name}
+                            </Label>
+                            <Input
+                              type="range"
+                              id={`criterion-${index}`}
+                              name={`weights.${criterion.name}`}
+                              value={props.values.weights[criterion.name]}
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              step={0.1}
+                              min={0}
+                              max={1}
+                            />
+                          </FormGroup>
+                        ))}
+                        {isFacilitator ? (
+                          <Row>
+                            <Col>
+                              <Button
+                                type="submit"
+                                color="primary"
+                                disabled={!props.dirty || props.isSubmitting}
+                                block
+                              >
+                                Save weights
+                              </Button>
+                            </Col>
+                            <Col>
+                              <Button
+                                type="reset"
+                                color="primary"
+                                disabled={!props.dirty || props.isSubmitting}
+                                block
+                                outline
+                              >
+                                Reset weights
+                              </Button>
+                            </Col>
+                          </Row>
+                        ) : isAnonymous ? (
+                          <Button
+                            type="submit"
+                            color="primary"
+                            onClick={handleRegister.bind(
+                              null,
+                              props.values.weights
+                            )}
+                            block
+                          >
+                            Register account to clone evaluation and save
+                            weights
+                          </Button>
+                        ) : (
+                          <Button type="submit" color="primary" block>
+                            Clone evaluation and save weights
+                          </Button>
+                        )}
+                      </Form>
+                    </CardBody>
+                  </LoadingOverlay>
+                </Col>
+                <Col sm="12" md="6">
+                  <SectionCard.Header>
+                    Prioritized Concept List
+                  </SectionCard.Header>
                   <CardBody>
-                    <Form
-                      onSubmit={props.handleSubmit}
-                      onReset={props.handleReset}
-                    >
-                      {evaluation.criteria.map((criterion, index) => (
-                        <FormGroup key={index}>
-                          <Label for={`criterion-${index}`}>
-                            {criterion.name}
-                          </Label>
-                          <Input
-                            type="range"
-                            id={`criterion-${index}`}
-                            name={`weights.${criterion.name}`}
-                            value={props.values.weights[criterion.name]}
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            step={0.1}
-                            min={0}
-                            max={1}
-                          />
-                        </FormGroup>
-                      ))}
-                      {isFacilitator ? (
-                        <Row>
-                          <Col>
-                            <Button
-                              type="submit"
-                              color="primary"
-                              disabled={!props.dirty || props.isSubmitting}
-                              block
-                            >
-                              Save weights
-                            </Button>
-                          </Col>
-                          <Col>
-                            <Button
-                              type="reset"
-                              color="primary"
-                              disabled={!props.dirty || props.isSubmitting}
-                              block
-                              outline
-                            >
-                              Reset weights
-                            </Button>
-                          </Col>
-                        </Row>
-                      ) : isAnonymous ? (
-                        <Button
-                          type="submit"
-                          color="primary"
-                          onClick={handleRegister.bind(
-                            null,
-                            props.values.weights
-                          )}
-                          block
-                        >
-                          Register account to clone evaluation and save weights
-                        </Button>
-                      ) : (
-                        <Button type="submit" color="primary" block>
-                          Clone evaluation and save weights
-                        </Button>
-                      )}
-                    </Form>
+                    <ConceptList
+                      evaluation={evaluation}
+                      weights={props.values.weights}
+                    />
                   </CardBody>
-                </LoadingOverlay>
-              </Col>
-              <Col sm="12" md="6">
-                <SectionCard.Header>
-                  Prioritized Concept List
-                </SectionCard.Header>
-                <CardBody>
-                  <ConceptList
-                    evaluation={evaluation}
-                    weights={props.values.weights}
-                  />
-                </CardBody>
-              </Col>
-            </Row>
-          </SectionCard>
+                </Col>
+              </Row>
+            </SectionCard>
+            <SectionCard>
+              <SectionCard.Header>Result</SectionCard.Header>
+              <CardBody>
+                <EvaluationTable
+                  evaluation={evaluation}
+                  weights={props.values.weights}
+                />
+              </CardBody>
+            </SectionCard>
+          </>
         )}
       </Formik>
       <LinkCredentialsModal

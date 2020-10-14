@@ -151,6 +151,12 @@ export type FilterableScore = {
   value: number;
 };
 
+export function toFilterableScores(scores: Scores) {
+  return Object.keys(scores).flatMap((userId) => {
+    return scores[userId].map((score) => ({ ...score, participant: userId }));
+  });
+}
+
 export function summarizeScores(
   scores: FilterableScore[],
   weights: Weights,
