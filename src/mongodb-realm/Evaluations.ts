@@ -1,4 +1,9 @@
 import { ObjectId } from "bson";
+import { useMongoCollection } from "./RealmApp";
+
+export function useEvaluations() {
+  return useMongoCollection<Evaluation>("Evaluations");
+}
 
 export type Details = {
   description?: string;
@@ -71,8 +76,8 @@ export function generateSharingToken(length = 8) {
 /** Turn an array of array of scores (values per concept per criteria) into a flat array of score objects (criteria, concept, value) */
 export function flattenScores(
   scores: number[][],
-  criteria: Criterion[],
-  concepts: Concept[]
+  criteria: Pick<Criterion, "name">[],
+  concepts: Pick<Concept, "name">[]
 ): Score[] {
   return scores.flatMap((scores, criterionIndex) =>
     scores.map((value, conceptIndex) => ({
@@ -84,8 +89,8 @@ export function flattenScores(
 }
 export function unflattenScores(
   scores: Score[],
-  criteria: Criterion[],
-  concepts: Concept[]
+  criteria: Pick<Criterion, "name">[],
+  concepts: Pick<Concept, "name">[]
 ) {
   const result: number[][] = [];
   for (const { criterion, concept, value } of scores) {
@@ -131,4 +136,59 @@ export function weightedScoredConcepts(
   scoredConcepts.sort((a, b) => b.score.average - a.score.average);
 
   return scoredConcepts;
+}
+
+type ScoreFiltering = {
+  concept?: string;
+  criterion?: string;
+  participant?: string;
+};
+
+export type FilterableScore = {
+  concept: string;
+  criterion: string;
+  participant: string;
+  value: number;
+};
+
+export function toFilterableScores(scores: Scores) {
+  return Object.keys(scores).flatMap((userId) => {
+    return scores[userId].map((score) => ({ ...score, participant: userId }));
+  });
+}
+
+export function summarizeScores(
+  scores: FilterableScore[],
+  weights: Weights,
+  filtering: ScoreFiltering = {}
+) {
+  const filterKeys = Object.keys(filtering) as Array<keyof typeof filtering>;
+  const filteredScores = scores.filter((score) =>
+    filterKeys.reduce<boolean>(
+      (pass, filterKey) => pass && score[filterKey] === filtering[filterKey],
+      true
+    )
+  );
+  const sum = filteredScores.reduce((sum, s) => sum + s.value, 0);
+  const weightedSum = filteredScores.reduce(
+    (sum, s) => sum + s.value * weights[s.criterion],
+    0
+  );
+  const average = sum / filteredScores.length;
+  const weightedAverage = weightedSum / filteredScores.length;
+  let sumSquaredDeviation = filteredScores.reduce(
+    (sum, s) => sum + Math.pow(s.value - average, 2),
+    0
+  );
+  const standardDiviation = Math.sqrt(
+    sumSquaredDeviation / filteredScores.length
+  );
+  return {
+    scores: filteredScores,
+    sum,
+    average,
+    weightedSum,
+    weightedAverage,
+    standardDiviation,
+  };
 }

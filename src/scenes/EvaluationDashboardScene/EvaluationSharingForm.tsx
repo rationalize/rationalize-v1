@@ -4,8 +4,7 @@ import { FormGroup, Input, Label, Button, Form } from "reactstrap";
 
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { CopyToClipboardInput } from "components/CopyToClipboardInput";
-import { Evaluation } from "mongodb-realm";
-import { useAuthentication } from "components/AuthenticationContext";
+import { Evaluation, useEvaluations } from "mongodb-realm";
 
 type Values = { public: boolean };
 
@@ -14,17 +13,13 @@ export type EvaluationSharingFormProps = { evaluation: Evaluation };
 export function EvaluationSharingForm({
   evaluation,
 }: EvaluationSharingFormProps) {
-  const { user } = useAuthentication();
+  const evaluations = useEvaluations();
 
   async function handleSubmit(values: Values) {
-    if (user) {
-      await user.evaluations.updateOne(
-        { _id: { $eq: evaluation._id } },
-        { $set: { sharing: { mode: values.public ? "public" : "disabled" } } }
-      );
-    } else {
-      throw new Error("Expected an authenticated user");
-    }
+    await evaluations.updateOne(
+      { _id: { $eq: evaluation._id } },
+      { $set: { sharing: { mode: values.public ? "public" : "disabled" } } }
+    );
   }
   const evaluationUrl =
     global.location.origin + `/evaluations/${evaluation._id.toHexString()}`;

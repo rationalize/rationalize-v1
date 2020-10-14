@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from "react";
-import { FormGroup, Alert, Button } from "reactstrap";
+import { FormGroup, Button } from "reactstrap";
 import { Credentials } from "realm-web";
 
 import { OrLine } from "components/OrLine";
-import { useAuthentication } from "components/AuthenticationContext";
 import { RegisterUserForm } from "components/RegisterUserForm";
 import { ButtonIcon } from "icons";
+import { useUser } from "./UserContext";
 
 export type LinkCredentialsFormProps = {
   onLinked: () => void;
@@ -20,15 +20,11 @@ export function LinkCredentialsForm({
   onError = console.error,
   initialAction,
 }: LinkCredentialsFormProps) {
-  const { user } = useAuthentication();
+  const user = useUser();
 
   const linkCredentials = useCallback(
     async (credentials: Credentials) => {
-      if (user) {
-        await user.linkCredentials(credentials);
-      } else {
-        throw new Error("Can't link without a user");
-      }
+      await user.linkCredentials(credentials);
     },
     [user]
   );
@@ -58,12 +54,6 @@ export function LinkCredentialsForm({
       handleFacebook();
     }
   }, [handleFacebook, handleGoogle, initialAction]);
-
-  if (user === null) {
-    return (
-      <Alert color="warn">You need to be logged in to link credentials</Alert>
-    );
-  }
 
   return (
     <>

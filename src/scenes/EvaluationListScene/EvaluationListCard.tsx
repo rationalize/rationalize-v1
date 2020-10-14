@@ -2,36 +2,33 @@ import React, { useState, useEffect } from "react";
 import { Container, Table, Card } from "reactstrap";
 import { useHistory } from "react-router";
 
-import { useAuthentication } from "components/AuthenticationContext";
 import { CenteredContainer } from "components/CenteredContainer";
 import { LinkButton } from "components/LinkButton";
 import { LoadingOverlay } from "components/LoadingOverlay";
-import { Evaluation, app } from "mongodb-realm";
+import { Evaluation, useEvaluations } from "mongodb-realm";
 
 import { EvaluationsListHelp } from "./EvaluationsListHelp";
 
 import styles from "./EvaluationListCard.module.scss";
+import { useUser } from "components/UserContext";
 
 export function EvaluationListCard() {
   const [evaluations, setEvaluations] = useState<Evaluation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const history = useHistory();
-  const { user } = useAuthentication();
+  const user = useUser();
+  const evaluationsCollection = useEvaluations();
 
   useEffect(() => {
     setIsLoading(true);
-    if (user) {
-      user.evaluations
-        .find({ facilitator: { $eq: app.currentUser?.id } })
-        .then(setEvaluations, setError)
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      throw new Error("Expected an authenticated user");
-    }
-  }, [user]);
+    evaluationsCollection
+      .find({ facilitator: { $eq: user.id } })
+      .then(setEvaluations, setError)
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [evaluationsCollection, user]);
 
   function goToEvaluation(evaluation: Evaluation) {
     history.push(`/evaluations/${evaluation._id.toHexString()}`);

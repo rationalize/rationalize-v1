@@ -13,15 +13,21 @@ import { Formik } from "formik";
 import { useHistory } from "react-router-dom";
 import { ObjectId } from "bson";
 
-import { useAuthentication } from "components/AuthenticationContext";
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { SectionCard } from "components/SectionCard";
-import { Weights, Evaluation, isOnlyAnonymous } from "mongodb-realm";
+import {
+  Weights,
+  Evaluation,
+  isOnlyAnonymous,
+  useEvaluations,
+} from "mongodb-realm";
 
 import { ConceptList } from "./ConceptList";
 import { LinkCredentialsModal } from "./LinkCredentialsModal";
 import { UserProfileModal } from "./UserProfileModal";
 import { WeightsHelp } from "./WeightsHelp";
+import { useUser } from "components/UserContext";
+import { EvaluationTable } from "./EvaluationTable";
 
 export type WeightValues = { weights: Weights };
 
@@ -49,7 +55,8 @@ type UserProfileModalState =
     };
 
 export function WeightsRow({ evaluation }: WeightsRowProps) {
-  const { user } = useAuthentication();
+  const user = useUser();
+  const evaluations = useEvaluations();
   const history = useHistory();
 
   // Read weights from the evaluation or generate as fallback
@@ -78,46 +85,40 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
   const isAnonymous = isOnlyAnonymous(user);
 
   async function forkEvaluation(weights: Weights): Promise<ObjectId> {
-    if (user) {
-      // Create a cloned copy of this evaluation and navigate to it
-      const newEvalutaion: Evaluation = {
-        // Start with the values of the existing event
-        ...evaluation,
-        // The current the facilitator of the new event
-        facilitator: user.id,
-        // Save with the weights provided by the user
-        weights: weights,
-        // Indicate that this evaluation is a copy of another
-        copyOf: evaluation._id,
-        // Assume sharing is disabled until the user actively change this themselves
-        sharing: { mode: "disabled" },
-      };
-      // Pick a new ID for this evalutation
-      newEvalutaion._id = new ObjectId();
-      // Insert the new evaluation
-      const { insertedId } = await user.evaluations.insertOne(newEvalutaion);
-      return insertedId;
-    } else {
-      throw new Error("Expected an authenticated user");
-    }
+    // Create a cloned copy of this evaluation and navigate to it
+    const newEvalutaion: Evaluation = {
+      // Start with the values of the existing event
+      ...evaluation,
+      // The current the facilitator of the new event
+      facilitator: user.id,
+      // Save with the weights provided by the user
+      weights: weights,
+      // Indicate that this evaluation is a copy of another
+      copyOf: evaluation._id,
+      // Assume sharing is disabled until the user actively change this themselves
+      sharing: { mode: "disabled" },
+    };
+    // Pick a new ID for this evalutation
+    newEvalutaion._id = new ObjectId();
+    // Insert the new evaluation
+    const { insertedId } = await evaluations.insertOne(newEvalutaion);
+    return insertedId;
   }
 
   async function handleWeightsSubmit(values: WeightValues) {
     try {
-      if (user && isFacilitator) {
+      if (isFacilitator) {
         // Just update the weights
-        await user.evaluations.updateOne(
+        await evaluations.updateOne(
           { _id: evaluation._id },
           { $set: { weights: values.weights } }
         );
         setInitialWeights(values.weights);
-      } else if (user) {
+      } else {
         // TODO: Force user to register and link with another authentication provider if authenticated anonymously
         const newId = await forkEvaluation(values.weights);
         // Navigate to the new evaluation
         history.push(`/evaluations/${newId.toHexString()}`);
-      } else {
-        throw new Error("Expected an authenticated user");
       }
     } catch (err) {
       console.error(err);
@@ -160,94 +161,106 @@ export function WeightsRow({ evaluation }: WeightsRowProps) {
         onSubmit={handleWeightsSubmit}
       >
         {(props) => (
-          <SectionCard>
-            <Row>
-              <Col sm="12" md="6">
-                <SectionCard.Header>
-                  Adjust Criteria Weights <WeightsHelp />
-                </SectionCard.Header>
-                <LoadingOverlay isLoading={props.isSubmitting || isSaving}>
+          <>
+            <SectionCard>
+              <Row>
+                <Col sm="12" md="6">
+                  <SectionCard.Header>
+                    Adjust Criteria Weights <WeightsHelp />
+                  </SectionCard.Header>
+                  <LoadingOverlay isLoading={props.isSubmitting || isSaving}>
+                    <CardBody>
+                      <Form
+                        onSubmit={props.handleSubmit}
+                        onReset={props.handleReset}
+                      >
+                        {evaluation.criteria.map((criterion, index) => (
+                          <FormGroup key={index}>
+                            <Label for={`criterion-${index}`}>
+                              {criterion.name}
+                            </Label>
+                            <Input
+                              type="range"
+                              id={`criterion-${index}`}
+                              name={`weights.${criterion.name}`}
+                              value={props.values.weights[criterion.name]}
+                              onChange={props.handleChange}
+                              onBlur={props.handleBlur}
+                              step={0.1}
+                              min={0}
+                              max={1}
+                            />
+                          </FormGroup>
+                        ))}
+                        {isFacilitator ? (
+                          <Row>
+                            <Col>
+                              <Button
+                                type="submit"
+                                color="primary"
+                                disabled={!props.dirty || props.isSubmitting}
+                                block
+                              >
+                                Save weights
+                              </Button>
+                            </Col>
+                            <Col>
+                              <Button
+                                type="reset"
+                                color="primary"
+                                disabled={!props.dirty || props.isSubmitting}
+                                block
+                                outline
+                              >
+                                Reset weights
+                              </Button>
+                            </Col>
+                          </Row>
+                        ) : isAnonymous ? (
+                          <Button
+                            type="submit"
+                            color="primary"
+                            onClick={handleRegister.bind(
+                              null,
+                              props.values.weights
+                            )}
+                            block
+                          >
+                            Register account to clone evaluation and save
+                            weights
+                          </Button>
+                        ) : (
+                          <Button type="submit" color="primary" block>
+                            Clone evaluation and save weights
+                          </Button>
+                        )}
+                      </Form>
+                    </CardBody>
+                  </LoadingOverlay>
+                </Col>
+                <Col sm="12" md="6">
+                  <SectionCard.Header>
+                    Prioritized Concept List
+                  </SectionCard.Header>
                   <CardBody>
-                    <Form
-                      onSubmit={props.handleSubmit}
-                      onReset={props.handleReset}
-                    >
-                      {evaluation.criteria.map((criterion, index) => (
-                        <FormGroup key={index}>
-                          <Label for={`criterion-${index}`}>
-                            {criterion.name}
-                          </Label>
-                          <Input
-                            type="range"
-                            id={`criterion-${index}`}
-                            name={`weights.${criterion.name}`}
-                            value={props.values.weights[criterion.name]}
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            step={0.1}
-                            min={0}
-                            max={1}
-                          />
-                        </FormGroup>
-                      ))}
-                      {isFacilitator ? (
-                        <Row>
-                          <Col>
-                            <Button
-                              type="submit"
-                              color="primary"
-                              disabled={!props.dirty || props.isSubmitting}
-                              block
-                            >
-                              Save weights
-                            </Button>
-                          </Col>
-                          <Col>
-                            <Button
-                              type="reset"
-                              color="primary"
-                              disabled={!props.dirty || props.isSubmitting}
-                              block
-                              outline
-                            >
-                              Reset weights
-                            </Button>
-                          </Col>
-                        </Row>
-                      ) : isAnonymous ? (
-                        <Button
-                          type="submit"
-                          color="primary"
-                          onClick={handleRegister.bind(
-                            null,
-                            props.values.weights
-                          )}
-                          block
-                        >
-                          Register account to clone evaluation and save weights
-                        </Button>
-                      ) : (
-                        <Button type="submit" color="primary" block>
-                          Clone evaluation and save weights
-                        </Button>
-                      )}
-                    </Form>
+                    <ConceptList
+                      evaluation={evaluation}
+                      weights={props.values.weights}
+                    />
                   </CardBody>
-                </LoadingOverlay>
-              </Col>
-              <Col sm="12" md="6">
-                <SectionCard.Header>
-                  Prioritized Concept List
-                </SectionCard.Header>
-                <CardBody>
-                  <ConceptList
-                    evaluation={evaluation}
-                    weights={props.values.weights}
-                  />
-                </CardBody>
-              </Col>
-            </Row>
-          </SectionCard>
+                </Col>
+              </Row>
+            </SectionCard>
+            <SectionCard>
+              <SectionCard.Header>Result</SectionCard.Header>
+              <CardBody>
+                <EvaluationTable
+                  evaluation={evaluation}
+                  weights={props.values.weights}
+                />
+              </CardBody>
+            </SectionCard>
+          </>
         )}
       </Formik>
       <LinkCredentialsModal

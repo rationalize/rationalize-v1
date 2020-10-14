@@ -1,18 +1,28 @@
 import React, { ReactNode } from "react";
-import { AuthenticationConsumer } from "components/AuthenticationContext";
 import { Redirect } from "react-router-dom";
 
+import { UserProvider } from "./UserContext";
+import { AnonymousAuthenticator } from "./AnonymousAuthenticator";
+
 export type RestrictedAreaProps = {
-  userId?: string;
   children: ReactNode;
+  authenticateAnonymously?: boolean;
 };
 
-export function RestrictedArea({ userId, children }: RestrictedAreaProps) {
+export function RestrictedArea({
+  children,
+  authenticateAnonymously,
+}: RestrictedAreaProps) {
   return (
-    <AuthenticationConsumer>
-      {({ user }) =>
-        user && (!userId || user.id === userId) ? children : <Redirect to="/" />
+    <UserProvider
+      renderUnauthenticated={() =>
+        authenticateAnonymously ? (
+          <AnonymousAuthenticator />
+        ) : (
+          <Redirect to="/" />
+        )
       }
-    </AuthenticationConsumer>
+      children={children}
+    />
   );
 }

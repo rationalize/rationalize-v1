@@ -4,11 +4,14 @@ import { EvaluationLoader } from "components/EvaluationLoader";
 import { PrimaryLayout } from "layouts/PrimaryLayout";
 
 import { ScoringContainer } from "./ScoringContainer";
+import { RestrictedArea } from "components/RestrictedArea";
 
 export function ScoringScene() {
   return (
     <PrimaryLayout>
-      <EvaluationLoader component={ScoringContainer} />
+      <RestrictedArea>
+        <EvaluationLoader component={ScoringContainer} />
+      </RestrictedArea>
     </PrimaryLayout>
   );
 }

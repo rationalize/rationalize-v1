@@ -3,8 +3,9 @@ import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 import { Formik } from "formik";
 
 import { LoadingOverlay } from "components/LoadingOverlay";
-import { UserProfile } from "mongodb-realm";
+import { UserProfile, useUserProfiles } from "mongodb-realm";
 import { useAuthentication } from "components/AuthenticationContext";
+import { useUser } from "./UserContext";
 
 type FormValues = {
   firstName: string;
@@ -45,39 +46,38 @@ const KNOWN_WORKS = [
 export type UserProfileFormProps = { onSaved?: () => void };
 
 export function UserProfileForm({ onSaved }: UserProfileFormProps) {
-  const { user, refreshCustomData } = useAuthentication();
+  const { refreshCustomData } = useAuthentication();
+  const user = useUser();
+  const userProfiles = useUserProfiles();
 
   async function handleSubmit(values: FormValues) {
-    if (user) {
-      const parsedValues: Partial<UserProfile> = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-      };
-      if (values.use === "individual" || values.use === "professional") {
-        parsedValues.use = values.use;
-      }
-
-      if (parsedValues.use === "professional") {
-        parsedValues.company = values.company;
-        parsedValues.title = values.title;
-        parsedValues.work =
-          values.work === "other" ? values.workOther : values.work;
-      }
-      // Submit the parsed values
-      const { upsertedId, modifiedCount } = await user.userProfiles.updateOne(
-        { userId: user.id },
-        { $set: parsedValues },
-        { upsert: true }
-      );
-      // Expect either an upserted or a modified document
-      if (upsertedId || modifiedCount === 1) {
-        await refreshCustomData();
-      } else {
-        throw new Error("Failed updating the profile");
-      }
-    } else {
-      throw new Error("Cannot save profile without an authenticated user");
+    const parsedValues: Partial<UserProfile> = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+    };
+    if (values.use === "individual" || values.use === "professional") {
+      parsedValues.use = values.use;
     }
+
+    if (parsedValues.use === "professional") {
+      parsedValues.company = values.company;
+      parsedValues.title = values.title;
+      parsedValues.work =
+        values.work === "other" ? values.workOther : values.work;
+    }
+    // Submit the parsed values
+    const { upsertedId, modifiedCount } = await userProfiles.updateOne(
+      { userId: user.id },
+      { $set: parsedValues },
+      { upsert: true }
+    );
+    // Expect either an upserted or a modified document
+    if (upsertedId || modifiedCount === 1) {
+      await refreshCustomData();
+    } else {
+      throw new Error("Failed updating the profile");
+    }
+
     gtag("event", "save_user_profile");
     if (onSaved) {
       onSaved();

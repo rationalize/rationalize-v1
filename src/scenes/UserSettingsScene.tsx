@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CardText,
   Button,
@@ -11,23 +11,60 @@ import {
 import { app } from "mongodb-realm";
 
 import { UserProfileForm } from "components/UserProfileForm";
-import { useAuthentication } from "components/AuthenticationContext";
 import { RestrictedArea } from "components/RestrictedArea";
 import { SectionCard } from "components/SectionCard";
 import { LinkButton } from "components/LinkButton";
 import { PrimaryLayout } from "layouts/PrimaryLayout";
+import { useUser } from "components/UserContext";
+import { LoadingOverlay } from "components/LoadingOverlay";
 
-export function UserSettingsScene() {
-  const { user } = useAuthentication();
+function ChangePasswordForm() {
+  const user = useUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   function handleSendResetPasswordEmail() {
-    if (user && user.profile.email) {
-      app.emailPasswordAuth.sendResetPasswordEmail(user.profile.email);
+    if (user.profile.email) {
+      setIsLoading(true);
+      app.emailPasswordAuth
+        .sendResetPasswordEmail(user.profile.email)
+        .catch(setError)
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else {
-      throw new Error("Failed to determine email");
+      const err = new Error("Failed to determine email");
+      setError(err);
     }
   }
 
+  return (
+    <SectionCard>
+      <LoadingOverlay isLoading={isLoading} error={error}>
+        <SectionCard.Header>Change password</SectionCard.Header>
+        <CardBody>
+          <CardText>
+            To verify your email address, you change your password by resetting
+            it: This sends you an email with a link to a form where you can
+            enter a new password.
+          </CardText>
+        </CardBody>
+        <CardFooter>
+          <Button
+            onClick={handleSendResetPasswordEmail}
+            color="primary"
+            outline
+            block
+          >
+            Send a password reset email
+          </Button>
+        </CardFooter>
+      </LoadingOverlay>
+    </SectionCard>
+  );
+}
+
+export function UserSettingsScene() {
   return (
     <PrimaryLayout>
       <RestrictedArea>
@@ -43,26 +80,7 @@ export function UserSettingsScene() {
               </SectionCard>
             </Col>
             <Col sm="12" md="6">
-              <SectionCard>
-                <SectionCard.Header>Change password</SectionCard.Header>
-                <CardBody>
-                  <CardText>
-                    To verify your email address, you change your password by
-                    resetting it: This sends you an email with a link to a form
-                    where you can enter a new password.
-                  </CardText>
-                </CardBody>
-                <CardFooter>
-                  <Button
-                    onClick={handleSendResetPasswordEmail}
-                    color="primary"
-                    outline
-                    block
-                  >
-                    Send a password reset email
-                  </Button>
-                </CardFooter>
-              </SectionCard>
+              <ChangePasswordForm />
               <SectionCard>
                 <SectionCard.Header>Support</SectionCard.Header>
                 <CardBody>

@@ -6,7 +6,6 @@ import { useHistory } from "react-router-dom";
 
 import { Evaluation, flattenScores, unflattenScores } from "mongodb-realm";
 import { LoadingOverlay } from "components/LoadingOverlay";
-import { useAuthentication } from "components/AuthenticationContext";
 import { EvaluationSurveyUrl } from "components/EvaluationSurveyUrl";
 import { LinkButton } from "components/LinkButton";
 import { SectionCard } from "components/SectionCard";
@@ -15,24 +14,26 @@ import { EvaluationCard } from "components/EvaluationCard";
 import { CriterionSection } from "./CriterionSection";
 
 import styles from "./ScoringContainer.module.scss";
+import { useUser } from "components/UserContext";
 
 type ScoringContainerProps = { evaluation: Evaluation };
 
 export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   const { criteria, concepts } = evaluation;
   const history = useHistory();
-  const { user } = useAuthentication();
+  const user = useUser();
   const [criterionIndex, setCriterionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const initialFlatScores = user ? evaluation.scores[user.id] : undefined;
+
+  const initialFlatScores = evaluation.scores[user.id];
   const initialScores = initialFlatScores
     ? unflattenScores(initialFlatScores, criteria, concepts)
     : [];
   const [scores, setScores] = useState<number[][]>(initialScores);
   const [isSaved, setSaved] = useState<boolean | undefined>(undefined);
 
-  const isFacilitator = user && user.id === evaluation.facilitator;
+  const isFacilitator = user.id === evaluation.facilitator;
 
   function goToEvaluation() {
     // Continue to the evaluations overview
@@ -51,9 +52,6 @@ export function ScoringContainer({ evaluation }: ScoringContainerProps) {
   }
 
   async function handleScores(scoreValues: number[]) {
-    if (!user) {
-      throw new Error("Expected an authenticated user");
-    }
     const newScores = [...scores];
     newScores[criterionIndex] = scoreValues;
     setScores(newScores);
