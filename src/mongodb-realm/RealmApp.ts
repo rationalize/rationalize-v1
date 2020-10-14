@@ -1,4 +1,6 @@
 import { ObjectId } from "bson";
+import { useUser } from "components/UserContext";
+import { useMemo } from "react";
 import { App, User as RealmUser } from "realm-web";
 
 import { UserProfile } from "./UserProfiles";
@@ -78,3 +80,27 @@ export function selectConfiguration(name: string) {
 
 export const config = getAppConfiguration();
 export const app = new App<Functions, UserProfile | {}>(config.appId);
+
+export function useMongoClient() {
+  const user = useUser();
+  return useMemo(() => {
+    return user.mongoClient("mongodb-atlas");
+  }, [user]);
+}
+
+export function useMongoDB(databaseName = config.databaseName) {
+  const client = useMongoClient();
+  return useMemo(() => {
+    return client.db(databaseName);
+  }, [client, databaseName]);
+}
+
+export function useMongoCollection<T extends Realm.Services.MongoDB.Document>(
+  collectionName: string,
+  databaseName = config.databaseName
+) {
+  const db = useMongoDB(databaseName);
+  return useMemo(() => {
+    return db.collection<T>(collectionName);
+  }, [db, collectionName]);
+}

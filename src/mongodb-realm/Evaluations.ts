@@ -1,4 +1,9 @@
 import { ObjectId } from "bson";
+import { useMongoCollection } from "./RealmApp";
+
+export function useEvaluations() {
+  return useMongoCollection<Evaluation>("Evaluations");
+}
 
 export type Details = {
   description?: string;

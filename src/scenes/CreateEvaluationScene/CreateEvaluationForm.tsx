@@ -16,7 +16,13 @@ import { ObjectId } from "bson";
 import { ListField, ListFieldInputItem } from "components/ListField";
 import { LoadingOverlay } from "components/LoadingOverlay";
 import { FieldFeedback } from "components/FieldFeedback";
-import { Scoring, generateSharingToken, Evaluation, Link } from "mongodb-realm";
+import {
+  Scoring,
+  generateSharingToken,
+  Evaluation,
+  Link,
+  useEvaluations,
+} from "mongodb-realm";
 
 import { CriteriaHelp } from "./CriteriaHelp";
 import { ConceptHelp } from "./ConceptHelp";
@@ -35,7 +41,7 @@ import {
 } from "./Values";
 import { Focus } from "./Focus";
 import { FocusResetter } from "./FocusResetter";
-import { useAuthentication } from "components/AuthenticationContext";
+import { useUser } from "components/UserContext";
 
 export type CreateEvaluationHandler = (
   value: EvaluationValues,
@@ -143,37 +149,34 @@ function createConceptOrCriterion(): ConceptValues | CriterionValues {
 export function CreateEvaluationForm({
   handleCreated,
 }: CreateEvaluationFormProps) {
-  const { user } = useAuthentication();
+  const user = useUser();
+  const evaluations = useEvaluations();
 
   const handleSubmit: CreateEvaluationHandler = async (values, helpers) => {
-    if (user) {
-      // Filter out links without a URL and undefine empty titles
-      const criteria = values.criteria.filter((c) => c.name).map(cleanDetails);
-      const concepts = values.concepts.filter((a) => a.name).map(cleanDetails);
-      const links = cleanLinks(values.links);
-      // Generate sharing token
-      const scoring: Scoring = {
-        ...values.scoring,
-        token: generateSharingToken(),
-      };
-      const evaluation: Omit<Evaluation, "_id"> = {
-        facilitator: user.id,
-        participants: [],
-        scores: {},
-        name: values.name,
-        description: values.description,
-        links,
-        concepts,
-        criteria,
-        sharing: { mode: "disabled" },
-        scoring,
-      };
-      const { insertedId } = await user.evaluations.insertOne(evaluation);
-      gtag("event", "create_evaluation");
-      handleCreated({ ...evaluation, _id: insertedId });
-    } else {
-      throw new Error("Need an authenticated user to create an evaluation.");
-    }
+    // Filter out links without a URL and undefine empty titles
+    const criteria = values.criteria.filter((c) => c.name).map(cleanDetails);
+    const concepts = values.concepts.filter((a) => a.name).map(cleanDetails);
+    const links = cleanLinks(values.links);
+    // Generate sharing token
+    const scoring: Scoring = {
+      ...values.scoring,
+      token: generateSharingToken(),
+    };
+    const evaluation: Omit<Evaluation, "_id"> = {
+      facilitator: user.id,
+      participants: [],
+      scores: {},
+      name: values.name,
+      description: values.description,
+      links,
+      concepts,
+      criteria,
+      sharing: { mode: "disabled" },
+      scoring,
+    };
+    const { insertedId } = await evaluations.insertOne(evaluation);
+    gtag("event", "create_evaluation");
+    handleCreated({ ...evaluation, _id: insertedId });
   };
 
   const [focus, setFocus] = useState<Focus | null>(null);

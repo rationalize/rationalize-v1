@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Container } from "reactstrap";
 
 import { RestrictedArea } from "components/RestrictedArea";
-import { useAuthentication } from "components/AuthenticationContext";
 import { EvaluationCard } from "components/EvaluationCard";
 import { useAlerts } from "components/AlertContext";
 import { Evaluation, isOnlyAnonymous } from "mongodb-realm";
@@ -10,18 +9,19 @@ import { Evaluation, isOnlyAnonymous } from "mongodb-realm";
 import { FacilitatorRow } from "./FacilitatorRow";
 import { WeightsRow } from "./WeightsRow";
 import { AnonymousAlertMessage } from "./AnonymousAlertMessage";
+import { useUser } from "components/UserContext";
 
 type EvaluationDashboardProps = { evaluation: Evaluation };
 
 export function EvaluationDashboard({ evaluation }: EvaluationDashboardProps) {
-  const { user } = useAuthentication();
+  const user = useUser();
   const alerts = useAlerts();
 
-  const isFacilitator = user !== null && user.id === evaluation.facilitator;
+  const isFacilitator = user.id === evaluation.facilitator;
 
   useEffect(() => {
     // If this user is facilitator and they havn't registerd
-    if (evaluation.facilitator === user?.id && isOnlyAnonymous(user)) {
+    if (evaluation.facilitator === user.id && isOnlyAnonymous(user)) {
       alerts.showAlert({
         id: "anonymous-go-register",
         message: (

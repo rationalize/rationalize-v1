@@ -1,4 +1,9 @@
 import { ObjectId } from "bson";
+import { useMongoCollection } from "./RealmApp";
+
+export function useUserProfiles() {
+  return useMongoCollection<UserProfile>("UserProfiles");
+}
 
 type ProfessionalProfile = {
   use: "professional";
